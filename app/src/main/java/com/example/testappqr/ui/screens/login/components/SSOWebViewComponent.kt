@@ -54,12 +54,12 @@ fun SSOWebViewComponent(
                         loadWithOverviewMode = true
                         useWideViewPort = true
                     }
-                    val cookieManager = CookieManager.getInstance()
-                    cookieManager.removeAllCookies(null)
+                      val cookieManager = CookieManager.getInstance()
+                    cookieManager.setAcceptCookie(true)
+                    cookieManager.setAcceptThirdPartyCookies(this, true)
                     cookieManager.flush()
-                    clearCache(true)
-                    clearHistory()
-                    WebStorage.getInstance().deleteAllData()
+
+
                     webViewClient = object : WebViewClient() {
                         override fun onReceivedError(
                             view: WebView?,
