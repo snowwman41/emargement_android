@@ -22,6 +22,8 @@ import com.example.testappqr.SharedApiResponseModel
 import com.example.testappqr.ui.screens.home.components.QRCodeComponent
 import com.example.testappqr.ui.screens.home.components.UserComponent
 import com.example.testappqr.ui.screens.home.components.UserSwitchComponent
+import com.example.testappqr.ui.screens.home.components.StudentPresenceComponent
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -50,9 +52,8 @@ fun HomeScreen(navController: NavHostController, sharedApiResponseModel : Shared
             UserComponent(sharedApiResponseModel)
 
             if (isStudent) {
-                Text("TODO ...")
+                StudentPresenceComponent(sharedApiResponseModel)
             } else {
-
                 QRCodeComponent(sharedApiResponseModel)
             }
         }

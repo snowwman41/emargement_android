@@ -69,6 +69,13 @@ dependencies {
     implementation(libs.retrofit)//api call
     implementation(libs.converter.gson)//api call
 
+    implementation(libs.camerax.core)//camera setup
+    implementation(libs.camerax.camera2)//camera setup
+    implementation(libs.camerax.lifecycle)//camera setup
+    implementation(libs.camerax.view)//camera setup
+    implementation(libs.camerax.mlkit)//camera setup
+    implementation(libs.mlkit.barcode.scanning)//qr scan
+
 
 
 
