@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
-import com.example.testappqr.SharedApiResponseModel
+import com.example.testappqr.SharedModel
 import com.example.testappqr.models.ApiSSOResponse
 import com.example.testappqr.network.RetrofitApi
 import kotlinx.coroutines.runBlocking
@@ -32,7 +32,7 @@ import java.io.ByteArrayInputStream
 @Composable
 fun SSOWebViewComponent(
     navController: NavHostController,
-    sharedApiResponseModel: SharedApiResponseModel
+    sharedModel: SharedModel
 ) {
     var isLoading by remember { mutableStateOf(true) }
     var webViewError by remember { mutableStateOf(false) }
@@ -74,8 +74,8 @@ fun SSOWebViewComponent(
                             val requestUrl = request?.url.toString()
                             if (requestUrl.startsWith("http://10.0.2.2:8080/auth/cas/validate")) { // ✅ Detect JSON request
 
-                                sharedApiResponseModel.apiSSOResponse = handleValidationRequest(requestUrl)
-                                if (sharedApiResponseModel.apiSSOResponse != null){
+                                sharedModel.apiSSOResponse = handleValidationRequest(requestUrl)
+                                if (sharedModel.apiSSOResponse != null){
                                     shouldNavigate = true
                                 }
                                 return WebResourceResponse(

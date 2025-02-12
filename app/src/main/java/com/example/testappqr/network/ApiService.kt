@@ -3,6 +3,8 @@ package com.example.testappqr.network
 
 
 import com.example.testappqr.models.ApiSSOResponse
+import com.example.testappqr.models.ModuleDTO
+import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SignatureDTO
 import okhttp3.ResponseBody
@@ -13,6 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Url
 import java.util.UUID
 
@@ -28,10 +31,25 @@ interface ApiService {
     @POST("sign")
     suspend fun postSignature (@Body signatureDTO: SignatureDTO): List<SignatureDTO>
 
-    @POST("sign")
+    @POST("addSession")
     suspend fun postSession (@Body sessionDTO: SessionDTO): List<SessionDTO>
 
     @GET
     suspend fun casValidate (@Url url : String): ApiSSOResponse
+
+    @GET("modules/professor/{professorId}")
+    suspend fun getModules (@Path("professorId") professorId : String): List<ModuleLazyDTO>
+
+    @POST("create-module")
+    suspend fun createModule(@Body moduleDTO: ModuleLazyDTO): List<ModuleLazyDTO>
+
+    @GET("modules/{moduleId}")
+    suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
+
+    @GET("openSession/{sessionId}")
+    suspend fun openSession (@Path("sessionId") sessionId : UUID): String
+
+    @GET("closeSession/{sessionId}")
+    suspend fun closeSession (@Path("sessionId") sessionId : UUID): Unit
 }
 

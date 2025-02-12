@@ -16,10 +16,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.testappqr.SharedApiResponseModel
+import com.example.testappqr.SharedModel
 
 @Composable
-fun StudentPresenceComponent(sharedApiResponseModel: SharedApiResponseModel) {
+fun StudentPresenceComponent(sharedModel: SharedModel) {
     var sessionCode by remember { mutableStateOf("") }
     val context = LocalContext.current
 

@@ -6,9 +6,12 @@ import java.util.UUID
 
 data class SessionDTO(
     val sessionId: UUID,
+    val moduleId: UUID,
     val sessionName: String,
     val date: String,
     val startTime: String,
     val endTime: String,
-    val signatures: Set<SignatureDTO>
+    val verificationCode: String,
+    val active : Boolean
+//    val signatures: Set<SignatureDTO>
 )

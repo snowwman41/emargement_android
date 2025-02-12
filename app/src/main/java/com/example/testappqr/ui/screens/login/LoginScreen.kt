@@ -7,21 +7,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import com.example.testappqr.SharedApiResponseModel
+import com.example.testappqr.SharedModel
 import com.example.testappqr.network.RetrofitApi
 import com.example.testappqr.ui.screens.login.components.SSOWebViewComponent
 
 
 
 @Composable
-fun LoginScreen(navController: NavHostController, sharedApiResponseModel: SharedApiResponseModel) {
+fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
     var isTokenValid by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         isTokenValid = verifyToken()
     }
     if (!isTokenValid) {
-        SSOWebViewComponent(navController,sharedApiResponseModel)
+        SSOWebViewComponent(navController,sharedModel)
     }
 }
 
