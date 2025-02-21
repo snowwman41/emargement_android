@@ -1,4 +1,4 @@
-package com.example.testappqr.models
+package com.example.testappqr.data.models
 
 import java.util.UUID
 
