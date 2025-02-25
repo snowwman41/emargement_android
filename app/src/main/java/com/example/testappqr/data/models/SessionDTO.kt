@@ -11,6 +11,7 @@ data class SessionDTO(
     val date: String,
     val startTime: String,
     val endTime: String,
+    val timestamp: String,
     val verificationCode: String,
     val active : Boolean
 //    val signatures: Set<SignatureDTO>

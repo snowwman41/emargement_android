@@ -37,6 +37,7 @@ import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.presentation.sharedcomponents.BasicButton
 import java.util.UUID
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModulesView(
@@ -101,6 +102,7 @@ fun ModulesView(
                         label = { Text("module name") },
                         value = moduleName,
                         onValueChange = { moduleName = it })
+
                     Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
                         BasicButton(onClick = { showModal = false }, text = "Cancel", textSize = 16.sp)
                         BasicButton(onClick = {
