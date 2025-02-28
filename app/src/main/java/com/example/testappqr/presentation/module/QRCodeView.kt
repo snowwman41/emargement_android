@@ -17,6 +17,7 @@ import com.example.testappqr.core.network.RetrofitApi
 import java.util.UUID
 
 import android.graphics.Bitmap
+import com.example.testappqr.data.models.SessionDTO
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.common.BitMatrix
@@ -62,7 +63,7 @@ suspend fun getSessions() {
     val response = RetrofitApi.api.getSessions()
     println(response)
 }
-suspend fun openSession(sessionId: UUID) :String {
+suspend fun openSession(sessionId: UUID) : SessionDTO {
     val response = RetrofitApi.api.openSession(sessionId)
     return response
 }

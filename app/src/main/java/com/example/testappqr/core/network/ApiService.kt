@@ -24,6 +24,9 @@ interface ApiService {
     @GET("sessions")
     suspend fun getSessions (): List<SessionDTO>
 
+//    @GET("sessions/{sessionId}")
+//    suspend fun getSession (): List<SessionDTO>
+
     @POST("sign")
     suspend fun postSignature (@Body signatureDTO: SignatureDTO): List<SignatureDTO>
 
@@ -43,7 +46,7 @@ interface ApiService {
     suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
 
     @GET("openSession/{sessionId}")
-    suspend fun openSession (@Path("sessionId") sessionId : UUID): String
+    suspend fun openSession (@Path("sessionId") sessionId : UUID): SessionDTO
 
     @GET("closeSession/{sessionId}")
     suspend fun closeSession (@Path("sessionId") sessionId : UUID): Unit

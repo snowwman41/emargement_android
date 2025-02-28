@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,9 +49,10 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel) {
-    var showModal by remember { mutableStateOf(false) }
+fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel, viewModel: ModuleViewModel) {
+//    var showModal by remember { mutableStateOf(false) }
     var qrCodeModal by remember { mutableStateOf(false) }
+    val showModal by viewModel.showModal.collectAsState()
     var sessionName by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(LocalDate.now().toString()) }
     var startTime by remember { mutableStateOf("00:00") }
@@ -67,7 +69,7 @@ fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel) {
             }
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                BasicButton(onClick = { showModal = true }, text = "Add session")
+                BasicButton(onClick = { viewModel.setShowModal(true) }, text = "Add session")
             }
             if (module != null) {
                 LazyColumn {
@@ -113,7 +115,7 @@ fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel) {
                 }
 
                 if (showModal) {
-                    BasicAlertDialog(onDismissRequest = { showModal = false }) {
+                    BasicAlertDialog(onDismissRequest = { viewModel.setShowModal(false) }) {
                         Surface(
                             shape = MaterialTheme.shapes.medium,
                             color = MaterialTheme.colorScheme.surface,
@@ -143,7 +145,7 @@ fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel) {
                                     horizontalArrangement = Arrangement.End
                                 ) {
                                     BasicButton(
-                                        onClick = { showModal = false },
+                                        onClick = { viewModel.setShowModal(false) },
                                         text = "Cancel",
                                         textSize = 16.sp
                                     )
@@ -159,7 +161,7 @@ fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel) {
                                             )
                                             module = getModule(sharedModel.moduleId!!)
                                         }
-                                        showModal = false
+                                        viewModel.setShowModal(false)
                                     }, text = "Add", textSize = 16.sp)
                                 }
                             }

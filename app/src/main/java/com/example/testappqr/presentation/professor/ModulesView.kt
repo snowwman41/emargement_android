@@ -47,7 +47,7 @@ fun ModulesView(
     val coroutine = rememberCoroutineScope()
     var modulesList = remember { mutableStateListOf<ModuleLazyDTO>() }
     var moduleName by remember { mutableStateOf("") }
-    var speciality by remember { mutableStateOf("") }
+    var speciality by remember { mutableStateOf(UUID.randomUUID()) }
     var showModal by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -76,7 +76,7 @@ fun ModulesView(
                         module.moduleName,
                         style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     )
-                    Text(module.speciality, style = TextStyle(fontSize = 18.sp))
+//                    Text(module.speciality.toString(), style = TextStyle(fontSize = 18.sp))
                 }
             }
         }
@@ -94,9 +94,9 @@ fun ModulesView(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Enter a new Module")
-                    TextField(label = { Text("Speciality") },
-                        value = speciality,
-                        onValueChange = { speciality = it })
+//                    TextField(label = { Text("Speciality") },
+//                        value = speciality,
+//                        onValueChange = { speciality = it })
 
                     TextField(
                         label = { Text("module name") },
@@ -116,7 +116,7 @@ fun ModulesView(
                                     )
                                 )
                                 moduleName = ""
-                                speciality = ""
+//                                speciality = ""
                             }
                             showModal = false
                         }, text = "Add", textSize = 16.sp)
@@ -136,15 +136,14 @@ suspend fun getModules(sharedModel: SharedModel): List<ModuleLazyDTO> {
 
 suspend fun createModule(
     sharedModel: SharedModel,
-    speciality: String,
+    speciality: UUID,
     moduleName: String
 ): List<ModuleLazyDTO> {
     val response = RetrofitApi.api.createModule(
         ModuleLazyDTO(
             UUID.randomUUID(),
             moduleName,
-            speciality,
-            sharedModel.apiSSOResponse?.authenticationSuccess?.attributes?.uid.toString()
+            speciality
         )
     );   return response
 

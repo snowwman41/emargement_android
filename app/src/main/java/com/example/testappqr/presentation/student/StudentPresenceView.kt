@@ -1,5 +1,7 @@
+
 package com.example.testappqr.presentation.student
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
@@ -13,59 +15,72 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.mlkit.vision.barcode.BarcodeScanner
 
 @Composable
 fun StudentPresenceView() {
     var sessionCode by remember { mutableStateOf("") }
-    val context = LocalContext.current
+    var isScanning by remember { mutableStateOf(false) }
+    var scannedCode by remember { mutableStateOf("") }
+    var hasPermission by remember { mutableStateOf(false) }
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val scannedData = result.data?.getStringExtra("SCANNED_QR_CODE") ?: ""
-            if (scannedData.isNotEmpty()) {
-                sessionCode = scannedData
-                Toast.makeText(context, "Session trouvée : $scannedData", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+    RequestCameraPermission { hasPermission = true }
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
-            value = sessionCode,
-            onValueChange = { sessionCode = it },
-            label = { Text("Entrer le code de session") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(onDone = {
-                Toast.makeText(context, "Code soumis : $sessionCode", Toast.LENGTH_SHORT).show()
-            }),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-        )
+        Button(onClick = { isScanning = !isScanning }) {
+        Text("Toggle scan")
+    }
+        if (hasPermission) {
+            if (isScanning) {
+                BarcodeScanner { code ->
+                    scannedCode = code
+                    isScanning = false
+                }
+            } else {
+                if (scannedCode.isNotEmpty()) {
 
-        Button(
-            onClick = {
-                Toast.makeText(context, "Code soumis : $sessionCode", Toast.LENGTH_SHORT).show()
-            },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-        ) {
-            Text("Valider le code")
+                    Row(horizontalArrangement = Arrangement.Center) {
+                        Text(
+                            "Signed to the session",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                    }
+                }
+            }
+        } else {
+            Text("Waiting for camera permission...")
         }
 
-        Button(
-            onClick = { qrScannerLauncher.launch(Intent(context, QRScannerActivity::class.java)) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Scanner un QR Code")
+    }
+}
+@Composable
+fun RequestCameraPermission(onPermissionGranted: () -> Unit) {
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                onPermissionGranted()
+            } else {
+                Toast.makeText(context, "Camera permission is required", Toast.LENGTH_LONG).show()
+            }
         }
+    )
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.CAMERA)
     }
 }

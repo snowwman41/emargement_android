@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+
 //    implementation(libs.androidx.appcompat)
 
 
@@ -73,7 +74,9 @@ dependencies {
     implementation(libs.camera.camera2)
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
-    implementation(libs.camerax.mlkit)//camera setup
+
+
+//    implementation(libs.camerax.mlkit)//camera setup
     implementation(libs.mlkit.barcode.scanning)//qr scan
 
 

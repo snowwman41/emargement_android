@@ -48,8 +48,10 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
                 )
             )
         )
+        LaunchedEffect(Unit) {
+            navController.navigate("professor")
+        }
 
-        navController.navigate("professor")
     }else{
         LaunchedEffect(Unit) {
             isTokenValid = verifyToken()

@@ -12,8 +12,7 @@ data class ModuleDTO(
 data class ModuleLazyDTO(
     val moduleId: UUID,
     val moduleName: String,
-    val speciality: String,
-    val professorId: String,
+    val speciality: UUID,
 )
 
 
