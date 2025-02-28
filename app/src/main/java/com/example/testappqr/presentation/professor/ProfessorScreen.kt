@@ -27,7 +27,6 @@ fun ProfessorScreen(navController: NavHostController, sharedModel : SharedModel)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BasicButton(text = "Student", onClick = { navController.navigate("student") })
-            UserComponent(sharedModel)
             ModulesView(sharedModel,navController)
 
         }

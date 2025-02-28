@@ -56,13 +56,13 @@ fun ModulesView(
             modulesList.addAll(it)
         }
     }
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp), horizontalArrangement = Arrangement.End) {
-        BasicButton(onClick = {
-            showModal = true
-        }, text = "Add Module")
-    }
+//    Row(modifier = Modifier
+//        .fillMaxWidth()
+//        .padding(8.dp), horizontalArrangement = Arrangement.End) {
+//        BasicButton(onClick = {
+//            showModal = true
+//        }, text = "Add Module")
+//    }
 
     LazyColumn {
         items(modulesList.toList()) { module ->

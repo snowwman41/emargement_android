@@ -43,6 +43,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 import androidx.compose.ui.platform.LocalContext
+import com.example.testappqr.core.utils.formatDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -95,17 +96,14 @@ fun ModuleScreen(navController: NavHostController, sharedModel: SharedModel, vie
                                         )
                                     )
                                     Text(
-                                        it.startTime + " - " + it.endTime,
+                                        formatDate(it.startTime) + " - " + formatDate(it.endTime),
                                         style = TextStyle(fontSize = 18.sp)
                                     )
                                 }
                                 Column {
                                     if (it.active) {
                                         Text("Active", style = TextStyle(fontSize = 18.sp))
-                                        // Text(
-                                            // "Verification code : " + it.verificationCode,
-                                            // style = TextStyle(fontSize = 18.sp)
-                                        // )
+
                                     }
                                 }
 
