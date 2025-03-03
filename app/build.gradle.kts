@@ -2,7 +2,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-parcelize")
+//hilt
+    alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlin.kapt)
+
+
 }
 
 android {
@@ -78,6 +82,16 @@ dependencies {
 
 //    implementation(libs.camerax.mlkit)//camera setup
     implementation(libs.mlkit.barcode.scanning)//qr scan
+
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    //Navigation
+    implementation(libs.hilt.navigation)
+
+    //Lifecycle Runtime Compose
+    implementation(libs.lifecycle.compose)
 
 
 

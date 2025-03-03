@@ -17,9 +17,11 @@ import com.example.testappqr.presentation.module.ModuleScreen
 import com.example.testappqr.presentation.module.ModuleViewModel
 import com.example.testappqr.presentation.professor.ProfessorScreen
 import com.example.testappqr.presentation.student.StudentScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.UUID
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
