@@ -5,18 +5,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.testappqr.core.theme.EmargementTheme
-import com.example.testappqr.data.models.ApiSSOResponse
+import androidx.navigation.navArgument
+import com.example.testappqr.theme.EmargementTheme
+import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
-import com.example.testappqr.presentation.login.LoginScreen
-import com.example.testappqr.presentation.module.ModuleScreen
-import com.example.testappqr.presentation.module.ModuleViewModel
-import com.example.testappqr.presentation.professor.ProfessorScreen
-import com.example.testappqr.presentation.student.StudentScreen
+import com.example.testappqr.presentation.login.screens.LoginScreen
+import com.example.testappqr.presentation.professor.screens.ModuleScreen
+import com.example.testappqr.presentation.professor.screens.ProfessorScreen
+import com.example.testappqr.presentation.student.screens.StudentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.UUID
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
 }
 
 class SharedModel {
-    var apiSSOResponse: ApiSSOResponse? = ApiSSOResponse(
+    var apiSSOResponse: SSODTO? = SSODTO(
         authenticationSuccess = AuthenticationSuccess(
             user = "s23022841",
             attributes = Attributes(
@@ -77,15 +78,15 @@ fun App(sharedModel: SharedModel) {
         composable("login") {
             LoginScreen(navController, sharedModel)
         }
-
         composable("professor") {
-            ProfessorScreen(navController, sharedModel)
+            ProfessorScreen(navController)
         }
         composable("student") {
             StudentScreen(navController, sharedModel)
         }
-        composable("professor/module") {
-            ModuleScreen(navController, sharedModel, viewModel = ModuleViewModel())
+        composable("professor/module/{moduleId}",
+            arguments = listOf(navArgument("moduleId") {type = NavType.StringType})) {
+            ModuleScreen(navController)
         }
     }
 }

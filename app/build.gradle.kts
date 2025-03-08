@@ -5,8 +5,7 @@ plugins {
 //hilt
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.kotlin.kapt)
-
-
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

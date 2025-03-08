@@ -1,18 +1,24 @@
 package com.example.testappqr.data.models
 
-import java.util.UUID
+import android.os.Parcelable
 
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+import java.util.UUID
+@Parcelize
 data class ModuleDTO(
     val moduleId: UUID,
     val moduleName: String,
-    val speciality: String,
-    val professorId: String,
-    var sessions: List<SessionDTO>
-)
+    val specialityId: String,
+    val teachers: @RawValue List<TeacherLazyDTO>,
+    var sessions  : @RawValue List<SessionDTO>
+) : Parcelable
+
+@Parcelize
 data class ModuleLazyDTO(
     val moduleId: UUID,
     val moduleName: String,
-    val speciality: UUID,
-)
+    val specialityId: UUID
+) : Parcelable
 
 

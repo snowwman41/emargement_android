@@ -5,13 +5,11 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class SessionDTO(
-    val sessionId: UUID,
+    val sessionId: UUID? = null,
     val moduleId: UUID,
     val sessionName: String,
-    val date: String,
-    val startTime: String,
-    val endTime: String,
-    val timestamp: String,
+    val startTime: Long,
+    val endTime: Long,
     val verificationCode: String,
     val active : Boolean
 //    val signatures: Set<SignatureDTO>
