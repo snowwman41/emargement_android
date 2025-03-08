@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.camerax.mlkit)//camera setup
     implementation(libs.mlkit.barcode.scanning)//qr scan
 
+    implementation(libs.altbeacon)//beacon
+
 
 
 

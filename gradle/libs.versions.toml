@@ -15,6 +15,7 @@ retrofit = "2.9.0"
 gson = "2.9.0"
 navigationCompose = "2.8.6"
 mlkit_barcode_version = "16.0.0"
+altbeacon = "2.19.3"
 
 
 
@@ -48,6 +49,8 @@ camera-camera2 = { module = "androidx.camera:camera-camera2", version = "1.2.0" 
 camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version = "1.2.0" }
 camera-view = { module = "androidx.camera:camera-view", version = "1.0.0" }
 mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit_barcode_version" }
+
+altbeacon = { module = "org.altbeacon:android-beacon-library", version.ref = "altbeacon" }
 
 
 [plugins]
