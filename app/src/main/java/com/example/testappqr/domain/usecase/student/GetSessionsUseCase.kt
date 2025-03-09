@@ -1,6 +1,6 @@
 package com.example.testappqr.domain.usecase.student
 
-import com.example.testappqr.domain.repository.ProfessorRepository
+
 import com.example.testappqr.domain.repository.StudentRepository
 import javax.inject.Inject
 

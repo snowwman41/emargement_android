@@ -32,7 +32,7 @@ interface ApiService {
     @GET("closeSession/{sessionId}")
     suspend fun closeSession (@Path("sessionId") sessionId : UUID): Unit
 
-    @GET("/students/{userId}/active-sessions")
+    @GET("students/{userId}/active-sessions")
     suspend fun getActiveSessions (@Path("userId") userId : String): List<SessionDTO>
 
     @POST("auth/token/verify")

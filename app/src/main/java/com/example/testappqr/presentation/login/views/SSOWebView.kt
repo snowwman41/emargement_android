@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 //import com.example.testappqr.data.datasource.remote.RetrofitApi
 
 import com.example.testappqr.SharedModel
+import com.example.testappqr.presentation.navigation.Routes
 import java.io.ByteArrayInputStream
 
 @Composable
@@ -123,7 +124,7 @@ fun SSOWebViewComponent(
         if (shouldNavigate) {
             LaunchedEffect (Unit){
 
-                navController.navigate("professor") {
+                navController.navigate(Routes.PROFESSOR) {
                     popUpTo("login") {
                         inclusive = true
                     }

@@ -17,7 +17,7 @@ class NetworkModule {
     fun provideNetworkService(): ApiService {
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://5a8cfbf2-dbe7-4e98-b7bd-ca4aaf08a889.mock.pstmn.io/")
+            .baseUrl("http://10.0.2.2:8080/")
             .build()
         return retrofit.create(ApiService::class.java)
     }

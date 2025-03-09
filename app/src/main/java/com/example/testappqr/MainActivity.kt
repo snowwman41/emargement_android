@@ -15,6 +15,7 @@ import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
 import com.example.testappqr.presentation.login.screens.LoginScreen
+import com.example.testappqr.presentation.navigation.NavGraph
 import com.example.testappqr.presentation.professor.screens.ModuleScreen
 import com.example.testappqr.presentation.professor.screens.ProfessorScreen
 import com.example.testappqr.presentation.student.screens.StudentScreen
@@ -28,9 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmargementTheme {
-
-                App(SharedModel())
-
+                NavGraph(SharedModel())
             }
         }
     }
@@ -70,24 +69,5 @@ class SharedModel {
 
 }
 
-@Composable
-fun App(sharedModel: SharedModel) {
-    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") {
-            LoginScreen(navController, sharedModel)
-        }
-        composable("professor") {
-            ProfessorScreen(navController)
-        }
-        composable("student") {
-            StudentScreen(navController, sharedModel)
-        }
-        composable("professor/module/{moduleId}",
-            arguments = listOf(navArgument("moduleId") {type = NavType.StringType})) {
-            ModuleScreen(navController)
-        }
-    }
-}
 

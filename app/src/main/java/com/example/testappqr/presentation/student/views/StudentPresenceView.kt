@@ -6,14 +6,17 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.testappqr.R
 
 @Composable
 fun StudentPresenceView() {
@@ -32,8 +35,11 @@ fun StudentPresenceView() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = { isScanning = !isScanning }) {
+
         Text("Toggle scan")
     }
+        IconButton (onClick = { isScanning = !isScanning }){ Icon(painter = painterResource(R.drawable.scan_qr_code),contentDescription  = "zefz") }
+
         if (hasPermission) {
             if (isScanning) {
                 BarcodeScanner { code ->

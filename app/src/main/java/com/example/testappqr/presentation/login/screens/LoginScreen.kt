@@ -14,6 +14,7 @@ import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
 import com.example.testappqr.SharedModel
 import com.example.testappqr.presentation.login.views.SSOWebViewComponent
+import com.example.testappqr.presentation.navigation.Routes
 
 
 @Composable
@@ -50,7 +51,7 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
             )
         )
         LaunchedEffect(Unit) {
-            navController.navigate("professor")
+            navController.navigate(Routes.PROFESSOR)
         }
 
     }else{

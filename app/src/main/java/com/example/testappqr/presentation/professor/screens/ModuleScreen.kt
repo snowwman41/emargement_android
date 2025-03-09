@@ -22,7 +22,7 @@ import com.example.testappqr.presentation.professor.viewmodels.ModuleViewModel
 import com.example.testappqr.presentation.professor.views.AddSessionView
 import com.example.testappqr.presentation.professor.views.QRCodeView
 import com.example.testappqr.presentation.sharedviews.BasicButton
-import com.example.testappqr.presentation.sharedviews.NavigationScreen
+import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.sharedviews.SessionView
 
 
@@ -33,7 +33,7 @@ fun ModuleScreen(
 
     val moduleState by viewModel.moduleState.collectAsStateWithLifecycle()
 
-    NavigationScreen(navController = navController, title = "Module", showBackButton = true) {
+    NavigationView(navController = navController, title = "Module", showBackButton = true) {
         Column {
             LaunchedEffect(Unit) { viewModel.getModule() }
 

@@ -39,7 +39,6 @@ class AddSessionVM @Inject constructor(
     fun addSession() {
         val moduleId = UUID.fromString(savedStateHandle.get<String>("moduleId"))
 
-        println(moduleId)
         viewModelScope.launch {
             addSessionUseCase(
                 moduleId = moduleId,

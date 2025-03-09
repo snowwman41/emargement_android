@@ -8,18 +8,19 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.testappqr.SharedModel
 import com.example.testappqr.presentation.sharedviews.BasicButton
-import com.example.testappqr.presentation.sharedviews.NavigationScreen
+import com.example.testappqr.presentation.navigation.NavigationView
+import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.student.views.StudentPresenceView
 
 @Composable
-fun StudentScreen(navController: NavHostController, sharedModel: SharedModel) {
+fun StudentScreen(navController: NavHostController) {
 
-    NavigationScreen(navController = navController, title = "Student") {
+    NavigationView(navController = navController, title = "Student") {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BasicButton(text = "Professor", onClick = { navController.navigate("professor") })
+            BasicButton(text = "Professor", onClick = { navController.navigate(Routes.PROFESSOR) })
             StudentPresenceView()
         }
 

@@ -21,7 +21,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.presentation.navigation.Routes
+//import com.example.testappqr.presentation.navigation.navigateToProfessorModule
 import com.example.testappqr.presentation.professor.viewmodels.ProfessorVM
+import okhttp3.Route
 import java.util.UUID
 
 
@@ -40,7 +43,8 @@ fun ProfessorModulesView(
                 modifier = Modifier
                     .padding(6.dp)
                     .clickable {
-                        navController.navigate("professor/module/${module.moduleId}")
+                        navController.navigate(Routes.PROFESSOR_MODULE(module.moduleId.toString()))
+//                        navController.navigateToProfessorModule(module.moduleId.toString())
                     }
             )
         }

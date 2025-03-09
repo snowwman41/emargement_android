@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.sharedviews
+package com.example.testappqr.presentation.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationScreen(
+fun NavigationView(
     navController: NavHostController,
     showBackButton: Boolean = false,
     title: String = "",
