@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.testappqr.SharedModel
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
@@ -20,7 +19,7 @@ fun StudentScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BasicButton(text = "Professor", onClick = { navController.navigate(Routes.PROFESSOR) })
+            BasicButton(text = "Professor", onClick = { navController.navigate(Routes.PROFESSOR_MODULES) })
             StudentPresenceView()
         }
 

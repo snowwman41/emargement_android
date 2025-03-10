@@ -22,16 +22,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.presentation.navigation.Routes
+import com.example.testappqr.presentation.professor.viewmodels.ProfessorModulesVM
 //import com.example.testappqr.presentation.navigation.navigateToProfessorModule
-import com.example.testappqr.presentation.professor.viewmodels.ProfessorVM
-import okhttp3.Route
+
 import java.util.UUID
 
 
 @Composable
 fun ProfessorModulesView(
     navController: NavController,
-    professorVM: ProfessorVM = hiltViewModel()
+    professorVM: ProfessorModulesVM = hiltViewModel()
 ) {
     val professorState by professorVM.professorState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {

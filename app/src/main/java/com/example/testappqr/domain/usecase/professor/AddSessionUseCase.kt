@@ -1,6 +1,6 @@
 package com.example.testappqr.domain.usecase.professor
 
-import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
 import java.util.UUID
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class AddSessionUseCase @Inject constructor(private val professorRepository: Pro
         val timeStampStartTime = 1L
         val timeStampEndTime = 1L
         professorRepository.addSession(
-            session = SessionDTO(
+            session = SessionLazyDTO(
                 moduleId = moduleId,
                 sessionName = sessionName,
                 startTime = timeStampStartTime,

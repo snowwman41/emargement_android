@@ -4,21 +4,11 @@ package com.example.testappqr
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.testappqr.theme.EmargementTheme
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
-import com.example.testappqr.presentation.login.screens.LoginScreen
 import com.example.testappqr.presentation.navigation.NavGraph
-import com.example.testappqr.presentation.professor.screens.ModuleScreen
-import com.example.testappqr.presentation.professor.screens.ProfessorScreen
-import com.example.testappqr.presentation.student.screens.StudentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.UUID

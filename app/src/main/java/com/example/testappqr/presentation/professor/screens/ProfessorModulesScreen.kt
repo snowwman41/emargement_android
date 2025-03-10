@@ -1,3 +1,5 @@
+@file:JvmName("ProfessorModulesScreenKt")
+
 package com.example.testappqr.presentation.professor.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -14,8 +16,8 @@ import com.example.testappqr.presentation.professor.views.ProfessorModulesView
 import com.example.testappqr.presentation.sharedviews.BasicButton
 
 @Composable
-fun ProfessorScreen(navController: NavHostController) {
-    NavigationView(navController = navController, title = "Modules") {
+fun ProfessorModulesScreen(navController: NavHostController) {
+    NavigationView(navController = navController, title = "My modules") {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,

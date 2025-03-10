@@ -11,7 +11,7 @@ data class ModuleDTO(
     val moduleName: String,
     val specialityId: String,
     val teachers: @RawValue List<TeacherLazyDTO>,
-    var sessions  : @RawValue List<SessionDTO>
+    var sessions  : @RawValue List<SessionLazyDTO>
 ) : Parcelable
 
 @Parcelize

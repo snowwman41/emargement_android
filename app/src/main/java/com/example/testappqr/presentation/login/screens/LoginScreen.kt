@@ -51,7 +51,7 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
             )
         )
         LaunchedEffect(Unit) {
-            navController.navigate(Routes.PROFESSOR)
+            navController.navigate(Routes.PROFESSOR_SESSIONS)
         }
 
     }else{

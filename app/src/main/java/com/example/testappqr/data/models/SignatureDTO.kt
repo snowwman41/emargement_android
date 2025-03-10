@@ -4,8 +4,7 @@ import java.util.UUID
 
 data class SignatureDTO(
     val id: UUID,
-    val userName: String,
-    val userFirstName: String,
+    val studentId : String,
     val sessionId: UUID,
     val verificationCode :String
 )

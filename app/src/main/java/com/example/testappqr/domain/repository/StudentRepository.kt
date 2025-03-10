@@ -1,9 +1,8 @@
 package com.example.testappqr.domain.repository
 
-import com.example.testappqr.data.models.SessionDTO
-import retrofit2.http.Path
+import com.example.testappqr.data.models.SessionLazyDTO
 
 interface StudentRepository {
-    suspend fun getActiveSessions (userId : String): List<SessionDTO>
+    suspend fun getActiveSessions (userId : String): List<SessionLazyDTO>
 
 }

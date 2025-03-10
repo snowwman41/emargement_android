@@ -27,7 +27,7 @@ import com.example.testappqr.presentation.sharedviews.SessionView
 
 
 @Composable
-fun ModuleScreen(
+fun ProfessorModuleScreen(
     navController: NavHostController, viewModel: ModuleViewModel = hiltViewModel()
 ) {
 

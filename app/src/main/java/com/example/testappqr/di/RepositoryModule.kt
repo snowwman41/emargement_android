@@ -1,8 +1,6 @@
 package com.example.testappqr.di
 
-import com.example.testappqr.data.datasource.remote.ApiService
 import com.example.testappqr.data.repository.FakeProfessorRepositoryImpl
-import com.example.testappqr.data.repository.ProfessorRepositoryImpl
 import com.example.testappqr.domain.repository.ProfessorRepository
 import dagger.Module
 import dagger.Provides
@@ -15,7 +13,7 @@ import javax.inject.Singleton
 object RepositoryModule {
 //    @Provides
 //    @Singleton
-//    fun provideBookRepository(
+//    fun provideRepository(
 //        apiService: ApiService
 //
 //        ): ProfessorRepository {
@@ -24,7 +22,7 @@ object RepositoryModule {
 //    }
     @Provides
     @Singleton
-    fun provideBookRepository(
+    fun provideRepository(
     ): ProfessorRepository {
 
         return FakeProfessorRepositoryImpl()

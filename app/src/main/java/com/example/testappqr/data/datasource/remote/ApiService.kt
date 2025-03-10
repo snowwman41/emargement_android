@@ -5,7 +5,7 @@ package com.example.testappqr.data.datasource.remote
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
-import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.SessionLazyDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 
@@ -24,22 +24,22 @@ interface ApiService {
     suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
 
     @POST("addSession")
-    suspend fun addSession (@Body sessionDTO: SessionDTO): List<SessionDTO>
+    suspend fun addSession (@Body sessionLazyDTO: SessionLazyDTO): List<SessionLazyDTO>
 
     @GET("openSession/{sessionId}")
-    suspend fun openSession (@Path("sessionId") sessionId : UUID): SessionDTO
+    suspend fun openSession (@Path("sessionId") sessionId : UUID): SessionLazyDTO
 
     @GET("closeSession/{sessionId}")
     suspend fun closeSession (@Path("sessionId") sessionId : UUID): Unit
 
     @GET("students/{userId}/active-sessions")
-    suspend fun getActiveSessions (@Path("userId") userId : String): List<SessionDTO>
+    suspend fun getActiveSessions (@Path("userId") userId : String): List<SessionLazyDTO>
 
     @POST("auth/token/verify")
     suspend fun verifyToken (): Boolean
 
     @GET("sessions")
-    suspend fun getSessions (): List<SessionDTO>
+    suspend fun getSessions (): List<SessionLazyDTO>
 
     @GET
     suspend fun casValidate (@Url url : String): SSODTO

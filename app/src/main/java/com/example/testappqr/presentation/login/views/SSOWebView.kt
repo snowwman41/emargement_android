@@ -124,7 +124,7 @@ fun SSOWebViewComponent(
         if (shouldNavigate) {
             LaunchedEffect (Unit){
 
-                navController.navigate(Routes.PROFESSOR) {
+                navController.navigate(Routes.PROFESSOR_MODULES) {
                     popUpTo("login") {
                         inclusive = true
                     }

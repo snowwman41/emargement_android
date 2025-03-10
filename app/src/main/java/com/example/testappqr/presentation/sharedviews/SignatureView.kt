@@ -21,7 +21,7 @@ import com.example.testappqr.utils.formatTime
 import java.util.UUID
 
 @Composable
-fun SessionView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
+fun SignatureView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth().padding(6.dp)
     ) {
@@ -53,8 +53,8 @@ fun SessionView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
 }
 @Preview(showBackground = true)
 @Composable
-fun SessionPreview(){
-    SessionView(
+fun SignaturePreview(){
+    SignatureView(
         SessionLazyDTO(
             sessionId = UUID.randomUUID(),
             moduleId = UUID.randomUUID(),

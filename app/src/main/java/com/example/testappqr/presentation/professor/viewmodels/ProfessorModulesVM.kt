@@ -13,7 +13,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfessorVM @Inject constructor(
+class ProfessorModulesVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getModulesUseCase: GetModulesUseCase
 ) : ViewModel() {
