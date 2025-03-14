@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.camera.camera2)
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
+    implementation(libs.altbeacon)//beacon
+
 
 
 //    implementation(libs.camerax.mlkit)//camera setup

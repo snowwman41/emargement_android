@@ -31,9 +31,9 @@ fun ProfessorCodeScreen(
                 onClick = { viewModel.toggleQRCodeModal(true) },
                 text = "Show QR code"
             )
-            Row { Text("code")
-                IconButton(content = Icon()) { }
-            }
+//            Row { Text("code")
+//                IconButton(content = Icon()) { }
+//            }
         }
 
 
