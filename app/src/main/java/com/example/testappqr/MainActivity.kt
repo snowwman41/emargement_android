@@ -30,11 +30,11 @@ import java.util.UUID
 //    }
 //}
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {  // Changement d'extension vers AppCompatActivity
+class MainActivity : ComponentActivity() {  // Changement d'extension vers AppCompatActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startBeaconScannerService()
+//        startBeaconScannerService()
 
         setContent {
             EmargementTheme {
