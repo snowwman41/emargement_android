@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.data.models.SignatureDTO
 import com.example.testappqr.presentation.navigation.NavigationView
-import com.example.testappqr.presentation.professor.viewmodels.ProfessorSessionVM
+import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionVM
 import com.example.testappqr.utils.formatDate
 import com.example.testappqr.utils.formatTime
 

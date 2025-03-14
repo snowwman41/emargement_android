@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
-import com.example.testappqr.presentation.professor.viewmodels.ProfessorSessionsVM
+import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionsVM
 import com.example.testappqr.presentation.sharedviews.SessionView
 
 @Composable

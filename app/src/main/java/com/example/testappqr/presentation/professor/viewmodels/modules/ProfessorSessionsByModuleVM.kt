@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.viewmodels
+package com.example.testappqr.presentation.professor.viewmodels.modules
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -33,8 +33,6 @@ class ProfessorSessionsByModuleVM @Inject constructor(
         savedStateHandle["ProfessorSessionsByModuleState"] =
             update(professorSessionsByModuleState.value)
     }
-
-
 }
 
 @Parcelize

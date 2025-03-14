@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.testappqr.SharedModel
 import com.example.testappqr.presentation.login.screens.LoginScreen
-import com.example.testappqr.presentation.professor.screens.code.ProfessorCodeScreen
+import com.example.testappqr.presentation.professor.screens.ProfessorCodeScreen
 import com.example.testappqr.presentation.professor.screens.modules.ProfessorModuleNavigationScreen
 import com.example.testappqr.presentation.professor.screens.modules.ProfessorModulesScreen
 import com.example.testappqr.presentation.professor.screens.home.ProfessorSessionScreen

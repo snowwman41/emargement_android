@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.viewmodels
+package com.example.testappqr.presentation.professor.viewmodels.modules
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -23,7 +23,7 @@ class ProfessorStudentsByModuleVM @Inject constructor(
         ProfessorStudentsByModuleState()
     )
 
-    fun getStudentsByModule(moduleId : UUID) {
+    fun getStudentsByModule(moduleId: UUID) {
         viewModelScope.launch {
             val students = professorStudentsByModuleUseCase(moduleId)
             updateState { it.copy(studentsList = students) }

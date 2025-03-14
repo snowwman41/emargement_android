@@ -38,7 +38,7 @@ fun StudentPresenceView() {
 
         Text("Toggle scan")
     }
-        IconButton (onClick = { isScanning = !isScanning }){ Icon(painter = painterResource(R.drawable.scan_qr_code),contentDescription  = "zefz") }
+        IconButton (onClick = { isScanning = !isScanning }){ Icon(painter = painterResource(R.drawable.scan_qr_code),contentDescription  = "code QR") }
 
         if (hasPermission) {
             if (isScanning) {

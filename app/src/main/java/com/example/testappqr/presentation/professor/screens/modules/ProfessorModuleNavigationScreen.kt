@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.testappqr.presentation.professor.viewmodels.ModuleViewModel
+import com.example.testappqr.presentation.professor.viewmodels.code.ProfessorCodeVM
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
@@ -16,7 +16,7 @@ import com.example.testappqr.presentation.navigation.Routes
 
 @Composable
 fun ProfessorModuleNavigationScreen(
-    navController: NavHostController, moduleId : String,viewModel: ModuleViewModel = hiltViewModel()
+    navController: NavHostController, moduleId : String,viewModel: ProfessorCodeVM = hiltViewModel()
 ) {
 
     val moduleState by viewModel.moduleState.collectAsStateWithLifecycle()

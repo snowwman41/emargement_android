@@ -22,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.presentation.navigation.Routes
-import com.example.testappqr.presentation.professor.viewmodels.ProfessorModulesVM
+import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorModulesVM
 //import com.example.testappqr.presentation.navigation.navigateToProfessorModule
 
 import java.util.UUID

@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.viewmodels
+package com.example.testappqr.presentation.professor.viewmodels.modules
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
