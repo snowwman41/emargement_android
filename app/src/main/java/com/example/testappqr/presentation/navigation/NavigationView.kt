@@ -90,36 +90,43 @@ fun BottomBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar {
-        NavigationBarItem(icon = {
-            Icon(imageVector = Icons.Default.Home, "")
-        },
-            label = { Text(text = "Home") }, selected = currentRoute == Routes.PROFESSOR_SESSIONS,
-            onClick = {
-                navController.navigate(Routes.PROFESSOR_SESSIONS) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+        println(currentRoute)
+        if (currentRoute != null) {
+            NavigationBarItem(icon = {
+                Icon(imageVector = Icons.Default.Home, "")
+            },
+                label = { Text(text = "Home") }, selected = currentRoute.contains(Routes.PROFESSOR_SESSIONS),
+                onClick = {
+                    navController.navigate(Routes.PROFESSOR_SESSIONS) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
 
-            })
-        NavigationBarItem(icon = {
-            Icon(imageVector = Icons.AutoMirrored.Filled.List, "")
-        },
-            label = { Text(text = "Modules") }, selected = currentRoute == Routes.PROFESSOR_MODULES,
-            onClick = {
-                navController.navigate(Routes.PROFESSOR_MODULES) {
-                    // Pop up to the start destination of the graph to avoid building up a stack
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+                })
+        }
+        if (currentRoute != null) {
+            NavigationBarItem(icon = {
+                Icon(imageVector = Icons.AutoMirrored.Filled.List, "")
+            },
+                label = { Text(text = "Modules") }, selected = currentRoute.contains(Routes.PROFESSOR_MODULES),
+                onClick = {
+                    navController.navigate(Routes.PROFESSOR_MODULES)
+
+                    {
+                        // Pop up to the start destination of the graph to avoid building up a stack
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
                     }
-                    // Avoid multiple copies of the same destination
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
-                }
-            })
+                })
+        }
         NavigationBarItem(icon = {
             Icon(painter = painterResource(id = R.drawable.scan_qr_code), "")
         },

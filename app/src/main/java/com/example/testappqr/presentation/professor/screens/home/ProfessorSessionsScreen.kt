@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.screens
+package com.example.testappqr.presentation.professor.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn

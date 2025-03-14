@@ -1,7 +1,10 @@
 package com.example.testappqr.data.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.util.UUID
-
+@Parcelize
 data class SessionLazyDTO(
     val sessionId: UUID? = null,
     val moduleId: UUID,
@@ -11,8 +14,8 @@ data class SessionLazyDTO(
     val verificationCode: String,
     val active : Boolean
 //    val signatures: Set<SignatureDTO>
-)
-
+) : Parcelable
+@Parcelize
 data class SessionDTO(
     val sessionId: UUID? = null,
     val moduleId: UUID,
@@ -21,5 +24,5 @@ data class SessionDTO(
     val endTime: Long,
     val verificationCode: String,
     val active : Boolean,
-    val signatures: List<SignatureDTO>
-)
+    val signatures: @RawValue List<SignatureDTO>
+) : Parcelable

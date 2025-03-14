@@ -19,6 +19,7 @@ import com.example.testappqr.presentation.navigation.Routes
 
 @Composable
 fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
+    println("inside login")
     var isTokenValid by remember { mutableStateOf(false) }
     if (sharedModel.development) {
 
@@ -50,21 +51,16 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
                 )
             )
         )
-        LaunchedEffect(Unit) {
-            navController.navigate(Routes.PROFESSOR_SESSIONS)
-        }
+//        LaunchedEffect(Unit) {
+//            navController.navigate(Routes.PROFESSOR_SESSIONS)
+//        }
+        navController.navigate(Routes.PROFESSOR_SESSIONS)
+
 
     }else{
-        LaunchedEffect(Unit) {
-//            isTokenValid = verifyToken()
-        }
-        if (!isTokenValid) {
-            SSOWebViewComponent(navController,sharedModel)
-        }
+        SSOWebViewComponent(navController,sharedModel)
+
     }
 
 }
-//
-//suspend fun verifyToken(): Boolean {
-//    return RetrofitApi.api.verifyToken()
-//}
+

@@ -6,6 +6,7 @@ import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.data.models.StudentLazyDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
 import java.util.UUID
 import javax.inject.Inject
@@ -44,7 +45,15 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
         TODO("Not yet implemented")
     }
 
+    override suspend fun getSessionsByModule(): List<SessionLazyDTO> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getSession(): SessionDTO {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO> {
         TODO("Not yet implemented")
     }
 

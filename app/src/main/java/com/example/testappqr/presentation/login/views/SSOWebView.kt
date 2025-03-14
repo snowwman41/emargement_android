@@ -26,16 +26,19 @@ import androidx.navigation.NavHostController
 
 import com.example.testappqr.SharedModel
 import com.example.testappqr.presentation.navigation.Routes
+import com.example.testappqr.presentation.sharedviews.BasicButton
 import java.io.ByteArrayInputStream
-
+val ip = "172.25.208.1"
 @Composable
 fun SSOWebViewComponent(
     navController: NavHostController,
     sharedModel: SharedModel
 ) {
+    val ip = "172.25.208.1"
+    val ssoUrl = "http://$ip:8080/auth/cas"
     var isLoading by remember { mutableStateOf(true) }
     var webViewError by remember { mutableStateOf(false) }
-    val ssoUrl = "http://10.0.2.2:8080/auth/cas"
+
     var shouldNavigate by remember { mutableStateOf(false) }
 
 
@@ -71,7 +74,7 @@ fun SSOWebViewComponent(
                         //intercept to go out of the webview, otherwise we receive data in webview and we can't interact with it
                         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                             val requestUrl = request?.url.toString()
-                            if (requestUrl.startsWith("http://10.0.2.2:8080/auth/cas/validate")) { // ✅ Detect JSON request
+                            if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
 
 //                                sharedModel.apiSSOResponse = handleValidationRequest(requestUrl)
                                 if (sharedModel.apiSSOResponse != null){
@@ -87,14 +90,7 @@ fun SSOWebViewComponent(
                         }
 
                         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                            val url = request?.url?.toString() ?: return false
-                            if (url.startsWith("http://localhost:8080")) {
-                                val newUrl = url.replace("localhost", "10.0.2.2")
-                                    .replace("127.0.0.1", "10.0.2.2")
-                                view?.loadUrl(newUrl) // Load the modified URL
-                                return true //override : true , continue with request, either modified
-                            }
-                           return false //override : false , continue with unmodified request
+                            return overrideUrl(view, request)
                         }
 
                         override fun onPageFinished(view: WebView?, url: String?) {
@@ -108,7 +104,6 @@ fun SSOWebViewComponent(
             },
             modifier = Modifier.fillMaxSize()
         )
-
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
@@ -120,11 +115,15 @@ fun SSOWebViewComponent(
                 text = "Error loading content",
                 modifier = Modifier.align(Alignment.Center)
             )
+            BasicButton(
+                onClick= { navController.navigate(Routes.LOGIN) },
+                text = "Refresh",
+            )
         }
         if (shouldNavigate) {
             LaunchedEffect (Unit){
 
-                navController.navigate(Routes.PROFESSOR_MODULES) {
+                navController.navigate(Routes.PROFESSOR_SESSIONS) {
                     popUpTo("login") {
                         inclusive = true
                     }
@@ -138,13 +137,14 @@ fun SSOWebViewComponent(
 
 }
 
-//private fun handleValidationRequest(url: String): SSODTO? {
-//    return runBlocking {
-//        try {
-//            val response = RetrofitApi.api.casValidate(url)
-//            response
-//        } catch (e: Exception) {
-//             null
-//        }
-//    }
-//}
+fun overrideUrl(view: WebView?, request: WebResourceRequest?): Boolean{
+    val url = request?.url?.toString() ?: return false
+    if (url.startsWith("http://localhost:8080")) {
+        val newUrl = url.replace("localhost", ip)
+            .replace("127.0.0.1", ip)
+        view?.loadUrl(newUrl) // Load the modified URL
+        return true //override : true , continue with request, either modified
+    }
+    return false //override : false , continue with unmodified request
+
+}

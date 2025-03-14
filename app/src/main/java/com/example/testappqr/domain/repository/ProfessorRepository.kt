@@ -5,6 +5,7 @@ import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.data.models.StudentLazyDTO
 import java.util.UUID
 
 interface ProfessorRepository {
@@ -15,7 +16,10 @@ interface ProfessorRepository {
     suspend fun closeSession(sessionId: UUID)
     //active ?
     suspend fun getSessions(): List<SessionLazyDTO>
+    suspend fun getSessionsByModule(): List<SessionLazyDTO>
     suspend fun getSession(): SessionDTO
+    suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO>
+
 
     // not yet implemented
     suspend fun verifyToken(): Boolean

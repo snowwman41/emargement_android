@@ -13,6 +13,18 @@ object Routes {
         "professor/modules/${moduleId}"
     }
 
+    val PROFESSOR_SESSIONS_BY_MODULE: (moduleId: String) -> String = { moduleId ->
+        "professor/modules/${moduleId}/sessions"
+    }
+    val PROFESSOR_SESSION_BY_MODULE: (moduleId: String,sessionId : String) -> String = { moduleId,sessionId ->
+        "professor/modules/${moduleId}/sessions/${sessionId}"
+
+    }
+    val PROFESSOR_STUDENTS_BY_MODULE: (moduleId: String) -> String = { moduleId ->
+        "professor/modules/${moduleId}/students"
+    }
+
+
     const val PROFESSOR_CODE = "professor/code"
 
 

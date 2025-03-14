@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.screens
+package com.example.testappqr.presentation.professor.screens.code
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

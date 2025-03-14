@@ -1,6 +1,6 @@
 @file:JvmName("ProfessorModulesScreenKt")
 
-package com.example.testappqr.presentation.professor.screens
+package com.example.testappqr.presentation.professor.screens.modules
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

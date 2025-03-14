@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.screens
+package com.example.testappqr.presentation.professor.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

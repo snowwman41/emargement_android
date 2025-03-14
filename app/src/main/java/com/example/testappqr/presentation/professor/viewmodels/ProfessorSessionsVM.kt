@@ -22,7 +22,7 @@ class ProfessorSessionsVM @Inject constructor(
     fun getSessions() {
         viewModelScope.launch {
             val sessions = professorSessionsUseCase()
-
+            println("sessions: $sessions")
             updateState { it.copy(sessionsList = sessions) }
         }
     }
@@ -35,5 +35,5 @@ class ProfessorSessionsVM @Inject constructor(
 
 @Parcelize
 data class ProfessorSessionsState(
-    val sessionsList: @RawValue List<SessionLazyDTO>? = null
+    val sessionsList: @RawValue List<SessionLazyDTO> = emptyList()
 ) : Parcelable

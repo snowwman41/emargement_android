@@ -6,6 +6,7 @@ import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.data.models.SignatureDTO
+import com.example.testappqr.data.models.StudentLazyDTO
 import com.example.testappqr.data.models.TeacherLazyDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
 import java.util.UUID
@@ -52,7 +53,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                     "third",
                     1740222636,
                     1740225636,
-                    "null",
+                    "test",
                     false,
 
                     ), SessionLazyDTO(
@@ -61,7 +62,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                     "second",
                     1740222636,
                     1740225636,
-                    "null",
+                    "test",
                     false
 
                 ), SessionLazyDTO(
@@ -70,7 +71,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                     "first",
                     1740222636,
                     1740225636,
-                    "null",
+                    "test",
                     false
                 )
             )
@@ -85,7 +86,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
             "third",
             1740222636,
             1740225636,
-            "null",
+            "test",
             false
         )
     }
@@ -106,7 +107,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                 "third",
                 1740222636,
                 1740225636,
-                "null",
+                "test",
                 true,
 
                 ), SessionLazyDTO(
@@ -115,7 +116,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                 "second",
                 1740222636,
                 1740225636,
-                "null",
+                "test",
                 true
 
             ), SessionLazyDTO(
@@ -124,7 +125,39 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                 "first",
                 1740222636,
                 1740225636,
-                "null",
+                "test",
+                true
+            )
+        )
+    }
+
+    override suspend fun getSessionsByModule(): List<SessionLazyDTO> {
+        return listOf(
+            SessionLazyDTO(
+                UUID.fromString("10dc002f-35fa-445d-9a1c-99a78940333e"),
+                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+                "third for module",
+                1740222636,
+                1740225636,
+                "test",
+                true,
+
+                ), SessionLazyDTO(
+                UUID.fromString("35ec002f-35fa-445d-9a1c-99a78940111e"),
+                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+                "second for module",
+                1740222636,
+                1740225636,
+                "test",
+                true
+
+            ), SessionLazyDTO(
+                UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
+                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+                "first for module",
+                1740222636,
+                1740225636,
+                "test",
                 true
             )
         )
@@ -158,6 +191,31 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
                 )
             )
         )
+    }
+
+    override suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO> {
+
+        return listOf(
+            StudentLazyDTO(
+                studentId = "b24028599",
+                firstName = "Oscar",
+                lastName = "Bauer",
+                email = ""
+            ),
+            StudentLazyDTO(
+                studentId = "b24028599",
+                firstName = "Oscar",
+                lastName = "Bauer",
+                email = ""
+            ),
+            StudentLazyDTO(
+                studentId = "b24028599",
+                firstName = "Oscar",
+                lastName = "Bauer",
+                email = ""
+            ),
+        )
+
     }
 
     override suspend fun verifyToken(): Boolean {
