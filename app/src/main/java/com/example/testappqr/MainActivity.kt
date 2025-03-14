@@ -1,27 +1,56 @@
 
 package com.example.testappqr
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import com.example.testappqr.theme.EmargementTheme
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
 import com.example.testappqr.presentation.navigation.NavGraph
+import com.example.testappqr.presentation.student.views.BeaconScannerService
 import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.UUID
 
+//
+//class MainActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            EmargementTheme {
+//                NavGraph(SharedModel())
+//            }
+//        }
+//    }
+//}
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {  // Changement d'extension vers AppCompatActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startBeaconScannerService()
+
         setContent {
             EmargementTheme {
                 NavGraph(SharedModel())
             }
         }
+    }
+
+    private fun startBeaconScannerService() {
+        val intent = Intent(this, BeaconScannerService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
+        Toast.makeText(this, "Beacon scanning started", Toast.LENGTH_SHORT).show()
     }
 }
 
