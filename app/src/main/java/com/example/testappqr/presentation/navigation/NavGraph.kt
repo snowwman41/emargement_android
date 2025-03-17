@@ -37,8 +37,6 @@ fun NavGraph(sharedModel: SharedModel) {
             ProfessorSessionScreen(navController)
         }
 
-
-
         composable(Routes.PROFESSOR_MODULES) {
             ProfessorModulesScreen(navController)
         }
