@@ -27,8 +27,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlinx.parcelize.RawValue
+import javax.inject.Inject
 
 data class BeaconDevice(
     val address: String,
@@ -45,6 +45,9 @@ class BeaconVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+
+    val beaconState = savedStateHandle.getStateFlow("beaconState", BeaconState())
+
     companion object {
         private const val TAG = "BeaconVM"
         private const val SCAN_PERIOD = 30000L // 30 seconds
@@ -57,36 +60,32 @@ class BeaconVM @Inject constructor(
     private var bluetoothLeScanner: BluetoothLeScanner? = null
     private val handler = Handler(Looper.getMainLooper())
 
-    val beaconState = savedStateHandle.getStateFlow("beaconState", BeaconState())
 
-
-    // BLE Scanner receiver
+    // BLE Scanner receiver to listen to ble changes
     private val bluetoothStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == BluetoothAdapter.ACTION_STATE_CHANGED) {
-                val btState =
-                    intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
-                val isEnabled = btState == BluetoothAdapter.STATE_ON
-                Log.d(TAG, "BT state changed: $isEnabled ($btState)")
+            val btState =
+                intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+            val isEnabled = btState == BluetoothAdapter.STATE_ON
 
-                updateState { it.copy(isBluetoothEnabled = isEnabled) }
+            updateState { it.copy(isBluetoothEnabled = isEnabled) }
 
-                if (!isEnabled) {
-                    updateState {
-                        it.copy(
-                            errorMessage = "Bluetooth must be enabled"
-                        )
-                    }
-                    stopScanning()
-                } else {
-                    updateState {
-                        it.copy(
-                            errorMessage = null
-                        )
-                    }
-                    setupBluetoothScanner()
+            if (!isEnabled) {
+                updateState {
+                    it.copy(
+                        errorMessage = "Bluetooth must be enabled"
+                    )
                 }
+                stopScanning()
+            } else {
+                updateState {
+                    it.copy(
+                        errorMessage = null
+                    )
+                }
+                setupBluetoothScanner()
             }
+
         }
     }
 
@@ -120,14 +119,12 @@ class BeaconVM @Inject constructor(
             }
 
             bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
-            Log.d(TAG, "Bluetooth scanner initialized successfully")
         } catch (e: Exception) {
             updateState {
                 it.copy(
                     errorMessage = "Error initializing Bluetooth: ${e.message}"
                 )
             }
-            Log.e(TAG, "Error initializing bluetooth", e)
         }
     }
 
@@ -191,8 +188,6 @@ class BeaconVM @Inject constructor(
             )
         }
 
-        Log.d(TAG, "Starting scan for beacons")
-
         // Set scan settings to aggressive mode for best discovery
         val settings = ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -203,8 +198,11 @@ class BeaconVM @Inject constructor(
             .build()
 
         // Don't use filters to get all devices including ELA beacons
+
         val filters = ArrayList<ScanFilter>()
 
+
+        filters.add(ScanFilter.Builder().setDeviceName("L ID 007435").build())
         handler.postDelayed({ stopScanning() }, SCAN_PERIOD)
 
         try {
@@ -215,7 +213,12 @@ class BeaconVM @Inject constructor(
                 bluetoothLeScanner?.startScan(filters, settings, leScanCallback)
                 Log.d(TAG, "Started scanning with aggressive settings")
             } else {
-                updateState { it.copy(isScanning = false, errorMessage ="Missing BLUETOOTH_SCAN permission" ) }
+                updateState {
+                    it.copy(
+                        isScanning = false,
+                        errorMessage = "Missing BLUETOOTH_SCAN permission"
+                    )
+                }
                 Log.e(TAG, "Missing BLUETOOTH_SCAN permission")
             }
         } catch (e: Exception) {
@@ -235,7 +238,10 @@ class BeaconVM @Inject constructor(
                     bluetoothLeScanner?.stopScan(leScanCallback)
                     updateState { it.copy(isScanning = false) }
 
-                    Log.d(TAG, "Stopped scanning - found ${beaconState.value.detectedBeacons.size} devices")
+                    Log.d(
+                        TAG,
+                        "Stopped scanning - found ${beaconState.value.detectedBeacons.size} devices"
+                    )
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error stopping scan", e)
@@ -250,56 +256,10 @@ class BeaconVM @Inject constructor(
             var batteryLevel: Float? = null
             var manufacturerInfo: String? = null
 
-            Log.d(TAG, "Device found: ${device.address}")
-
-            scanRecord?.let { record ->
-                val rawBytes = record.bytes
-                if (rawBytes != null) {
-                    // Full hex dump of all advertising data
-                    Log.d(TAG, "Raw data: ${bytesToHex(rawBytes)}")
-
-                    // Try to identify if this is an ELA beacon
-                    if (isELABeacon(device.address, rawBytes)) {
-                        // Extract battery level using ELA specific logic
-                        batteryLevel = 0f
-                        manufacturerInfo = "ELA Beacon"
-                        Log.d(TAG, "ELA Beacon identified: ${device.address}")
-                    } else {
-                        // Generic manufacturer data extraction
-                        val manufacturerData = record.manufacturerSpecificData
-                        if (manufacturerData != null && manufacturerData.size() > 0) {
-                            val id = manufacturerData.keyAt(0)
-                            manufacturerInfo = "0x${id.toString(16)}"
-                            Log.d(TAG, "Manufacturer ID: $manufacturerInfo")
-                        }
-                    }
-                }
-
-                // Try to find battery service data
-                record.serviceData?.forEach { (uuid, data) ->
-                    Log.d(TAG, "Service UUID: $uuid, data: ${bytesToHex(data)}")
-                    if (uuid.toString().startsWith("0000180f")) {
-                        // Standard Battery Service
-                        if (data.isNotEmpty()) {
-                            batteryLevel = (data[0].toInt() and 0xFF).toFloat()
-                            Log.d(TAG, "Battery from standard service: $batteryLevel%")
-                        }
-                    }
-                }
-            }
-
-            val deviceName = if (ActivityCompat.checkSelfPermission(
-                    application, Manifest.permission.BLUETOOTH_CONNECT
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                device.name ?: "Unknown Device"
-            } else {
-                "Unknown Device (Permission Denied)"
-            }
 
             val beacon = BeaconDevice(
                 address = device.address,
-                name = deviceName,
+                name = device.name ?: "Unknown Device",
                 rssi = result.rssi,
                 batteryLevel = batteryLevel,
                 manufacturerData = manufacturerInfo
@@ -314,7 +274,7 @@ class BeaconVM @Inject constructor(
                     currentList[existingIndex] = beacon
                 } else {
                     if (beacon.address.startsWith("CC:97:6E"))
-                    currentList.add(beacon)
+                        currentList.add(beacon)
                     Log.d(TAG, "New device found: ${beacon.address}, Name: ${beacon.name}")
                 }
                 updateState {
@@ -419,3 +379,7 @@ data class BeaconState(
     val isBluetoothEnabled: Boolean = false,
     val errorMessage: String? = null
 ) : Parcelable
+
+class Beacon {
+
+}
