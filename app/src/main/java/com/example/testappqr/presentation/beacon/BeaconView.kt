@@ -1,10 +1,24 @@
-package com.example.testappqr.presentation.Beacon
+package com.example.testappqr.presentation.beacon
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
-fun BeaconItem(beacon: BeaconDevice) {
+fun BeaconItemView(beacon: BeaconDevice) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,43 +57,26 @@ fun BeaconItem(beacon: BeaconDevice) {
                 text = "Signal: ${beacon.rssi} dBm",
                 style = MaterialTheme.typography.bodyMedium
             )
-
-            beacon.batteryLevel?.let {
-                Text(
-                    text = "Battery: $it%",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            beacon.manufacturerData?.let {
-                Text(
-                    text = "Manufacturer: $it",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
         }
     }
 }
+
 @Composable
-fun BeaconScannerScreen(
+fun BeaconView(
     beaconVM: BeaconVM = hiltViewModel()
 ) {
 
-
     val beaconState by beaconVM.beaconState.collectAsStateWithLifecycle()
-
+    LaunchedEffect(Unit) {
+        beaconVM.getBeaconId("")
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Text(
-//            text = "ELA Beacon Scanner",
-//            style = MaterialTheme.typography.headlineMedium,
-//            modifier = Modifier.padding(bottom = 16.dp)
-//        )
+
 
         beaconState.errorMessage?.let {
             Text(
@@ -96,10 +93,13 @@ fun BeaconScannerScreen(
         ) {
             Button(
                 onClick = { beaconVM.startScanning() },
-                enabled = !beaconState.isScanning && beaconState.permissionsGranted,
+                enabled = !beaconState.isScanning &&
+                        beaconState.permissionsGranted &&
+                        beaconState.isBluetoothEnabled &&
+                        beaconState.isLocationEnabled,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Sign to session")
+                Text("Test your beacon")
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -112,6 +112,15 @@ fun BeaconScannerScreen(
                 Text("Stop Scanning")
             }
         }
+        Card(Modifier.fillMaxWidth()) {
+            if (beaconState.beaconId != null) {
+                Text(beaconState.beaconId!!)
+            } else {
+                Text("undefined")
+            }
+
+
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -121,7 +130,7 @@ fun BeaconScannerScreen(
             )
         }
 
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
+        HorizontalDivider()
 
         Text(
             text = "Found ${beaconState.detectedBeacons.size} devices",
@@ -135,7 +144,7 @@ fun BeaconScannerScreen(
                 .weight(1f)
         ) {
             items(beaconState.detectedBeacons.sortedByDescending { it.rssi }) { beacon ->
-                BeaconItem(beacon = beacon)
+                BeaconItemView(beacon = beacon)
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }

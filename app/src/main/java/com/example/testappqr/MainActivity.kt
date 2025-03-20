@@ -13,8 +13,9 @@ import androidx.compose.runtime.remember
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
 import com.example.testappqr.data.models.SSODTO
-import com.example.testappqr.presentation.Beacon.BeaconScannerScreen
-import com.example.testappqr.presentation.Beacon.BeaconVM
+import com.example.testappqr.presentation.beacon.BeaconView
+import com.example.testappqr.presentation.beacon.BeaconVM
+
 import com.example.testappqr.presentation.navigation.NavGraph
 import com.example.testappqr.theme.EmargementTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -92,7 +93,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EmargementTheme {
-                BeaconScannerScreen()
+                BeaconView()
             }
         }
 

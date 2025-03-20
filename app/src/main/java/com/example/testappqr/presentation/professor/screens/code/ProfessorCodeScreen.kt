@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.testappqr.presentation.Beacon.BeaconScannerScreen
+import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.professor.viewmodels.code.ProfessorCodeVM
 import com.example.testappqr.presentation.professor.views.QRCodeView
 import com.example.testappqr.presentation.sharedviews.BasicButton
@@ -33,7 +33,7 @@ fun ProfessorCodeScreen(
 //            onScanClicked = { startScanning() },
 //            onStopScanClicked = { beacon.stopScanning() }
 //        )
-        BeaconScannerScreen()
+        BeaconView()
 //        Column {
 //            BasicButton(
 //                onClick = { viewModel.toggleQRCodeModal(true) },
