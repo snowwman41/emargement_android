@@ -1,4 +1,3 @@
-
 package com.example.testappqr.presentation.Beacon
 
 import android.Manifest
@@ -18,32 +17,32 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
+import android.os.Parcelable
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlinx.parcelize.RawValue
 
-//data class BeaconDevice(
-//    val address: String,
-//    val name: String,
-//    val rssi: Int,
-//    val batteryLevel: Float? = null,
-//    val manufacturerData: String? = null,
-//    val lastSeen: Long = System.currentTimeMillis()
-//)
+data class BeaconDevice(
+    val address: String,
+    val name: String,
+    val rssi: Int,
+    val batteryLevel: Float? = null,
+    val manufacturerData: String? = null,
+    val lastSeen: Long = System.currentTimeMillis()
+)
 
 @HiltViewModel
 class BeaconVM @Inject constructor(
-    private val application: Application
+    private val application: Application,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     companion object {
@@ -52,41 +51,39 @@ class BeaconVM @Inject constructor(
     }
 
     // Bluetooth components
-    private val bluetoothManager = application.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+    private val bluetoothManager =
+        application.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
     private var bluetoothLeScanner: BluetoothLeScanner? = null
     private val handler = Handler(Looper.getMainLooper())
 
-    // State flows
-    private val _detectedBeacons = MutableStateFlow<List<BeaconDevice>>(emptyList())
-    val detectedBeacons: StateFlow<List<BeaconDevice>> = _detectedBeacons.asStateFlow()
+    val beaconState = savedStateHandle.getStateFlow("beaconState", BeaconState())
 
-    private val _isScanning = MutableStateFlow(false)
-    val isScanning: StateFlow<Boolean> = _isScanning.asStateFlow()
-
-    private val _permissionsGranted = MutableStateFlow(false)
-    val permissionsGranted: StateFlow<Boolean> = _permissionsGranted.asStateFlow()
-
-    private val _isBluetoothEnabled = MutableStateFlow(checkBluetoothState())
-    val isBluetoothEnabled: StateFlow<Boolean> = _isBluetoothEnabled.asStateFlow()
-
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
     // BLE Scanner receiver
     private val bluetoothStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == BluetoothAdapter.ACTION_STATE_CHANGED) {
-                val btState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+                val btState =
+                    intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
                 val isEnabled = btState == BluetoothAdapter.STATE_ON
                 Log.d(TAG, "BT state changed: $isEnabled ($btState)")
-                _isBluetoothEnabled.value = isEnabled
+
+                updateState { it.copy(isBluetoothEnabled = isEnabled) }
 
                 if (!isEnabled) {
-                    _errorMessage.value = "Bluetooth must be enabled"
+                    updateState {
+                        it.copy(
+                            errorMessage = "Bluetooth must be enabled"
+                        )
+                    }
                     stopScanning()
                 } else {
-                    _errorMessage.value = null
+                    updateState {
+                        it.copy(
+                            errorMessage = null
+                        )
+                    }
                     setupBluetoothScanner()
                 }
             }
@@ -105,19 +102,31 @@ class BeaconVM @Inject constructor(
     private fun setupBluetoothScanner() {
         try {
             if (bluetoothAdapter == null) {
-                _errorMessage.value = "Device doesn't support Bluetooth"
+                updateState {
+                    it.copy(
+                        errorMessage = "Device doesn't support Bluetooth"
+                    )
+                }
                 return
             }
 
             if (!bluetoothAdapter.isEnabled) {
-                _errorMessage.value = "Bluetooth is disabled"
+                updateState {
+                    it.copy(
+                        errorMessage = "Bluetooth is disabled"
+                    )
+                }
                 return
             }
 
             bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
             Log.d(TAG, "Bluetooth scanner initialized successfully")
         } catch (e: Exception) {
-            _errorMessage.value = "Error initializing Bluetooth: ${e.message}"
+            updateState {
+                it.copy(
+                    errorMessage = "Error initializing Bluetooth: ${e.message}"
+                )
+            }
             Log.e(TAG, "Error initializing bluetooth", e)
         }
     }
@@ -125,7 +134,11 @@ class BeaconVM @Inject constructor(
     // Set permissions status from MainActivity
     fun setPermissionsGranted(granted: Boolean) {
         viewModelScope.launch {
-            _permissionsGranted.value = granted
+            updateState {
+                it.copy(
+                    permissionsGranted = granted
+                )
+            }
             if (granted) {
                 setupBluetoothScanner()
             }
@@ -134,31 +147,50 @@ class BeaconVM @Inject constructor(
 
     fun startScanning() {
         if (!checkPermissions()) {
-            _errorMessage.value = "Missing required permissions"
+            updateState {
+                it.copy(
+                    errorMessage = "Missing required permissions"
+                )
+            }
+
             return
         }
 
         if (!isLocationEnabled()) {
-            _errorMessage.value = "Location services must be enabled"
+            updateState {
+                it.copy(
+                    errorMessage = "Location services must be enabled"
+                )
+            }
             return
         }
 
         if (!checkBluetoothState()) {
-            _errorMessage.value = "Bluetooth must be enabled"
+            updateState {
+                it.copy(
+                    errorMessage = "Bluetooth must be enabled"
+                )
+            }
             return
         }
 
         if (bluetoothLeScanner == null) {
             setupBluetoothScanner()
             if (bluetoothLeScanner == null) {
-                _errorMessage.value = "Bluetooth scanner not available"
+                updateState { it.copy(errorMessage = "Bluetooth scanner not available") }
+
                 return
             }
         }
 
-        _detectedBeacons.value = emptyList()
-        _isScanning.value = true
-        _errorMessage.value = null
+        updateState {
+            it.copy(
+                detectedBeacons = emptyList(),
+                isScanning = true,
+                errorMessage = null
+            )
+        }
+
         Log.d(TAG, "Starting scan for beacons")
 
         // Set scan settings to aggressive mode for best discovery
@@ -183,27 +215,27 @@ class BeaconVM @Inject constructor(
                 bluetoothLeScanner?.startScan(filters, settings, leScanCallback)
                 Log.d(TAG, "Started scanning with aggressive settings")
             } else {
-                _errorMessage.value = "Missing BLUETOOTH_SCAN permission"
-                _isScanning.value = false
+                updateState { it.copy(isScanning = false, errorMessage ="Missing BLUETOOTH_SCAN permission" ) }
                 Log.e(TAG, "Missing BLUETOOTH_SCAN permission")
             }
         } catch (e: Exception) {
-            _errorMessage.value = "Error: ${e.message}"
-            _isScanning.value = false
+            updateState { it.copy(isScanning = false, errorMessage = "Error: ${e.message}") }
+
             Log.e(TAG, "Error starting scan", e)
         }
     }
 
     fun stopScanning() {
-        if (bluetoothLeScanner != null && _isScanning.value) {
+        if (bluetoothLeScanner != null && beaconState.value.isScanning) {
             try {
                 if (ActivityCompat.checkSelfPermission(
                         application, Manifest.permission.BLUETOOTH_SCAN
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     bluetoothLeScanner?.stopScan(leScanCallback)
-                    _isScanning.value = false
-                    Log.d(TAG, "Stopped scanning - found ${_detectedBeacons.value.size} devices")
+                    updateState { it.copy(isScanning = false) }
+
+                    Log.d(TAG, "Stopped scanning - found ${beaconState.value.detectedBeacons.size} devices")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error stopping scan", e)
@@ -275,15 +307,21 @@ class BeaconVM @Inject constructor(
 
             // Update beacon list
             handler.post {
-                val currentList = _detectedBeacons.value.toMutableList()
+//                val currentList = savedStateHandle.get<BeaconState>("beaconState").detectedBeacons.toMutableList()
+                val currentList = beaconState.value.detectedBeacons.toMutableList()
                 val existingIndex = currentList.indexOfFirst { it.address == beacon.address }
                 if (existingIndex >= 0) {
                     currentList[existingIndex] = beacon
                 } else {
+                    if (beacon.address.startsWith("CC:97:6E"))
                     currentList.add(beacon)
                     Log.d(TAG, "New device found: ${beacon.address}, Name: ${beacon.name}")
                 }
-                _detectedBeacons.value = currentList
+                updateState {
+                    it.copy(
+                        detectedBeacons = currentList
+                    )
+                }
             }
         }
 
@@ -294,15 +332,16 @@ class BeaconVM @Inject constructor(
         }
 
         override fun onScanFailed(errorCode: Int) {
-            _isScanning.value = false
-            val errorMessage = when(errorCode) {
+            updateState { it.copy(isScanning = false) }
+            val errorMessage = when (errorCode) {
                 ScanCallback.SCAN_FAILED_ALREADY_STARTED -> "Scan already started"
                 ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED -> "Application registration failed"
                 ScanCallback.SCAN_FAILED_FEATURE_UNSUPPORTED -> "BLE not supported"
                 ScanCallback.SCAN_FAILED_INTERNAL_ERROR -> "Internal error"
                 else -> "Unknown error code: $errorCode"
             }
-            _errorMessage.value = errorMessage
+            updateState { it.copy(errorMessage = errorMessage) }
+
             Log.e(TAG, "Scan failed: $errorMessage")
         }
     }
@@ -330,21 +369,23 @@ class BeaconVM @Inject constructor(
             application, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        val bluetoothPermission = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            ContextCompat.checkSelfPermission(
-                application, Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            ContextCompat.checkSelfPermission(
-                application, Manifest.permission.BLUETOOTH
-            ) == PackageManager.PERMISSION_GRANTED
-        }
+        val bluetoothPermission =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                ContextCompat.checkSelfPermission(
+                    application, Manifest.permission.BLUETOOTH_SCAN
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                ContextCompat.checkSelfPermission(
+                    application, Manifest.permission.BLUETOOTH
+                ) == PackageManager.PERMISSION_GRANTED
+            }
 
         return locationPermission && bluetoothPermission
     }
 
     private fun isLocationEnabled(): Boolean {
-        val locationManager = application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
@@ -364,4 +405,17 @@ class BeaconVM @Inject constructor(
         }
         stopScanning()
     }
+
+    private fun updateState(update: (BeaconState) -> BeaconState) {
+        savedStateHandle["beaconState"] = update(beaconState.value)
+    }
 }
+
+@Parcelize
+data class BeaconState(
+    val isScanning: Boolean = false,
+    val detectedBeacons: @RawValue List<BeaconDevice> = emptyList(),
+    val permissionsGranted: Boolean = false,
+    val isBluetoothEnabled: Boolean = false,
+    val errorMessage: String? = null
+) : Parcelable
