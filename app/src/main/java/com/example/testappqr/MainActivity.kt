@@ -20,7 +20,10 @@ import com.example.testappqr.presentation.navigation.NavGraph
 import com.example.testappqr.theme.EmargementTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
-
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 //@AndroidEntryPoint
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,13 +82,13 @@ import java.util.UUID
 //}
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val beaconViewModel: BeaconVM by viewModels()
+    private val beaconVM: BeaconVM by viewModels()
 
     private val requestMultiplePermissions = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val allGranted = permissions.entries.all { it.value }
-        beaconViewModel.setPermissionsGranted(allGranted)
+        beaconVM.setPermissionsGranted(allGranted)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,29 +96,51 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EmargementTheme {
-                BeaconView()
+                NavGraph(sharedModel = SharedModel())
             }
         }
 
-        requestPermissions()
+        requestPermissions(isMainActivity = true)
+        beaconVM.clearPermissionRequest()
     }
-
-    private fun requestPermissions() {
+    fun requestPermissions(isMainActivity: Boolean) {
         val permissionsToRequest = mutableListOf(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            android.Manifest.permission.ACCESS_FINE_LOCATION
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionsToRequest.add(android.Manifest.permission.BLUETOOTH_SCAN)
             permissionsToRequest.add(android.Manifest.permission.BLUETOOTH_CONNECT)
-            permissionsToRequest.add(android.Manifest.permission.BLUETOOTH_ADMIN)
         } else {
             permissionsToRequest.add(android.Manifest.permission.BLUETOOTH)
-            permissionsToRequest.add(android.Manifest.permission.BLUETOOTH_ADMIN)
         }
 
-        requestMultiplePermissions.launch(permissionsToRequest.toTypedArray())
+        // Check if any permission is denied and we can't show system dialog
+        var canAskPermissions = true
+        for (permission in permissionsToRequest) {
+            if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED &&
+                !shouldShowRequestPermissionRationale(permission)) {
+                canAskPermissions = false
+                break
+            }
+        }
+
+        if (canAskPermissions) {
+            // We can show system permission dialog
+            requestMultiplePermissions.launch(permissionsToRequest.toTypedArray())
+        } else if (!isMainActivity) {
+            // User has selected "Don't ask again", direct to settings
+            Toast.makeText(
+                this,
+                "Please enable required permissions in app settings",
+                Toast.LENGTH_LONG
+            ).show()
+
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+            startActivity(intent)
+        }
     }
 }
 

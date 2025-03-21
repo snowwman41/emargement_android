@@ -26,7 +26,7 @@ fun ProfessorCodeScreen(
 
     val moduleState by viewModel.moduleState.collectAsStateWithLifecycle()
 
-    NavigationView(navController = navController, title = "Module") {
+    NavigationView(navController = navController, title = "Code") {
 //        BeaconScreen (
 //            isScanning = isScanning.value,
 //            beacons = detectedBeacons,

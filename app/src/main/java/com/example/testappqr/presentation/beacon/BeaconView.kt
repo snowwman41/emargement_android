@@ -22,10 +22,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.testappqr.MainActivity
 
 
 @Composable
@@ -67,9 +69,11 @@ fun BeaconView(
 ) {
 
     val beaconState by beaconVM.beaconState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         beaconVM.getBeaconId("")
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -92,9 +96,16 @@ fun BeaconView(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { beaconVM.startScanning() },
+                onClick = {
+                    if (!beaconVM.checkPermissions()) {
+                        // Request permissions directly if they're not granted
+                        (context as? MainActivity)?.requestPermissions(isMainActivity = false)
+                    } else {
+                        // Only start scanning if permissions are granted
+                        beaconVM.startScanning()
+                    }},
                 enabled = !beaconState.isScanning &&
-                        beaconState.permissionsGranted &&
+                        !beaconState.permissionsGranted &&
                         beaconState.isBluetoothEnabled &&
                         beaconState.isLocationEnabled,
                 modifier = Modifier.weight(1f)

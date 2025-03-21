@@ -15,6 +15,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.os.Build
 import android.os.Parcelable
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -52,16 +53,9 @@ class BeaconVM @Inject constructor(
     private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
     private var bluetoothLeScanner: BluetoothLeScanner? = null
 
-    private val bluetoothStateReceiver = object : BroadcastReceiver() {
+    private val bluetoothLocationStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-//            when (intent.action) {
-//                BluetoothAdapter.ACTION_STATE_CHANGED -> {
-//                    if (checkBluetoothState()) setupBluetoothScanner()
-//                }
-//                LocationManager.PROVIDERS_CHANGED_ACTION -> {
-//                    checkLocationState()
-//                }
-//            }
+
             if (checkLocationAndBluetoothState())
                 setupBluetoothScanner()
 
@@ -71,12 +65,11 @@ class BeaconVM @Inject constructor(
 
     init {
         // Register receiver for Bluetooth state changes
-//        val filters = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         val filters = IntentFilter().apply {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
         }
-        application.registerReceiver(bluetoothStateReceiver, filters)
+        application.registerReceiver(bluetoothLocationStateReceiver, filters)
 
         // Initialize Bluetooth scanner
         if (checkLocationAndBluetoothState())
@@ -118,7 +111,14 @@ class BeaconVM @Inject constructor(
         }
     }
 
+    fun clearPermissionRequest() {
+        updateState { it.copy(requestingPermissions = false) }
+    }
     fun startScanning() {
+        if (!checkPermissions()) {
+            updateState { it.copy(requestingPermissions = true) }
+            return
+        }
         if (!checkPermissions() || !checkLocationAndBluetoothState()) return
 
         if (bluetoothLeScanner == null) {
@@ -245,13 +245,13 @@ class BeaconVM @Inject constructor(
     }
 
 
-    private fun checkPermissions(): Boolean {
+    fun checkPermissions(): Boolean {
         val locationPermission = ContextCompat.checkSelfPermission(
             application, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         val bluetoothPermission =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ContextCompat.checkSelfPermission(
                     application, Manifest.permission.BLUETOOTH_SCAN
                 ) == PackageManager.PERMISSION_GRANTED
@@ -260,10 +260,10 @@ class BeaconVM @Inject constructor(
                     application, Manifest.permission.BLUETOOTH
                 ) == PackageManager.PERMISSION_GRANTED
             }
-        if (locationPermission || bluetoothPermission) {
+        if (!locationPermission || !bluetoothPermission) {
             updateState {
                 it.copy(
-                    errorMessage = "Missing required permissions"
+                    errorMessage = "Missing permissions on location or nearby devices"
                 )
             }
         }
@@ -306,7 +306,7 @@ class BeaconVM @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         try {
-            application.unregisterReceiver(bluetoothStateReceiver)
+            application.unregisterReceiver(bluetoothLocationStateReceiver)
         } catch (e: Exception) {
             Log.e(TAG, "Error unregistering receiver", e)
         }
@@ -332,6 +332,7 @@ data class BeaconState(
     val permissionsGranted: Boolean = false,
     val isBluetoothEnabled: Boolean = false,
     val isLocationEnabled: Boolean = false,
+    val requestingPermissions: Boolean = false,
     val errorMessage: String? = null
 ) : Parcelable
 
