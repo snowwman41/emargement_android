@@ -82,6 +82,14 @@ fun BeaconView(
     ) {
 
 
+        Card(Modifier.fillMaxWidth()) {
+            if (beaconState.beaconId != null) {
+                Text(" Beacon ID : ${beaconState.beaconId!!}")
+            } else {
+                Text("undefined")
+            }
+        }
+
         beaconState.errorMessage?.let {
             Text(
                 text = it,
@@ -122,15 +130,6 @@ fun BeaconView(
             ) {
                 Text("Stop Scanning")
             }
-        }
-        Card(Modifier.fillMaxWidth()) {
-            if (beaconState.beaconId != null) {
-                Text(beaconState.beaconId!!)
-            } else {
-                Text("undefined")
-            }
-
-
         }
 
         Spacer(modifier = Modifier.height(8.dp))

@@ -4,6 +4,7 @@ package com.example.testappqr.presentation.professor.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,26 +28,21 @@ fun ProfessorCodeScreen(
     val moduleState by viewModel.moduleState.collectAsStateWithLifecycle()
 
     NavigationView(navController = navController, title = "Code") {
-//        BeaconScreen (
-//            isScanning = isScanning.value,
-//            beacons = detectedBeacons,
-//            onScanClicked = { startScanning() },
-//            onStopScanClicked = { beacon.stopScanning() }
-//        )
-        BeaconView()
-//        Column {
-//            BasicButton(
-//                onClick = { viewModel.toggleQRCodeModal(true) },
-//                text = "Show QR code"
-//            )
-////            Row { Text("code")
-////                IconButton(content = Icon()) { }
-////            }
-//        }
-//
-//
-//        if (moduleState.qrCodeModal) {
-//            QRCodeView("moduleState.qrCode", onDismissRequest = { viewModel.toggleQRCodeModal(false) })
 
+
+        Column {
+            BasicButton(
+                onClick = { viewModel.toggleQRCodeModal(true) },
+                text = "Show QR code"
+            )
+            HorizontalDivider()
+            BeaconView()
+        }
+
+        if (moduleState.qrCodeModal) {
+            QRCodeView(
+                "moduleState.qrCode",
+                onDismissRequest = { viewModel.toggleQRCodeModal(false) })
+        }
     }
 }
