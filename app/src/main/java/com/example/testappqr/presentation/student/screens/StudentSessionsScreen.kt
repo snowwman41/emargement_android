@@ -1,4 +1,4 @@
-package com.example.testappqr.presentation.professor.screens.home
+package com.example.testappqr.presentation.student.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,54 +21,31 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
-import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionsVM
+import com.example.testappqr.presentation.navigation.StudentNavigationView
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.sharedviews.SessionView
+import com.example.testappqr.presentation.student.viewmodels.StudentSessionsVM
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-//
-//@Composable
-//fun ProfessorSessionsScreen(
-//    navController: NavHostController,
-//    professorSessionsVM: ProfessorSessionsVM = hiltViewModel()
-//) {
-//    val professorSessions by professorSessionsVM.professorSessionsState.collectAsStateWithLifecycle()
-//    LaunchedEffect(Unit) {
-//        professorSessionsVM.getSessions()
-//    }
-//
-//    NavigationView(navController = navController, title = "Today's Sessions") {
-//        if (professorSessions.sessionsList != null) {
-//            LazyColumn {
-//                items(professorSessions.sessionsList!!) { session ->
-//                    SessionView(session,
-//                        Modifier.clickable {
-//                            navController.navigate(Routes.PROFESSOR_SESSION(session.sessionId.toString()))
-//                        })
-//                }
-//            }
-//        }
-//    }
-//
-//}
+
 
 
 @Composable
-fun ProfessorSessionsScreen(
+fun StudentSessionsScreen(
     navController: NavHostController,
-    professorSessionsVM: ProfessorSessionsVM = hiltViewModel()
+    studentSessionsVM: StudentSessionsVM = hiltViewModel()
 ) {
-    val professorSessions by professorSessionsVM.professorSessionsState.collectAsStateWithLifecycle()
+    val studentSessions by studentSessionsVM.studentSessionsState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
-        professorSessionsVM.getSessions()
+        studentSessionsVM.getSessions()
     }
 
     val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(java.util.Date())
 
-    NavigationView(navController = navController, title = "Today's Sessions") {
+    StudentNavigationView(navController = navController, title = "Today's Sessions") {
         Column (modifier = Modifier.padding(10.dp)) {
-            BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT_SESSIONS) })
+            BasicButton(text = "Student", onClick = { navController.navigate(Routes.PROFESSOR_SESSIONS) })
 
             Text(
                 text = currentDate,
@@ -77,12 +54,12 @@ fun ProfessorSessionsScreen(
             )
 
             LazyColumn {
-                items(professorSessions.sessionsList) { session ->
+                items(studentSessions.sessionsList) { session ->
                     Column(modifier = Modifier.fillMaxWidth()) {
                         SessionView(session,
                             Modifier
                                 .clickable {
-                                    navController.navigate(Routes.PROFESSOR_SESSION(session.sessionId.toString()))
+                                    navController.navigate(Routes.STUDENT_CODE_BY_SESSION(session.sessionId.toString()))
                                 }
                                 .padding(vertical = 4.dp)
                         )

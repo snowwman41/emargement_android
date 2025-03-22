@@ -29,7 +29,7 @@ import java.util.UUID
 
 
 @Composable
-fun ProfessorModulesView(
+fun ModulesView(
     navController: NavController,
     professorVM: ProfessorModulesVM = hiltViewModel()
 ) {

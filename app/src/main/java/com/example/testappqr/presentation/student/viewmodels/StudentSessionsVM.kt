@@ -1,4 +1,5 @@
-package com.example.testappqr.presentation.professor.viewmodels.modules
+package com.example.testappqr.presentation.student.viewmodels
+
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -6,37 +7,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.domain.usecase.professor.ProfessorSessionsByModuleUseCase
+import com.example.testappqr.domain.usecase.student.StudentSessionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfessorSessionsByModuleVM @Inject constructor(
+class StudentSessionsVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val professorSessionsByModuleUseCase: ProfessorSessionsByModuleUseCase
+    private val studentSessionsUseCase: StudentSessionsUseCase
 ) : ViewModel() {
-    val professorSessionsByModuleState = savedStateHandle.getStateFlow(
-        "ProfessorSessionsByModuleState",
-        ProfessorSessionsByModuleState()
+    val studentSessionsState = savedStateHandle.getStateFlow(
+        "studentSessionsState",
+        StudentSessionsState()
     )
 
-    fun getSessionsByModule(moduleId : UUID) {
+    fun getSessions() {
         viewModelScope.launch {
-            val sessions = professorSessionsByModuleUseCase()
+            val sessions = studentSessionsUseCase("")
             updateState { it.copy(sessionsList = sessions) }
         }
     }
 
-    private fun updateState(update: (ProfessorSessionsByModuleState) -> ProfessorSessionsByModuleState) {
-        savedStateHandle["ProfessorSessionsByModuleState"] =
-            update(professorSessionsByModuleState.value)
+    private fun updateState(update: (StudentSessionsState) -> StudentSessionsState) {
+        savedStateHandle["studentSessionsState"] =
+            update(studentSessionsState.value)
     }
 }
 
 @Parcelize
-data class ProfessorSessionsByModuleState(
+data class StudentSessionsState(
     val sessionsList: @RawValue List<SessionLazyDTO> = emptyList()
 ) : Parcelable

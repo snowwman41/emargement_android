@@ -7,13 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.example.testappqr.data.models.Attributes
 import com.example.testappqr.data.models.AuthenticationSuccess
 import com.example.testappqr.data.models.SSODTO
-import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.beacon.BeaconVM
 
 import com.example.testappqr.presentation.navigation.NavGraph
@@ -24,62 +20,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-//@AndroidEntryPoint
-//class MainActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            EmargementTheme {
-////                NavGraph(SharedModel())
-//                BeaconScannerScreen()
-//            }
-//        }
-//    }
-//}
-//@AndroidEntryPoint
-//class MainActivity : ComponentActivity() {
-//    private val beaconViewModel: BeaconVM by viewModels()
-//
-//    private val permissionRequest = registerForActivityResult(
-//        ActivityResultContracts.RequestMultiplePermissions()
-//    ) { permissions ->
-//        val allGranted = permissions.entries.all { it.value }
-//        beaconViewModel.setPermissionsGranted(allGranted)
-//    }
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            EmargementTheme {
-//                NavGraph(SharedModel())
-//            }
-//        }
-//
-//        // Check if permissions are already granted
-//        if (!beaconViewModel.checkPermissions()) {
-//            requestPermissions()
-//        } else {
-//            beaconViewModel.setPermissionsGranted(true)
-//        }
-//    }
-//
-//    private fun requestPermissions() {
-//        val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            arrayOf(
-//                android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                android.Manifest.permission.BLUETOOTH_SCAN,
-//                android.Manifest.permission.BLUETOOTH_CONNECT
-//            )
-//        } else {
-//            arrayOf(
-//                android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                android.Manifest.permission.BLUETOOTH
-//            )
-//        }
-//
-//        permissionRequest.launch(permissionList)
-//    }
-//}
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val beaconVM: BeaconVM by viewModels()
@@ -100,10 +41,10 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        requestPermissions(isMainActivity = true)
+        requestLocalisationAndBluetoothPermissions(isMainActivity = true)
         beaconVM.clearPermissionRequest()
     }
-    fun requestPermissions(isMainActivity: Boolean) {
+    fun requestLocalisationAndBluetoothPermissions(isMainActivity: Boolean) {
         val permissionsToRequest = mutableListOf(
             android.Manifest.permission.ACCESS_FINE_LOCATION
         )

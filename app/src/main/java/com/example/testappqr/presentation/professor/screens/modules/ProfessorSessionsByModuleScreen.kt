@@ -14,20 +14,30 @@ import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorSessionsByModuleVM
 import com.example.testappqr.presentation.sharedviews.SessionView
+import java.util.UUID
 
 @Composable
-fun ProfessorSessionsByModuleScreen(navController: NavHostController, professorSessionsByModuleVM: ProfessorSessionsByModuleVM = hiltViewModel()) {
+fun ProfessorSessionsByModuleScreen(
+    navController: NavHostController,
+    moduleId : UUID,
+    professorSessionsByModuleVM: ProfessorSessionsByModuleVM = hiltViewModel()
+) {
     val professorSessionsByModuleState by professorSessionsByModuleVM.professorSessionsByModuleState.collectAsStateWithLifecycle()
 
-    NavigationView(navController,showBackButton = true)  {
+    NavigationView(navController, showBackButton = true) {
         LaunchedEffect(Unit) {
-            professorSessionsByModuleVM.getSessionsByModule()
+            professorSessionsByModuleVM.getSessionsByModule(moduleId)
         }
 
         LazyColumn {
             items(professorSessionsByModuleState.sessionsList) { session ->
                 SessionView(session, Modifier.clickable {
-                    navController.navigate(Routes.PROFESSOR_SESSION_BY_MODULE(session.sessionId.toString(),session.sessionId.toString()))
+                    navController.navigate(
+                        Routes.PROFESSOR_SESSION_BY_MODULE(
+                            session.sessionId.toString(),
+                            session.sessionId.toString()
+                        )
+                    )
                 })
             }
         }

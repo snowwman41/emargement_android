@@ -24,11 +24,19 @@ object Routes {
         "professor/modules/${moduleId}/students"
     }
 
-
     const val PROFESSOR_CODE = "professor/code"
 
+    const val STUDENT_SESSIONS = "student/sessions"
+    const val STUDENT_MODULES = "student/modules"
+    val STUDENT_CODE_BY_SESSION: (sessionId: String) -> String = { sessionId ->
+        "student/sessions/${sessionId}/code"
+    }
+    val STUDENT_QRCODE_SCANNER_BY_SESSION: (sessionId: String) -> String = { sessionId ->
+        "student/sessions/${sessionId}/code/qrcode-scanner"
+    }
 
-    const val STUDENT = "student"
+
+
     const val STUDENT_QRCODE_SCANNER = "student/qrcode-scanner"
 
 }

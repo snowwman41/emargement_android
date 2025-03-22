@@ -107,7 +107,7 @@ fun BeaconView(
                 onClick = {
                     if (!beaconVM.checkPermissions()) {
                         // Request permissions directly if they're not granted
-                        (context as? MainActivity)?.requestPermissions(isMainActivity = false)
+                        (context as? MainActivity)?.requestLocalisationAndBluetoothPermissions(isMainActivity = false)
                     } else {
                         // Only start scanning if permissions are granted
                         beaconVM.startScanning()

@@ -13,15 +13,16 @@ import com.example.testappqr.presentation.student.views.StudentPresenceView
 
 @Composable
 fun StudentScreen(navController: NavHostController) {
-
-    NavigationView(navController = navController, title = "Student") {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            BasicButton(text = "Professor", onClick = { navController.navigate(Routes.PROFESSOR_MODULES) })
-            StudentPresenceView()
-        }
-
-    }
+//
+//    StudentBottomBar(navController = navController, title = "Student") {
+//        Column(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            BasicButton(text = "Professor", onClick = { navController.navigate(Routes.PROFESSOR_MODULES) })
+////            StudentPresenceView()
+//            StudentSessionsScreen(navController = navController)
+//        }
+//
+//    }
 }

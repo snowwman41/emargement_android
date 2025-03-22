@@ -1,7 +1,9 @@
 package com.example.testappqr.di
 
 import com.example.testappqr.data.repository.FakeProfessorRepositoryImpl
+import com.example.testappqr.data.repository.FakeStudentRepositoryImpl
 import com.example.testappqr.domain.repository.ProfessorRepository
+import com.example.testappqr.domain.repository.StudentRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +24,14 @@ object RepositoryModule {
 //    }
     @Provides
     @Singleton
-    fun provideRepository(
+    fun provideStudentRepository(
+    ): StudentRepository {
+
+        return FakeStudentRepositoryImpl()
+    }
+    @Provides
+    @Singleton
+    fun provideProfessorRepository(
     ): ProfessorRepository {
 
         return FakeProfessorRepositoryImpl()

@@ -30,7 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.data.models.SignatureDTO
 import com.example.testappqr.presentation.navigation.NavigationView
+import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionVM
+import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.utils.formatDate
 import com.example.testappqr.utils.formatTime
 //
@@ -107,6 +109,7 @@ fun ProfessorSessionScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),

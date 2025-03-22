@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 
-import com.example.testappqr.presentation.professor.views.ProfessorModulesView
+import com.example.testappqr.presentation.professor.views.ModulesView
 import com.example.testappqr.presentation.sharedviews.BasicButton
 
 @Composable
@@ -23,8 +23,8 @@ fun ProfessorModulesScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT) })
-            ProfessorModulesView(navController)
+            BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT_SESSIONS) })
+            ModulesView(navController)
         }
     }
 }

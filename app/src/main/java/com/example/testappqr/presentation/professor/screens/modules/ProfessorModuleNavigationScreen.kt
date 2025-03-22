@@ -30,9 +30,7 @@ import androidx.compose.ui.unit.sp
 fun ProfessorModuleNavigationScreen(
     navController: NavHostController,
     moduleId: String,
-    viewModel: ProfessorCodeVM = hiltViewModel()
 ) {
-    val moduleState by viewModel.moduleState.collectAsStateWithLifecycle()
 
     NavigationView(navController = navController, title = "Module", showBackButton = true) {
         Box(
