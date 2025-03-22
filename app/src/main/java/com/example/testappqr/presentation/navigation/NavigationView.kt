@@ -1,5 +1,6 @@
 package com.example.testappqr.presentation.navigation
 
+import android.webkit.CookieManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -7,9 +8,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -42,17 +44,19 @@ fun NavigationView(
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
+    var showMenu by rememberSaveable { mutableStateOf(false) }
+
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-//                val cookieManager = CookieManager.getInstance()
-//                cookieManager.removeAllCookies(null)
-//                cookieManager.flush()
-//                navController.navigate("login")
-            }, containerColor = MaterialTheme.colorScheme.secondary) {
-                Icon(Icons.Default.Lock, contentDescription = "Disconnect")
-            }
-        },
+//        floatingActionButton = {
+//            FloatingActionButton(onClick = {
+////                val cookieManager = CookieManager.getInstance()
+////                cookieManager.removeAllCookies(null)
+////                cookieManager.flush()
+////                navController.navigate("login")
+//            }, containerColor = MaterialTheme.colorScheme.secondary) {
+//                Icon(Icons.Default.Lock, contentDescription = "Disconnect")
+//            }
+//        },
         topBar = {
             TopAppBar(
                 title = { Text(title) },
@@ -69,7 +73,45 @@ fun NavigationView(
                         }
                     }
                 },
-                actions = actions
+                actions = {
+                    actions()
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "More options"
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Disconnect") },
+                                onClick = {
+                                    showMenu = false
+                                    // Clear cookies and navigate to login
+                                    val cookieManager = CookieManager.getInstance()
+                                    cookieManager.removeAllCookies(null)
+                                    cookieManager.flush()
+                                    navController.navigate(Routes.LOGIN) {
+                                        popUpTo(0) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Parameters") },
+                                onClick = {
+                                    showMenu = false
+                                    // Navigate to parameters screen if you have one
+                                    // navController.navigate(Routes.PARAMETERS)
+                                }
+                            )
+                        }
+                    }
+                }
             )
         }, bottomBar = {
             BottomBar(navController)
@@ -95,7 +137,8 @@ fun BottomBar(navController: NavHostController) {
             NavigationBarItem(icon = {
                 Icon(imageVector = Icons.Default.Home, "")
             },
-                label = { Text(text = "Home") }, selected = currentRoute.contains(Routes.PROFESSOR_SESSIONS),
+                label = { Text(text = "Home") },
+                selected = currentRoute.contains(Routes.PROFESSOR_SESSIONS),
                 onClick = {
                     navController.navigate(Routes.PROFESSOR_SESSIONS) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -111,7 +154,8 @@ fun BottomBar(navController: NavHostController) {
             NavigationBarItem(icon = {
                 Icon(imageVector = Icons.AutoMirrored.Filled.List, "")
             },
-                label = { Text(text = "Modules") }, selected = currentRoute.contains(Routes.PROFESSOR_MODULES),
+                label = { Text(text = "Modules") },
+                selected = currentRoute.contains(Routes.PROFESSOR_MODULES),
                 onClick = {
                     navController.navigate(Routes.PROFESSOR_MODULES)
 

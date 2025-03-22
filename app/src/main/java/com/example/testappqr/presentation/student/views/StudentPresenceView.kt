@@ -91,7 +91,7 @@ fun RequestCameraPermission(onPermissionGranted: () -> Unit) {
                     Manifest.permission.CAMERA
                 )
                 if (!showRationale) {
-                    // User checked "Don't ask again", direct to settings
+                    // direct to full settings, if the rational sttings dont show
                     Toast.makeText(
                         context,
                         "Please enable camera permission in Settings",

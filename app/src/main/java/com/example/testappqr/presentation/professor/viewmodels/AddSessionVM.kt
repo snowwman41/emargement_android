@@ -18,7 +18,7 @@ class AddSessionVM @Inject constructor(
     private val addSessionUseCase: AddSessionUseCase
 ) :
     ViewModel() {
-    val sessionState = savedStateHandle.getStateFlow("sessionState", SessionState())
+    val addSessionState = savedStateHandle.getStateFlow("addSessionState", AddSessionState())
 
     fun onChangeSessionName(value: String) {
         updateState { it.copy(sessionName = value) }
@@ -42,22 +42,22 @@ class AddSessionVM @Inject constructor(
         viewModelScope.launch {
             addSessionUseCase(
                 moduleId = moduleId,
-                sessionName = sessionState.value.sessionName,
-                date = sessionState.value.date,
-                startTime = sessionState.value.startTime,
-                endTime = sessionState.value.endTime
+                sessionName = addSessionState.value.sessionName,
+                date = addSessionState.value.date,
+                startTime = addSessionState.value.startTime,
+                endTime = addSessionState.value.endTime
             )
         }
         updateState { it.copy(endTime = "") }
     }
 
-    private fun updateState(update: (SessionState) -> SessionState) {
-        savedStateHandle["sessionState"] = update(sessionState.value)
+    private fun updateState(update: (AddSessionState) -> AddSessionState) {
+        savedStateHandle["addSessionState"] = update(addSessionState.value)
     }
 }
 
 @Parcelize
-data class SessionState(
+data class AddSessionState(
     val sessionName: String = "",
     val date: String = LocalDate.now().toString(),
     val startTime: String = "00:00",

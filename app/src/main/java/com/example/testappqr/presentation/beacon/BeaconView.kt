@@ -65,7 +65,8 @@ fun BeaconItemView(beacon: BeaconDevice) {
 
 @Composable
 fun BeaconView(
-    beaconVM: BeaconVM = hiltViewModel()
+    beaconVM: BeaconVM = hiltViewModel(),
+    isProfessor: Boolean = true
 ) {
 
     val beaconState by beaconVM.beaconState.collectAsStateWithLifecycle()
@@ -73,36 +74,112 @@ fun BeaconView(
     LaunchedEffect(Unit) {
         beaconVM.getBeaconId("")
     }
+    if (isProfessor) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
 
+            Card(Modifier.fillMaxWidth()) {
+                if (beaconState.beaconId != null) {
+                    Text(" Beacon ID : ${beaconState.beaconId!!}")
+                } else {
+                    Text("undefined")
+                }
+            }
 
-        Card(Modifier.fillMaxWidth()) {
-            if (beaconState.beaconId != null) {
-                Text(" Beacon ID : ${beaconState.beaconId!!}")
-            } else {
-                Text("undefined")
+            beaconState.errorMessage?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = {
+                        if (!beaconVM.checkPermissions()) {
+                            // Request permissions directly if they're not granted
+                            (context as? MainActivity)?.requestLocalisationAndBluetoothPermissions(
+                                isMainActivity = false
+                            )
+                        } else {
+                            // Only start scanning if permissions are granted
+                            beaconVM.startScanning()
+                        }
+                    },
+                    enabled = !beaconState.isScanning &&
+                            !beaconState.permissionsGranted &&
+                            beaconState.isBluetoothEnabled &&
+                            beaconState.isLocationEnabled,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Test your beacon")
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { beaconVM.stopScanning() },
+                    enabled = beaconState.isScanning,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Stop Scanning")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (beaconState.isScanning) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            HorizontalDivider()
+            Text(
+                text = "Found ${beaconState.detectedBeacons.size} devices",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                items(beaconState.detectedBeacons.sortedByDescending { it.rssi }) { beacon ->
+                    BeaconItemView(beacon = beacon)
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
             }
         }
-
-        beaconState.errorMessage?.let {
-            Text(
-                text = it,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+    }else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+
+            beaconState.errorMessage?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
             Button(
                 onClick = {
                     if (!beaconVM.checkPermissions()) {
@@ -118,45 +195,19 @@ fun BeaconView(
                         beaconState.isLocationEnabled,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Test your beacon")
+                Text("Sign to session")
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = { beaconVM.stopScanning() },
-                enabled = beaconState.isScanning,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Stop Scanning")
+            if (beaconState.isScanning) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp)
+                )
             }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        if (beaconState.isScanning) {
-            CircularProgressIndicator(
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-
-        HorizontalDivider()
-
-        Text(
-            text = "Found ${beaconState.detectedBeacons.size} devices",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        ) {
-            items(beaconState.detectedBeacons.sortedByDescending { it.rssi }) { beacon ->
-                BeaconItemView(beacon = beacon)
-                Spacer(modifier = Modifier.height(4.dp))
-            }
         }
     }
+
 }

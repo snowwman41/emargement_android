@@ -26,7 +26,7 @@ import java.util.Calendar
 
 @Composable
 fun AddSessionView(onDismissRequest: () -> Unit, viewModel: AddSessionVM = hiltViewModel()) {
-    val sessionState by viewModel.sessionState.collectAsStateWithLifecycle()
+    val sessionState by viewModel.addSessionState.collectAsStateWithLifecycle()
     ModalView(onDismissRequest = onDismissRequest,
         onAddRequest = {
             onDismissRequest()

@@ -29,7 +29,7 @@ fun ModalView(onDismissRequest: () -> Unit,onAddRequest: (() -> Unit)? = null,  
                 if (showButtons) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         BasicButton(
                             onClick = onDismissRequest,

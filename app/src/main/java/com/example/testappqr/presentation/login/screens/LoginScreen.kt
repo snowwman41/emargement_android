@@ -54,7 +54,14 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
 //        LaunchedEffect(Unit) {
 //            navController.navigate(Routes.PROFESSOR_SESSIONS)
 //        }
-        navController.navigate(Routes.PROFESSOR_SESSIONS)
+        navController.navigate(Routes.PROFESSOR_SESSIONS) {
+//            popUpTo(0) { inclusive = true }
+            // OR if you know the login route
+             popUpTo(Routes.LOGIN) { inclusive = true }
+
+            // Prevent multiple copies of the home screen
+            launchSingleTop = true
+        }
 
 
     }else{

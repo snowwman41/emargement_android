@@ -23,9 +23,17 @@ import java.util.UUID
 @Composable
 fun SignatureView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(6.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(6.dp)
     ) {
-        Row (horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(10.dp).fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
             Text(
                 it.sessionName,
                 style = TextStyle(
@@ -51,9 +59,10 @@ fun SignatureView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
 
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun SignaturePreview(){
+fun SignaturePreview() {
     SignatureView(
         SessionLazyDTO(
             sessionId = UUID.randomUUID(),

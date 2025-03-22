@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -30,11 +29,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.data.models.SignatureDTO
 import com.example.testappqr.presentation.navigation.NavigationView
-import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionVM
-import com.example.testappqr.presentation.sharedviews.BasicButton
-import com.example.testappqr.utils.formatDate
-import com.example.testappqr.utils.formatTime
+import com.example.testappqr.presentation.sharedviews.SessionViewHeader
+
 //
 //@Composable
 //fun ProfessorSessionScreen(
@@ -87,7 +84,6 @@ import com.example.testappqr.utils.formatTime
 //
 
 
-
 @Composable
 fun ProfessorSessionScreen(
     navController: NavHostController, professorSessionVM: ProfessorSessionVM = hiltViewModel()
@@ -109,38 +105,7 @@ fun ProfessorSessionScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD))
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = session.sessionName, style = TextStyle(fontSize = 24.sp))
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = "Date: ${formatDate(session.startTime)}", style = TextStyle(fontSize = 18.sp))
-                        Text(
-                            text = "Hour: ${formatTime(session.startTime)} - ${formatTime(session.endTime)}",
-                            style = TextStyle(fontSize = 18.sp)
-                        )
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .background(if (session.active) Color.Green else Color.Red, RoundedCornerShape(8.dp))
-                                .padding(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Text(
-                                text = if (session.active) "✅ Open" else "❌ Closed",
-                                color = Color.White,
-                                style = TextStyle(fontSize = 18.sp)
-                            )
-                        }
-                    }
-                }
-
+                SessionViewHeader(session)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn {
@@ -153,6 +118,8 @@ fun ProfessorSessionScreen(
     }
 }
 
+
+
 @Composable
 fun SignatureView(signature: SignatureDTO) {
     Card(
@@ -160,7 +127,6 @@ fun SignatureView(signature: SignatureDTO) {
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F1F1))
     ) {
         Row(
             modifier = Modifier
@@ -170,7 +136,10 @@ fun SignatureView(signature: SignatureDTO) {
         ) {
             Column {
                 Text(text = "Name", style = TextStyle(fontSize = 20.sp))
-                Text(text = signature.studentId, style = TextStyle(fontSize = 16.sp, color = Color.Gray))
+                Text(
+                    text = signature.studentId,
+                    style = TextStyle(fontSize = 16.sp, color = Color.Gray)
+                )
             }
 
             Box(

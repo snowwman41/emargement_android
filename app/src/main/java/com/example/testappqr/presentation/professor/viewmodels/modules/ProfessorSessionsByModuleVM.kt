@@ -29,7 +29,10 @@ class ProfessorSessionsByModuleVM @Inject constructor(
             updateState { it.copy(sessionsList = sessions) }
         }
     }
+    fun showAddSession(showAddSession: Boolean){
+        updateState { it.copy(showAddSession = showAddSession) }
 
+    }
     private fun updateState(update: (ProfessorSessionsByModuleState) -> ProfessorSessionsByModuleState) {
         savedStateHandle["ProfessorSessionsByModuleState"] =
             update(professorSessionsByModuleState.value)
@@ -38,5 +41,6 @@ class ProfessorSessionsByModuleVM @Inject constructor(
 
 @Parcelize
 data class ProfessorSessionsByModuleState(
-    val sessionsList: @RawValue List<SessionLazyDTO> = emptyList()
+    val sessionsList: @RawValue List<SessionLazyDTO> = emptyList(),
+    val showAddSession : Boolean = false
 ) : Parcelable
