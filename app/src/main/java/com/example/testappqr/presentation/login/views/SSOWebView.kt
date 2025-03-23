@@ -76,6 +76,7 @@ fun SSOWebViewComponent(
                         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                             val requestUrl = request?.url.toString()
                             if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
+                                loginVM.getUserData(requestUrl)
                                 if (loginState.userData != null){
                                     loginVM.updateShouldNavigate(true)
                                 }

@@ -4,10 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.SSODTO
-import com.example.testappqr.domain.usecase.Login.GetUserDataUseCase
+import com.example.testappqr.domain.usecase.login.GetUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +23,10 @@ class LoginVM @Inject constructor(private val savedStateHandle: SavedStateHandle
     fun updateShouldNavigate(shouldNavigate: Boolean){
         updateState { it.copy(shouldNavigate = shouldNavigate) }
     }
-    fun getUserData(request : String): SSODTO? {
+    fun getUserData(request : String){
         viewModelScope.launch{
-            getUserDataUseCase(request)
+            val userData = getUserDataUseCase(request)
+            updateUserData(userData)
         }
     }
 //    private fun handleValidationRequest(url: String): SSODTO? {

@@ -1,4 +1,4 @@
-package com.example.testappqr.domain.usecase.Login
+package com.example.testappqr.domain.usecase.login
 
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.domain.repository.LoginRepository

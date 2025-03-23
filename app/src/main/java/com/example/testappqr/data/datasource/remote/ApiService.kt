@@ -41,8 +41,9 @@ interface ApiService {
     @GET("sessions")
     suspend fun getSessions (): List<SessionLazyDTO>
 
+    //validate sso ticket and get the user data
     @GET
-    suspend fun casValidate (@Url url : String): SSODTO
+    suspend fun ssoValidatation (@Url url : String): SSODTO
 
     @POST("create-module")
     suspend fun createModule(@Body moduleDTO: ModuleLazyDTO): List<ModuleLazyDTO>

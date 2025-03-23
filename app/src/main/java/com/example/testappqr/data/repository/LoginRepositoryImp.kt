@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class LoginRepositoryImp @Inject constructor(private val apiService : ApiService): LoginRepository {
     override suspend fun getUserData(request : String): SSODTO {
-        apiService.
+        return apiService.ssoValidatation(request)
     }
 }
