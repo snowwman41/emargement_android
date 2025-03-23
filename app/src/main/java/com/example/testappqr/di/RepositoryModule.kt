@@ -1,7 +1,9 @@
 package com.example.testappqr.di
 
+import com.example.testappqr.data.repository.FakeLoginRepositoryImpl
 import com.example.testappqr.data.repository.FakeProfessorRepositoryImpl
 import com.example.testappqr.data.repository.FakeStudentRepositoryImpl
+import com.example.testappqr.domain.repository.LoginRepository
 import com.example.testappqr.domain.repository.ProfessorRepository
 import com.example.testappqr.domain.repository.StudentRepository
 import dagger.Module
@@ -22,6 +24,12 @@ object RepositoryModule {
 //
 //        return ProfessorRepositoryImpl(apiService)
 //    }
+    @Provides
+    @Singleton
+    fun provideLoginRepository(
+    ): LoginRepository {
+        return FakeLoginRepositoryImpl()
+    }
     @Provides
     @Singleton
     fun provideStudentRepository(

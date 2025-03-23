@@ -2,12 +2,16 @@ package com.example.testappqr.presentation.login.viewmodels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.SSODTO
+import com.example.testappqr.domain.usecase.Login.GetUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginVM @Inject constructor(private val savedStateHandle: SavedStateHandle): ViewModel() {
+class LoginVM @Inject constructor(private val savedStateHandle: SavedStateHandle,private val getUserDataUseCase : GetUserDataUseCase): ViewModel() {
 
     val loginState = savedStateHandle.getStateFlow("loginState",LoginState())
 
@@ -20,7 +24,22 @@ class LoginVM @Inject constructor(private val savedStateHandle: SavedStateHandle
     fun updateShouldNavigate(shouldNavigate: Boolean){
         updateState { it.copy(shouldNavigate = shouldNavigate) }
     }
-    fun updateUserData(userData: SSODTO){
+    fun getUserData(request : String): SSODTO? {
+        viewModelScope.launch{
+            getUserDataUseCase(request)
+        }
+    }
+//    private fun handleValidationRequest(url: String): SSODTO? {
+//        return runBlocking {
+//            try {
+//                val response = RetrofitApi.api.casValidate(url)
+//                response
+//            } catch (e: Exception) {
+//                null
+//            }
+//        }
+//    }
+    private fun updateUserData(userData: SSODTO){
         updateState { it.copy(userData = userData) }
     }
     private fun updateState(update : (LoginState) -> LoginState){
