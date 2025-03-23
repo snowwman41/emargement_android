@@ -19,9 +19,8 @@ import com.example.testappqr.presentation.navigation.Routes
 
 @Composable
 fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
-    println("inside login")
     var isTokenValid by remember { mutableStateOf(false) }
-    if (sharedModel.development) {
+    if (false) {
 
         //mocking the sso
         sharedModel.apiSSOResponse= SSODTO(
@@ -55,7 +54,7 @@ fun LoginScreen(navController: NavHostController, sharedModel: SharedModel) {
 //            navController.navigate(Routes.PROFESSOR_SESSIONS)
 //        }
         navController.navigate(Routes.PROFESSOR_SESSIONS) {
-//            popUpTo(0) { inclusive = true }
+
             // OR if you know the login route
              popUpTo(Routes.LOGIN) { inclusive = true }
 

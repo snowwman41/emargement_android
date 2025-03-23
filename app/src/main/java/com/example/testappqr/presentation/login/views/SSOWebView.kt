@@ -20,11 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 
 //import com.example.testappqr.data.datasource.remote.RetrofitApi
 
 import com.example.testappqr.SharedModel
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import java.io.ByteArrayInputStream
@@ -32,15 +35,12 @@ val ip = "172.25.208.1"
 @Composable
 fun SSOWebViewComponent(
     navController: NavHostController,
-    sharedModel: SharedModel
+    sharedModel: SharedModel,
+    loginVM: LoginVM = hiltViewModel()
 ) {
     val ip = "172.25.208.1"
     val ssoUrl = "http://$ip:8080/auth/cas"
-    var isLoading by remember { mutableStateOf(true) }
-    var webViewError by remember { mutableStateOf(false) }
-
-    var shouldNavigate by remember { mutableStateOf(false) }
-
+    val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
@@ -56,7 +56,8 @@ fun SSOWebViewComponent(
                         loadWithOverviewMode = true
                         useWideViewPort = true
                     }
-                      val cookieManager = CookieManager.getInstance()
+                    // Enable cookies for auth
+                    val cookieManager = CookieManager.getInstance()
                     cookieManager.setAcceptCookie(true)
                     cookieManager.setAcceptThirdPartyCookies(this, true)
                     cookieManager.flush()
@@ -68,18 +69,17 @@ fun SSOWebViewComponent(
                             request: WebResourceRequest?,
                             error: WebResourceError?
                         ) {
-                            webViewError = true
-                            isLoading = false
+                            loginVM.updateWebViewError(true)
+                            loginVM.updateIsLoading(false)
                         }
                         //intercept to go out of the webview, otherwise we receive data in webview and we can't interact with it
                         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                             val requestUrl = request?.url.toString()
                             if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
-
-//                                sharedModel.apiSSOResponse = handleValidationRequest(requestUrl)
-                                if (sharedModel.apiSSOResponse != null){
-                                    shouldNavigate = true
+                                if (loginState.userData != null){
+                                    loginVM.updateShouldNavigate(true)
                                 }
+
                                 return WebResourceResponse(
                                     "text/plain",
                                     "UTF-8",
@@ -94,7 +94,7 @@ fun SSOWebViewComponent(
                         }
 
                         override fun onPageFinished(view: WebView?, url: String?) {
-                            isLoading = false
+                            loginVM.updateIsLoading(false)
                         }
                     }
 
@@ -104,13 +104,13 @@ fun SSOWebViewComponent(
             },
             modifier = Modifier.fillMaxSize()
         )
-        if (isLoading) {
+        if (loginState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
 
-        if (webViewError) {
+        if (loginState.webViewError) {
             Text(
                 text = "Error loading content",
                 modifier = Modifier.align(Alignment.Center)
@@ -120,28 +120,22 @@ fun SSOWebViewComponent(
                 text = "Refresh",
             )
         }
-        if (shouldNavigate) {
+        if (loginState.shouldNavigate) {
             LaunchedEffect (Unit){
-
                 navController.navigate(Routes.PROFESSOR_SESSIONS) {
                     popUpTo("login") {
                         inclusive = true
                     }
-
                 }
-
             }
         }
-
     }
-
 }
 
 fun overrideUrl(view: WebView?, request: WebResourceRequest?): Boolean{
     val url = request?.url?.toString() ?: return false
     if (url.startsWith("http://localhost:8080")) {
         val newUrl = url.replace("localhost", ip)
-            .replace("127.0.0.1", ip)
         view?.loadUrl(newUrl) // Load the modified URL
         return true //override : true , continue with request, either modified
     }
