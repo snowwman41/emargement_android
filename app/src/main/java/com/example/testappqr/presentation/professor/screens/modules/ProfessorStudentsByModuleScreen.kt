@@ -18,26 +18,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorSessionsByModuleVM
 
 
 @Composable
-fun ProfessorStudentsByModuleScreen(navController: NavHostController,
-    professorStudentsByModuleVM: ProfessorStudentsByModuleVM = hiltViewModel(), professorSessionVM: ProfessorSessionVM = hiltViewModel()) {
+fun ProfessorStudentsByModuleScreen(navController: NavHostController,moduleId : String,
+    professorStudentsByModuleVM: ProfessorStudentsByModuleVM = hiltViewModel()) {
 
     val professorStudentsByModuleState by professorStudentsByModuleVM.professorStudentsByModuleState.collectAsStateWithLifecycle()
-    val professorSessionState by professorSessionVM.professorSessionState.collectAsStateWithLifecycle()
-
-    val sessionName = professorSessionState.session?.sessionName ?: "Students"
 
     NavigationView(navController, showBackButton = true) {
         LaunchedEffect(Unit) {
-            professorStudentsByModuleVM.getStudentsByModule(UUID.randomUUID())
+            professorStudentsByModuleVM.getStudentsByModule(UUID.fromString(moduleId))
         }
 
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             Text(
-                text = sessionName,
-                style = MaterialTheme.typography.headlineMedium,
+                text = "Students enrolled to the module",
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 

@@ -1,5 +1,6 @@
 package com.example.testappqr.data.repository
 
+import com.example.testappqr.data.models.CodeDTO
 import com.example.testappqr.data.models.CodeType
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
@@ -79,9 +80,11 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
         )
     }
 
-    override suspend fun getCodes(moduleId: UUID): ModuleDTO {
+    override suspend fun getCodeByTeacher(userId: String): CodeDTO {
         TODO("Not yet implemented")
     }
+
+
 
     override suspend fun openSession(sessionId: UUID): SessionLazyDTO {
 //        apiService.openSession(sessionId)

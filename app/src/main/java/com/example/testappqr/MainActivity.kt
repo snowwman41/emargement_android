@@ -26,7 +26,6 @@ import com.example.testappqr.presentation.login.viewmodels.LoginVM
 class MainActivity : ComponentActivity() {
     private val beaconVM: BeaconVM by viewModels()
 
-    private val loginVM : LoginVM by viewModels()
     private val requestMultiplePermissions = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -39,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EmargementTheme {
-                NavGraph(loginVM)
+                NavGraph()
             }
         }
 

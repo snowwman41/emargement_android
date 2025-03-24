@@ -17,6 +17,8 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,7 +61,12 @@ fun ProfessorSessionsByModuleScreen(
                     })
                 }
             }
-            FilledIconButton(modifier = Modifier.size(60.dp),onClick = {professorSessionsByModuleVM.showAddSession(true)}) {
+            FilledIconButton(modifier = Modifier.size(60.dp),colors= IconButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+                disabledContentColor = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.38f),
+                disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.38f),
+            ),onClick = {professorSessionsByModuleVM.showAddSession(true)}) {
                 Icon(Icons.Filled.Add, contentDescription = "Back")
             }
             Spacer(modifier = Modifier.height(8.dp))

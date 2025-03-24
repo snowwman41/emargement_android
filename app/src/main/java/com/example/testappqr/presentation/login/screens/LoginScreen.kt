@@ -47,9 +47,8 @@ fun LoginScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-        if (loginState.userData != null) {
-            println(loginState.userData)
-            println("inside user state not null")
+//        if (loginState.userData != null) {
+        if (loginState.shouldNavigate && loginState.userData != null) {
             LaunchedEffect(Unit) {
                 navController.navigate(Routes.PROFESSOR_SESSIONS) {
                     popUpTo("login") {

@@ -14,6 +14,10 @@ import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntOffset
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,57 +38,19 @@ import com.example.testappqr.presentation.student.screens.StudentSessionsScreen
 import java.util.UUID
 
 @Composable
-fun NavGraph(loginVM: LoginVM) {
+fun NavGraph() {
     val navController = rememberNavController()
+    val loginVM: LoginVM = hiltViewModel()
 
-    val enterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
-        val initialOffset = IntOffset(0, 100)
-        slideIn(
-            initialOffset = { initialOffset },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        ) + fadeIn(spring())
-    }
-
-    val exitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
-        fadeOut(
-            animationSpec = tween(
-                durationMillis = 250,
-                easing = FastOutLinearInEasing
-            )
-        )
-    }
-
-    val popEnterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
-        fadeIn(
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = LinearOutSlowInEasing
-            )
-        )
-    }
-
-    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
-        val targetOffset = IntOffset(0, 100)
-        slideOut(
-            targetOffset = { targetOffset },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        ) + fadeOut(spring())
-    }
     NavHost(navController = navController, startDestination = Routes.LOGIN) {
 
         //PROFESSOR
         composable(
             Routes.LOGIN,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
             LoginScreen(navController, loginVM)
 
@@ -92,10 +58,10 @@ fun NavGraph(loginVM: LoginVM) {
 
         composable(
             Routes.PROFESSOR_SESSIONS,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
             ProfessorSessionsScreen(navController, loginVM = loginVM)
         }
@@ -103,10 +69,10 @@ fun NavGraph(loginVM: LoginVM) {
             Routes.PROFESSOR_SESSION(
                 "{sessionId}"
             ),
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) {
             ProfessorSessionScreen(navController)
@@ -114,10 +80,10 @@ fun NavGraph(loginVM: LoginVM) {
 
         composable(
             Routes.PROFESSOR_MODULES,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
             ProfessorModulesScreen(navController, loginVM)
         }
@@ -126,10 +92,10 @@ fun NavGraph(loginVM: LoginVM) {
                 "{moduleId}",
 
                 ),
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
@@ -140,10 +106,10 @@ fun NavGraph(loginVM: LoginVM) {
             Routes.PROFESSOR_SESSIONS_BY_MODULE(
                 "{moduleId}",
 
-                ), enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+                ), enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
@@ -156,14 +122,14 @@ fun NavGraph(loginVM: LoginVM) {
                 "{moduleId}",
 
                 ),
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
-                ProfessorStudentsByModuleScreen(navController)
+                ProfessorStudentsByModuleScreen(navController, it!!)
             }
         }
 
@@ -173,10 +139,10 @@ fun NavGraph(loginVM: LoginVM) {
                 "{sessionId}",
                 "{moduleId}",
 
-                ), enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+                ), enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
@@ -186,20 +152,20 @@ fun NavGraph(loginVM: LoginVM) {
 
         composable(
             Routes.PROFESSOR_CODE,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
-            ProfessorCodeScreen(navController)
+            ProfessorCodeScreen(navController, loginVM)
         }
         //STUDENT
         composable(
             Routes.STUDENT_SESSIONS,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
             StudentSessionsScreen(navController)
         }
@@ -208,10 +174,10 @@ fun NavGraph(loginVM: LoginVM) {
                 "{sessionId}",
 
                 ),
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
@@ -223,10 +189,10 @@ fun NavGraph(loginVM: LoginVM) {
                 "{sessionId}",
 
                 ),
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition,
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
@@ -235,10 +201,10 @@ fun NavGraph(loginVM: LoginVM) {
         }
         composable(
             Routes.STUDENT_MODULES,
-            enterTransition = enterTransition,
-            exitTransition = exitTransition,
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            enterTransition = Animation.enterTransition,
+            exitTransition = Animation.exitTransition,
+            popEnterTransition = Animation.popEnterTransition,
+            popExitTransition = Animation.popExitTransition
         ) {
             StudentSessionsScreen(navController)
         }
@@ -248,3 +214,60 @@ fun NavGraph(loginVM: LoginVM) {
     }
 
 }
+
+object Animation {
+    private const val DURATION = 300
+    private const val SLIDE_DISTANCE = 100
+
+    val enterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
+        val initialOffset = IntOffset(0, SLIDE_DISTANCE)
+        slideIn(
+            initialOffset = { initialOffset },
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        ) + fadeIn(spring())
+    }
+
+    val exitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
+        fadeOut(
+            animationSpec = tween(
+                durationMillis = DURATION,
+                easing = FastOutLinearInEasing
+            )
+        )
+    }
+
+    val popEnterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
+        fadeIn(
+            animationSpec = tween(
+                durationMillis = DURATION,
+                easing = LinearOutSlowInEasing
+            )
+        )
+    }
+
+    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
+        val targetOffset = IntOffset(0, SLIDE_DISTANCE)
+        slideOut(
+            targetOffset = { targetOffset },
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        ) + fadeOut(spring())
+    }
+}
+
+//fun NavGraphBuilder.student(navController: NavHostController) {
+//    composable(
+//        Routes.STUDENT_MODULES,
+//        enterTransition = Animation.enterTransition,
+//        exitTransition = Animation.exitTransition,
+//        popEnterTransition = Animation.popEnterTransition,
+//        popExitTransition = Animation.popExitTransition
+//    ) {
+//        StudentSessionsScreen(navController)
+//    }
+//}

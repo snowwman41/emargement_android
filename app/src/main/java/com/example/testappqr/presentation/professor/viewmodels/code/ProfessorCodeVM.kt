@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.domain.usecase.professor.ProfessorGetCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -12,9 +14,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfessorCodeVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val getCodeUseCase: ProfessorGetCodeUseCase
 ) : ViewModel() {
 
-    val moduleState = savedStateHandle.getStateFlow("moduleState", ModuleState())
+    val codeState = savedStateHandle.getStateFlow("codeState", CodeState())
 
     fun toggleQRCodeModal(show: Boolean) {
         if (show) {
@@ -27,18 +30,24 @@ class ProfessorCodeVM @Inject constructor(
             }
         }
         val qrCode = ((Math.random() * 1000).toInt() + 1).toString()
-        updateState { it.copy(qrCodeModal = show, qrCode = qrCode) }
+        updateState { it.copy(qrCodeModal = show)}
+    }
+    fun getCodes(userId : String) {
+        viewModelScope.launch {
+            val codes = getCodeUseCase(userId)
+            updateState { it.copy( codes = codes) }
+        }
     }
 
-    private fun updateState(update: (ModuleState) -> ModuleState) {
-        savedStateHandle["moduleState"] = update(moduleState.value)
+    private fun updateState(update: (CodeState) -> CodeState) {
+        savedStateHandle["codeState"] = update(codeState.value)
     }
 }
 
 @Parcelize
-data class ModuleState(
+data class CodeState(
     val qrCodeModal: Boolean = false,
-    val qrCode: String = "",
+    val codes : CodeDTO? = null
 ) : Parcelable
 
 

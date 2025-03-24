@@ -32,15 +32,15 @@ import java.util.UUID
 @Composable
 fun ModulesView(
     navController: NavController,
-    professorVM: ProfessorModulesVM = hiltViewModel(),
+    professorModulesVM: ProfessorModulesVM = hiltViewModel(),
     loginVM: LoginVM = hiltViewModel()
 
 ) {
-    val professorState by professorVM.professorState.collectAsStateWithLifecycle()
+    val professorState by professorModulesVM.professorState.collectAsStateWithLifecycle()
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        loginState.userData?.authenticationSuccess?.attributes?.let { professorVM.getModules(it.uid) }
+        loginState.userData?.authenticationSuccess?.attributes?.let { professorModulesVM.getModules(it.uid) }
     }
     LazyColumn {
         items(professorState.modulesList) { module ->

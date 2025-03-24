@@ -9,7 +9,6 @@ import com.example.testappqr.domain.usecase.professor.GetUserModulesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 
@@ -20,10 +19,13 @@ class ProfessorModulesVM @Inject constructor(
 ) : ViewModel() {
     val professorState = savedStateHandle.getStateFlow("professorState", ProfessorState())
 
-    fun getModules(userId : String) {
+    fun getModules(userId: String) {
         updateState { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val moduleList = getUserModulesUseCase(userId)
+            val moduleList =
+                getUserModulesUseCase(userId).sortedWith(
+                    compareByDescending { it.moduleName }
+                )
             updateState { it.copy(modulesList = moduleList, isLoading = false) }
         }
     }

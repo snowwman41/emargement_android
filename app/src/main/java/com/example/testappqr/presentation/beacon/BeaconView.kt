@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.testappqr.MainActivity
 import com.example.testappqr.presentation.sharedviews.BasicButton
+import com.example.testappqr.presentation.sharedviews.TextCard
 
 
 @Composable
@@ -70,13 +71,16 @@ fun BeaconItemView(beacon: BeaconDevice) {
 @Composable
 fun BeaconView(
     beaconVM: BeaconVM = hiltViewModel(),
+    beaconId: String? = null,
     isProfessor: Boolean = true
 ) {
 
     val beaconState by beaconVM.beaconState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        beaconVM.getBeaconId("")
+        if (beaconId != null) {
+            beaconVM.setBeaconId(beaconId)
+        }
     }
     if (isProfessor) {
         Column(
@@ -86,7 +90,7 @@ fun BeaconView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (beaconState.beaconId != null) {
-                BeaconCard(beaconState.beaconId!!)
+                TextCard(beaconState.beaconId!!)
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
@@ -206,18 +210,6 @@ fun BeaconView(
                     modifier = Modifier.padding(16.dp)
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun BeaconCard(beaconId: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Beacon ID : $beaconId", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }

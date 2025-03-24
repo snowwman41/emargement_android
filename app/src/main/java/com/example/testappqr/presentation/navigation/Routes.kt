@@ -3,6 +3,8 @@ package com.example.testappqr.presentation.navigation
 object Routes {
     const val LOGIN = "login"
 
+
+    //Professor Routes
     const val PROFESSOR_SESSIONS = "professor/sessions"
     val PROFESSOR_SESSION: (sessionId: String) -> String = { sessionId ->
         "professor/sessions/${sessionId}"
@@ -27,6 +29,8 @@ object Routes {
 
     const val PROFESSOR_CODE = "professor/code"
 
+
+    //Student Routes
     const val STUDENT_SESSIONS = "student/sessions"
     const val STUDENT_MODULES = "student/modules"
     val STUDENT_CODE_BY_SESSION: (sessionId: String) -> String = { sessionId ->

@@ -24,13 +24,13 @@ fun convertToTimestamp(dateStr: String, timeStr: String): Long {
     return dateTime.toInstant(ZoneOffset.UTC).epochSecond
 }
 fun formatTime(timestamp: Long): String {
-    val date = Date(timestamp)
+    val date = Date(timestamp * 1000)
     val format = SimpleDateFormat("HH:mm", Locale.getDefault())
     return format.format(date)
 }
 
 fun formatDate(timestamp: Long): String {
-    val date = Date(timestamp)
+    val date = Date(timestamp*1000)
     val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return format.format(date)
 }

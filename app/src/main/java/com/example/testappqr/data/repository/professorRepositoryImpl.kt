@@ -24,7 +24,7 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
         return apiService.getModule(moduleId)
     }
 
-    override suspend fun getCodeByTeacher(userId: UUID): CodeDTO {
+    override suspend fun getCodeByTeacher(userId: String): CodeDTO {
         return apiService.getCodeByTeacher(userId)
     }
 
@@ -56,7 +56,7 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
     }
 
     override suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO> {
-        TODO("Not yet implemented")
+        return apiService.getStudentsByModule(moduleId)
     }
 
     override suspend fun casValidate(url: String): SSODTO {

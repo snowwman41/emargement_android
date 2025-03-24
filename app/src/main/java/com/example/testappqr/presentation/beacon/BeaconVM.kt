@@ -144,7 +144,7 @@ class BeaconVM @Inject constructor(
 
         // Scan for the user's beacon with device name
         val filters = ArrayList<ScanFilter>()
-        filters.add(ScanFilter.Builder().setDeviceName("L ID 007435").build())
+        filters.add(ScanFilter.Builder().setDeviceName(beaconState.value.beaconId).build())
         viewModelScope.launch {
             delay(SCAN_PERIOD)
             stopScanning()
@@ -314,9 +314,9 @@ class BeaconVM @Inject constructor(
         stopScanning()
     }
 
-    fun getBeaconId(userId: String) {
-        viewModelScope.launch { print("getBeaconid") }
-        updateState { it.copy(beaconId = "L ID 007435") }
+    fun setBeaconId(beaconId: String) {
+//        viewModelScope.launch { print("getBeaconid") }
+        updateState { it.copy(beaconId = beaconId) }
     }
 
     private fun updateState(update: (BeaconState) -> BeaconState) {

@@ -8,6 +8,7 @@ import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.data.models.StudentLazyDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 
@@ -60,6 +61,10 @@ interface ApiService {
 
     @GET("modules/{moduleId}")
     suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
+
+    @GET("modules/{moduleId}/students")
+    suspend fun getStudentsByModule (@Path("moduleId") moduleId : UUID): List<StudentLazyDTO>
+
 
     @GET("codes/{userId}")
     suspend fun getCodeByTeacher (@Path("userId") userId : String): CodeDTO

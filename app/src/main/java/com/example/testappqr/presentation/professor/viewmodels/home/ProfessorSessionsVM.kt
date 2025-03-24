@@ -22,9 +22,12 @@ class ProfessorSessionsVM @Inject constructor(
 
     fun getSessions( userId : String) {
         viewModelScope.launch {
-            println("userId : $userId")
-            val sessions = professorSessionsOnDateUseCase(userId , formatTodaysDate())
-            println(sessions)
+            val sessions = professorSessionsOnDateUseCase(userId , formatTodaysDate()).sortedWith(
+                compareByDescending<SessionLazyDTO> { it.active }
+                    .thenBy { it.startTime }
+                    .thenBy { it.sessionName }
+
+            )
             updateState { it.copy(sessionsList = sessions) }
         }
     }

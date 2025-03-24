@@ -87,7 +87,7 @@ fun NavigationView(
                                     cookieManager.removeAllCookies(null)
                                     cookieManager.flush()
                                     navController.navigate(Routes.LOGIN) {
-                                        popUpTo(0) { inclusive = true }
+                                        popUpTo("login") { inclusive = true }
                                         launchSingleTop = true
                                     }
                                 }

@@ -26,23 +26,31 @@ class ProfessorSessionsByModuleVM @Inject constructor(
         ProfessorSessionsByModuleState()
     )
 
-    fun getSessionsByModule(moduleId : UUID) {
+    fun getSessionsByModule(moduleId: UUID) {
         viewModelScope.launch {
             val sessions = professorSessionsByModuleUseCase(moduleId)
-            updateState { it.copy(sessionsList = sessions.sessions) }
+            updateSessionsList(sessions.sessions)
         }
     }
-    fun showAddSession(showAddSession: Boolean){
+
+    fun showAddSession(showAddSession: Boolean) {
         updateState { it.copy(showAddSession = showAddSession) }
 
     }
-    private fun updateSessionsList(sessionsList : List<SessionLazyDTO>){
-        updateState { it.copy(sessionsList = sessionsList) }
+
+    private fun updateSessionsList(sessionsList: List<SessionLazyDTO>) {
+        updateState { state ->
+            state.copy(sessionsList = sessionsList.sortedWith(
+                compareBy { it.sessionName }
+            ))
+        }
     }
+
     private fun updateState(update: (ProfessorSessionsByModuleState) -> ProfessorSessionsByModuleState) {
         savedStateHandle["ProfessorSessionsByModuleState"] =
             update(professorSessionsByModuleState.value)
     }
+
     val addSessionState = savedStateHandle.getStateFlow("addSessionState", AddSessionState())
 
     fun onChangeSessionName(value: String) {
@@ -67,9 +75,7 @@ class ProfessorSessionsByModuleVM @Inject constructor(
 
     }
 
-    fun addSession(moduleId : UUID) {
-        println("add SESSION MODULE ID : $moduleId")
-//        val moduleId = UUID.fromString(savedStateHandle.get<String>("moduleId"))
+    fun addSession(moduleId: UUID) {
         viewModelScope.launch {
             val sessionsList = addSessionUseCase(
                 moduleId = moduleId,
@@ -98,7 +104,7 @@ class ProfessorSessionsByModuleVM @Inject constructor(
 @Parcelize
 data class ProfessorSessionsByModuleState(
     val sessionsList: @RawValue List<SessionLazyDTO> = emptyList(),
-    val showAddSession : Boolean = false,
+    val showAddSession: Boolean = false,
     val sessionName: String = "",
     val date: String = LocalDate.now().toString(),
     val startTime: String = "00:00",
