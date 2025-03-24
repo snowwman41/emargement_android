@@ -18,7 +18,9 @@ import com.example.testappqr.presentation.sharedviews.BasicButton
 
 @Composable
 fun ProfessorModulesScreen(navController: NavHostController, loginVM: LoginVM) {
-    NavigationView(navController = navController, title = "My modules") {
+    NavigationView(
+        navController = navController, title = "My modules", loginVM = loginVM
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,

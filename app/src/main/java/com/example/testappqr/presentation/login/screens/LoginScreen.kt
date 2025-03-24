@@ -10,6 +10,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -51,91 +52,92 @@ fun LoginScreen(
         if (loginState.shouldNavigate && loginState.userData != null) {
             LaunchedEffect(Unit) {
                 navController.navigate(Routes.PROFESSOR_SESSIONS) {
-                    popUpTo("login") {
-                        inclusive = false
+                    popUpTo(Routes.LOGIN) {
+                        inclusive = true
                     }
+                    launchSingleTop = true
                 }
             }
-        } else {
-            AndroidView(
-                factory = { ctx ->
-                    WebView(ctx).apply {
-                        settings
-                            .apply {
-                                javaScriptEnabled = true
-                                domStorageEnabled = true
-                                setSupportZoom(true)
-                                builtInZoomControls = true
-                                displayZoomControls = false
-                                loadWithOverviewMode = true
-                                useWideViewPort = true
-                            }
-                        // Enable cookies for auth
-                        val cookieManager = CookieManager.getInstance()
-                        cookieManager.setAcceptCookie(true)
-                        cookieManager.setAcceptThirdPartyCookies(this, true)
-                        cookieManager.flush()
+        }
+        AndroidView(
+            factory = { ctx ->
+                WebView(ctx).apply {
+                    settings
+                        .apply {
+                            javaScriptEnabled = true
+                            domStorageEnabled = true
+                            setSupportZoom(true)
+                            builtInZoomControls = true
+                            displayZoomControls = false
+                            loadWithOverviewMode = true
+                            useWideViewPort = true
+                        }
+                    // Enable cookies for auth
+                    val cookieManager = CookieManager.getInstance()
+                    cookieManager.setAcceptCookie(true)
+                    cookieManager.setAcceptThirdPartyCookies(this, true)
+                    cookieManager.flush()
 
 
-                        webViewClient = object : WebViewClient() {
-                            override fun onReceivedError(
-                                view: WebView?,
-                                request: WebResourceRequest?,
-                                error: WebResourceError?
-                            ) {
-                                loginVM.updateWebViewError(true)
-                                loginVM.updateIsLoading(false)
-                            }
+                    webViewClient = object : WebViewClient() {
+                        override fun onReceivedError(
+                            view: WebView?,
+                            request: WebResourceRequest?,
+                            error: WebResourceError?
+                        ) {
+                            loginVM.updateWebViewError(true)
+                            loginVM.updateIsLoading(false)
+                        }
 
-                            //intercept to go out of the webview, otherwise we receive data in webview and we can't interact with it
-                            override fun shouldInterceptRequest(
-                                view: WebView?,
-                                request: WebResourceRequest?
-                            ): WebResourceResponse? {
-                                val requestUrl = request?.url.toString()
-                                if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
-                                    loginVM.getUserData(requestUrl)
+                        //intercept to go out of the webview, otherwise we receive data in webview and we can't interact with it
+                        override fun shouldInterceptRequest(
+                            view: WebView?,
+                            request: WebResourceRequest?
+                        ): WebResourceResponse? {
+                            val requestUrl = request?.url.toString()
+                            if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
+                                loginVM.getUserData(requestUrl)
 //                                if (loginState.userData != null){
-                                    loginVM.updateShouldNavigate(true)
+                                loginVM.updateShouldNavigate(true)
 //                                }
 
-                                    return WebResourceResponse(
-                                        "text/plain",
-                                        "UTF-8",
-                                        ByteArrayInputStream("".toByteArray()) // Empty response to prevent the default one
-                                    )
-                                }
-                                return super.shouldInterceptRequest(
-                                    view,
-                                    request
-                                ) // give the ok the intercept
+                                return WebResourceResponse(
+                                    "text/plain",
+                                    "UTF-8",
+                                    ByteArrayInputStream("".toByteArray()) // Empty response to prevent the default one
+                                )
                             }
-
-                            override fun shouldOverrideUrlLoading(
-                                view: WebView?,
-                                request: WebResourceRequest?
-                            ): Boolean {
-                                val url = request?.url?.toString() ?: return false
-                                if (url.startsWith("http://localhost:8080")) {
-                                    val newUrl = url.replace("localhost", ip)
-                                    view?.loadUrl(newUrl) // Load the modified URL
-                                    return true //override : true , continue with request, either modified
-                                }
-                                return false //override : false , continue with unmodified request
-                            }
-
-                            override fun onPageFinished(view: WebView?, url: String?) {
-                                loginVM.updateIsLoading(false)
-                            }
-
+                            return super.shouldInterceptRequest(
+                                view,
+                                request
+                            ) // give the ok the intercept
                         }
-                        webChromeClient = WebChromeClient()
-                        loadUrl(url)
+
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            request: WebResourceRequest?
+                        ): Boolean {
+                            val url = request?.url?.toString() ?: return false
+                            if (url.startsWith("http://localhost:8080")) {
+                                val newUrl = url.replace("localhost", ip)
+                                view?.loadUrl(newUrl) // Load the modified URL
+                                return true //override : true , continue with request, either modified
+                            }
+                            return false //override : false , continue with unmodified request
+                        }
+
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            loginVM.updateIsLoading(false)
+                        }
+
                     }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+                    webChromeClient = WebChromeClient()
+                    loadUrl(url)
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+
 
         if (loginState.isLoading) {
             CircularProgressIndicator(
@@ -144,14 +146,27 @@ fun LoginScreen(
         }
 
         if (loginState.webViewError) {
-            Text(
-                text = "Error loading content",
-                modifier = Modifier.align(Alignment.Center)
-            )
-            BasicButton(
-                onClick = { navController.navigate(Routes.LOGIN) },
-                text = "Refresh",
-            )
+
+            Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "Error loading content",
+
+                )
+                BasicButton(
+                    onClick = {
+                        val cookieManager = CookieManager.getInstance()
+                        cookieManager.removeAllCookies(null)
+                        cookieManager.flush()
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(Routes.LOGIN) { inclusive = false }
+                            launchSingleTop = true
+                        }
+                        loginVM.updateWebViewError(false)
+                        loginVM.updateIsLoading(true)
+                    },
+                    text = "Refresh"
+                )
+            }
         }
     }
 }

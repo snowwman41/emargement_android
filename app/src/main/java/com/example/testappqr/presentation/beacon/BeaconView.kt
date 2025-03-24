@@ -84,13 +84,11 @@ fun BeaconView(
     }
     if (isProfessor) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (beaconState.beaconId != null) {
-                TextCard(beaconState.beaconId!!)
+                TextCard(beaconState.beaconId!!, "Beacon ID")
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
@@ -106,7 +104,8 @@ fun BeaconView(
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 BasicButton(

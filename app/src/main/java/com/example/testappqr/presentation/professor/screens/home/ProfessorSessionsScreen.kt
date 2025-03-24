@@ -75,7 +75,7 @@ fun ProfessorSessionsScreen(
 
     val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(java.util.Date())
 
-    NavigationView(navController = navController, title = "Today's Sessions") {
+    NavigationView(navController = navController, title = "Today's Sessions", loginVM = loginVM) {
         Column (modifier = Modifier.padding(10.dp)) {
             BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT_SESSIONS) })
 

@@ -32,8 +32,7 @@ interface ApiService {
     @GET("closeSession/{sessionId}")
     suspend fun closeSession (@Path("sessionId") sessionId : UUID): Unit
 
-    @GET("students/{userId}/active-sessions")
-    suspend fun getActiveSessions (@Path("userId") userId : String): List<SessionLazyDTO>
+
 
 
     @POST("auth/token/verify")
@@ -42,14 +41,15 @@ interface ApiService {
     @GET("sessions")
     suspend fun getSessions (): List<SessionLazyDTO>
 
-    //validate sso ticket and get the user data
+
+
+
+
+//working
+//validate sso ticket and get the user data
     @GET
     suspend fun ssoValidatation (@Url url : String): SSODTO
 
-    @POST("create-module")
-    suspend fun createModule(@Body moduleDTO: ModuleLazyDTO): List<ModuleLazyDTO>
-
-//working
     @GET("sessions/{userId}/{date}")
     suspend fun getSessionsOfUserOnDate (@Path("userId") userId : String, @Path("date") date : String): List<SessionLazyDTO>
 
@@ -68,6 +68,9 @@ interface ApiService {
 
     @GET("codes/{userId}")
     suspend fun getCodeByTeacher (@Path("userId") userId : String): CodeDTO
+
+    @GET("students/{userId}/active-sessions")
+    suspend fun getActiveSessionOfStudent (@Path("userId") userId : String): List<SessionLazyDTO>
 //
 //    @POST("sign")
 //    suspend fun postSignature (@Body signatureDTO: SignatureDTO): List<SignatureDTO>

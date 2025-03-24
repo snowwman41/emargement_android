@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.data.models.SignatureDTO
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionVM
 import com.example.testappqr.presentation.sharedviews.SessionViewHeader
@@ -86,7 +86,9 @@ import com.example.testappqr.presentation.sharedviews.SessionViewHeader
 
 @Composable
 fun ProfessorSessionScreen(
-    navController: NavHostController, professorSessionVM: ProfessorSessionVM = hiltViewModel()
+    navController: NavHostController,
+    professorSessionVM: ProfessorSessionVM = hiltViewModel(),
+    loginVM: LoginVM
 ) {
     val professorSessionState by professorSessionVM.professorSessionState.collectAsStateWithLifecycle()
 
@@ -97,7 +99,8 @@ fun ProfessorSessionScreen(
     NavigationView(
         navController = navController,
         showBackButton = true,
-        title = professorSessionState.session?.sessionName ?: "Session"
+        title = professorSessionState.session?.sessionName ?: "Session",
+        loginVM = loginVM
     ) {
         professorSessionState.session?.let { session ->
             Column(
@@ -117,7 +120,6 @@ fun ProfessorSessionScreen(
         }
     }
 }
-
 
 
 @Composable

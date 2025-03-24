@@ -43,7 +43,7 @@ fun ProfessorCodeScreen(
             )
         }
     }
-    NavigationView(navController = navController, title = "Code") {
+    NavigationView(navController = navController, title = "Code", loginVM = loginVM) {
 
         Column {
             BasicButton(
@@ -54,7 +54,7 @@ fun ProfessorCodeScreen(
                     .padding(8.dp)
             )
             HorizontalDivider()
-            codeState.codes?.readableCode?.let { TextCard(it) }
+            codeState.codes?.readableCode?.let { TextCard(it,"Input Code") }
             HorizontalDivider()
             codeState.codes?.let {
                 BeaconView(

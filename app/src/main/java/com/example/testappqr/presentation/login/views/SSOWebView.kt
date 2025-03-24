@@ -52,9 +52,10 @@ fun SSOWebViewComponent(
             println("inside user state not null")
             LaunchedEffect (Unit){
                 navController.navigate(Routes.PROFESSOR_SESSIONS) {
-                    popUpTo("login") {
-                        inclusive = false
+                    popUpTo(Routes.LOGIN) {
+                        inclusive = true
                     }
+                    launchSingleTop = true
                 }
             }
         }else{

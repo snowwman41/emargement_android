@@ -33,6 +33,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.testappqr.R
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,9 @@ fun NavigationView(
     title: String = "",
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
+    loginVM: LoginVM? = null,
     content: @Composable () -> Unit
+
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
 
@@ -82,12 +85,16 @@ fun NavigationView(
                                 text = { Text("Disconnect") },
                                 onClick = {
                                     showMenu = false
+                                    loginVM?.let {
+                                        it.updateShouldNavigate(false)
+                                        it.updateUserData(null)  // Assuming this function exists
+                                    }
                                     // Clear cookies and navigate to login
                                     val cookieManager = CookieManager.getInstance()
                                     cookieManager.removeAllCookies(null)
                                     cookieManager.flush()
                                     navController.navigate(Routes.LOGIN) {
-                                        popUpTo("login") { inclusive = true }
+                                        popUpTo(Routes.LOGIN) { inclusive = true }
                                         launchSingleTop = true
                                     }
                                 }

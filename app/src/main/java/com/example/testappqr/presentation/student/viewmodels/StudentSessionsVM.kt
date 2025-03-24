@@ -6,8 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.SessionLazyDTO
-import com.example.testappqr.domain.usecase.professor.ProfessorSessionsByModuleUseCase
-import com.example.testappqr.domain.usecase.student.StudentSessionsUseCase
+import com.example.testappqr.domain.usecase.student.StudentActiveSessionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -17,16 +16,16 @@ import javax.inject.Inject
 @HiltViewModel
 class StudentSessionsVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val studentSessionsUseCase: StudentSessionsUseCase
+    private val studentActiveSessionsUseCase: StudentActiveSessionsUseCase
 ) : ViewModel() {
     val studentSessionsState = savedStateHandle.getStateFlow(
         "studentSessionsState",
         StudentSessionsState()
     )
 
-    fun getSessions() {
+    fun getSessions(userId : String) {
         viewModelScope.launch {
-            val sessions = studentSessionsUseCase("")
+            val sessions = studentActiveSessionsUseCase(userId)
             updateState { it.copy(sessionsList = sessions) }
         }
     }

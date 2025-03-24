@@ -23,16 +23,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 
 
 @Composable
 fun ProfessorModuleNavigationScreen(
     navController: NavHostController,
     moduleId: String,
+    loginVM : LoginVM
 ) {
 
-    NavigationView(navController = navController, title = "Module", showBackButton = true) {
+    NavigationView(navController = navController, title = "Module", showBackButton = true, loginVM = loginVM) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

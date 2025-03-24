@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TextCard(beaconId: String) {
+fun TextCard(beaconId: String, title : String) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Beacon ID : $beaconId", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "$title : $beaconId", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }

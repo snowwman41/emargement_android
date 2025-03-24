@@ -22,7 +22,7 @@ class FakeLoginRepositoryImpl : LoginRepository {
                     supannEtuAnneeInscription = "2024",
                     amuDateValidation = "20230823102953Z",
                     supannEntiteAffectation = "SC7",
-                    uid = "s23022841",
+                    uid = "b24028599",
                     eduPersonPrimaryAffiliation = "student",
                     supannEtuEtape = "SMI5T1",
                     supannCivilite = "M.",

@@ -51,7 +51,7 @@ class LoginVM @Inject constructor(
 //            }
 //        }
 //    }
-    private fun updateUserData(userData: SSODTO) {
+    fun updateUserData(userData: SSODTO?) {
         updateState { it.copy(userData = userData) }
     }
 

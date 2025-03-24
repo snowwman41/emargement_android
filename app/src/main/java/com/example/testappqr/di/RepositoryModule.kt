@@ -2,10 +2,9 @@ package com.example.testappqr.di
 
 import com.example.testappqr.data.datasource.remote.ApiService
 import com.example.testappqr.data.repository.FakeLoginRepositoryImpl
-import com.example.testappqr.data.repository.FakeProfessorRepositoryImpl
-import com.example.testappqr.data.repository.FakeStudentRepositoryImpl
 import com.example.testappqr.data.repository.LoginRepositoryImp
 import com.example.testappqr.data.repository.ProfessorRepositoryImpl
+import com.example.testappqr.data.repository.StudentRepositoryImp
 import com.example.testappqr.domain.repository.LoginRepository
 import com.example.testappqr.domain.repository.ProfessorRepository
 import com.example.testappqr.domain.repository.StudentRepository
@@ -23,29 +22,40 @@ object RepositoryModule {
     fun provideRepository(
         apiService: ApiService
 
-        ): ProfessorRepository {
+    ): ProfessorRepository {
 
         return ProfessorRepositoryImpl(apiService)
     }
-    @Provides
-    @Singleton
-    fun provideLoginRepository(apiService : ApiService
-    ): LoginRepository {
-        return LoginRepositoryImp(apiService)
-    }
+
 //    @Provides
 //    @Singleton
 //    fun provideLoginRepository(
+//        apiService: ApiService
 //    ): LoginRepository {
-//        return FakeLoginRepositoryImpl()
+//        return LoginRepositoryImp(apiService)
 //    }
+
     @Provides
     @Singleton
     fun provideStudentRepository(
+        apiService: ApiService
     ): StudentRepository {
 
-        return FakeStudentRepositoryImpl()
+        return StudentRepositoryImp(apiService)
     }
+    @Provides
+    @Singleton
+    fun provideLoginRepository(
+    ): LoginRepository {
+        return FakeLoginRepositoryImpl()
+    }
+//    @Provides
+//    @Singleton
+//    fun provideStudentRepository(
+//    ): StudentRepository {
+//
+//        return FakeStudentRepositoryImpl()
+//    }
 //    @Provides
 //    @Singleton
 //    fun provideProfessorRepository(
