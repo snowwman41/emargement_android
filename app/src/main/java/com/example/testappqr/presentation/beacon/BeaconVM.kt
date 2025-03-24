@@ -114,6 +114,7 @@ class BeaconVM @Inject constructor(
     fun clearPermissionRequest() {
         updateState { it.copy(requestingPermissions = false) }
     }
+
     fun startScanning() {
         if (!checkPermissions()) {
             updateState { it.copy(requestingPermissions = true) }

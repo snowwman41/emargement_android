@@ -109,7 +109,7 @@ fun ProfessorSessionScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn {
-                    items(session.signatures) { signature ->
+                    items(session.signatures!!) { signature ->
                         SignatureView(signature)
                     }
                 }
@@ -137,7 +137,7 @@ fun SignatureView(signature: SignatureDTO) {
             Column {
                 Text(text = "Name", style = TextStyle(fontSize = 20.sp))
                 Text(
-                    text = signature.studentId,
+                    text = signature.student.firstName,
                     style = TextStyle(fontSize = 16.sp, color = Color.Gray)
                 )
             }

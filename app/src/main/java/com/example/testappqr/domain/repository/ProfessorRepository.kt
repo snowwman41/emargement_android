@@ -1,5 +1,6 @@
 package com.example.testappqr.domain.repository
 
+import com.example.testappqr.data.models.CodeDTO
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SSODTO
@@ -9,15 +10,24 @@ import com.example.testappqr.data.models.StudentLazyDTO
 import java.util.UUID
 
 interface ProfessorRepository {
-    suspend fun modules(): List<ModuleLazyDTO>
+    //working
+    suspend fun getSessionsOfUserOnDate(userId : String, date : String): List<SessionLazyDTO>
+    suspend fun getSession(sessionId : UUID): SessionDTO
+    suspend fun modules(userId : String): List<ModuleLazyDTO>
     suspend fun module(moduleId: UUID): ModuleDTO
-    suspend fun addSession(session: SessionLazyDTO): List<SessionLazyDTO>
+    suspend fun getCodeByTeacher(userId: String): CodeDTO
+
+
+
+
+
+
+
+    suspend fun addSession(session: SessionDTO): List<SessionLazyDTO>
     suspend fun openSession(sessionId: UUID): SessionLazyDTO
     suspend fun closeSession(sessionId: UUID)
     //active ?
-    suspend fun getSessions(): List<SessionLazyDTO>
-    suspend fun getSessionsByModule(): List<SessionLazyDTO>
-    suspend fun getSession(): SessionDTO
+//    suspend fun getSessionsByModule(moduleId : UUID): List<SessionLazyDTO>
     suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO>
 
 

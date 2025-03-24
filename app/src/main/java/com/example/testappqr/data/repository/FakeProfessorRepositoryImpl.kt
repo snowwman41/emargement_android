@@ -1,5 +1,6 @@
 package com.example.testappqr.data.repository
 
+import com.example.testappqr.data.models.CodeType
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SSODTO
@@ -19,7 +20,7 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
 
 //    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override suspend fun modules(): List<ModuleLazyDTO> {
+    override suspend fun modules(userId : String): List<ModuleLazyDTO> {
         return listOf(
             ModuleLazyDTO(
                 moduleId = UUID.fromString("b3559075-e922-4a35-b57c-261c94955c86"),
@@ -78,6 +79,10 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
         )
     }
 
+    override suspend fun getCodes(moduleId: UUID): ModuleDTO {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun openSession(sessionId: UUID): SessionLazyDTO {
 //        apiService.openSession(sessionId)
         return SessionLazyDTO(
@@ -95,11 +100,14 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
         //        apiService.closeSession(sessionId)
     }
 
-    override suspend fun addSession(session: SessionLazyDTO): List<SessionLazyDTO> {
+    override suspend fun addSession(session: SessionDTO): List<SessionLazyDTO> {
         return emptyList()
     }
 
-    override suspend fun getSessions(): List<SessionLazyDTO> {
+    override suspend fun getSessionsOfUserOnDate(
+        userId: String,
+        date: String
+    ): List<SessionLazyDTO>  {
         return listOf(
             SessionLazyDTO(
                 UUID.fromString("10dc002f-35fa-445d-9a1c-99a78940333e"),
@@ -131,43 +139,43 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
         )
     }
 
-    override suspend fun getSessionsByModule(): List<SessionLazyDTO> {
-        return listOf(
-            SessionLazyDTO(
-                UUID.fromString("10dc002f-35fa-445d-9a1c-99a78940333e"),
-                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
-                "third for module",
-                1740222636,
-                1740225636,
-                "test",
-                true,
+//    override suspend fun getSessionsByModule(moduleId: UUID): List<SessionLazyDTO> {
+//        return listOf(
+//            SessionLazyDTO(
+//                UUID.fromString("10dc002f-35fa-445d-9a1c-99a78940333e"),
+//                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+//                "third for module",
+//                1740222636,
+//                1740225636,
+//                "test",
+//                true,
+//
+//                ), SessionLazyDTO(
+//                UUID.fromString("35ec002f-35fa-445d-9a1c-99a78940111e"),
+//                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+//                "second for module",
+//                1740222636,
+//                1740225636,
+//                "test",
+//                true
+//
+//            ), SessionLazyDTO(
+//                UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
+//                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+//                "first for module",
+//                1740222636,
+//                1740225636,
+//                "test",
+//                true
+//            )
+//        )
+//    }
 
-                ), SessionLazyDTO(
-                UUID.fromString("35ec002f-35fa-445d-9a1c-99a78940111e"),
-                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
-                "second for module",
-                1740222636,
-                1740225636,
-                "test",
-                true
-
-            ), SessionLazyDTO(
-                UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
-                UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
-                "first for module",
-                1740222636,
-                1740225636,
-                "test",
-                true
-            )
-        )
-    }
-
-    override suspend fun getSession(): SessionDTO {
+    override suspend fun getSession(sessionId: UUID): SessionDTO {
         return SessionDTO(
             sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
             sessionName = "first",
-            moduleId = UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"),
+            module = ModuleLazyDTO(UUID.fromString("66af01d4-17eb-402c-9efd-06da619e6d2f"), "Mobile", UUID.fromString("b06509ed-e7f1-46ff-980b-85ef0d5935e0")),
             startTime = 1740222636,
             endTime = 1740225636,
             verificationCode = "250",
@@ -175,19 +183,22 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
             signatures = listOf(
                 SignatureDTO(
                     id = UUID.fromString("1c0707a1-242d-451d-b911-da984aed985f"),
-                    studentId = "b24028599",
+                    student = StudentLazyDTO( "b24028599", "Oscar", "Bauer", ""),
                     sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
-                    verificationCode = "250"
+                    verificationCode = "250",
+                    codeType = CodeType.QR
                 ), SignatureDTO(
                     id = UUID.fromString("d0e4aca8-7231-41e6-b15b-337c2033c22c"),
-                    studentId = "b12345678",
+                    student = StudentLazyDTO("b24028599", "Oscar", "Bauer", ""),
                     sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
-                    verificationCode = "250"
+                    codeType = CodeType.QR,
+                    verificationCode = "TODO()"
                 ), SignatureDTO(
                     id = UUID.fromString("e7a87e28-0c0b-4cdc-a143-66cc2446eb8f"),
-                    studentId = "z87654321",
+                    student = StudentLazyDTO("b24028599", "Oscar", "Bauer", ""),
                     sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
-                    verificationCode = "250"
+                    codeType = CodeType.QR,
+                    verificationCode = "TODO()"
                 )
             )
         )

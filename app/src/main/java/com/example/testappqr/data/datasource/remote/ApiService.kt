@@ -2,9 +2,11 @@ package com.example.testappqr.data.datasource.remote
 
 
 
+import com.example.testappqr.data.models.CodeDTO
 import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,14 +19,11 @@ import java.util.UUID
 
 interface ApiService {
 
-    @GET("modules/professor/{professorId}")
-    suspend fun getModules (@Path("professorId") professorId : String): List<ModuleLazyDTO>
 
-    @GET("modules/{moduleId}")
-    suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
+
 
     @POST("addSession")
-    suspend fun addSession (@Body sessionLazyDTO: SessionLazyDTO): List<SessionLazyDTO>
+    suspend fun addSession (@Body sessionDTO: SessionDTO): List<SessionLazyDTO>
 
     @GET("openSession/{sessionId}")
     suspend fun openSession (@Path("sessionId") sessionId : UUID): SessionLazyDTO
@@ -34,6 +33,7 @@ interface ApiService {
 
     @GET("students/{userId}/active-sessions")
     suspend fun getActiveSessions (@Path("userId") userId : String): List<SessionLazyDTO>
+
 
     @POST("auth/token/verify")
     suspend fun verifyToken (): Boolean
@@ -48,11 +48,21 @@ interface ApiService {
     @POST("create-module")
     suspend fun createModule(@Body moduleDTO: ModuleLazyDTO): List<ModuleLazyDTO>
 
+//working
+    @GET("sessions/{userId}/{date}")
+    suspend fun getSessionsOfUserOnDate (@Path("userId") userId : String, @Path("date") date : String): List<SessionLazyDTO>
 
+    @GET("sessions/{sessionId}")
+    suspend fun getSession (@Path("sessionId") sessionId: UUID): SessionDTO
 
-//
-////    @GET("sessions/{sessionId}")
-////    suspend fun getSession (): List<SessionDTO>
+    @GET("teachers/{userId}/modules")
+    suspend fun getModules (@Path("userId") userId : String): List<ModuleLazyDTO>
+
+    @GET("modules/{moduleId}")
+    suspend fun getModule (@Path("moduleId") moduleId : UUID): ModuleDTO
+
+    @GET("codes/{userId}")
+    suspend fun getCodeByTeacher (@Path("userId") userId : String): CodeDTO
 //
 //    @POST("sign")
 //    suspend fun postSignature (@Body signatureDTO: SignatureDTO): List<SignatureDTO>

@@ -14,6 +14,7 @@ object Routes {
     }
 
     val PROFESSOR_SESSIONS_BY_MODULE: (moduleId: String) -> String = { moduleId ->
+        println(" MODULE ID SEND $moduleId")
         "professor/modules/${moduleId}/sessions"
     }
     val PROFESSOR_SESSION_BY_MODULE: (moduleId: String,sessionId : String) -> String = { moduleId,sessionId ->

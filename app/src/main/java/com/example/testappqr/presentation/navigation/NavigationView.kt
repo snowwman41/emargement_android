@@ -47,16 +47,7 @@ fun NavigationView(
     var showMenu by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
-//        floatingActionButton = {
-//            FloatingActionButton(onClick = {
-////                val cookieManager = CookieManager.getInstance()
-////                cookieManager.removeAllCookies(null)
-////                cookieManager.flush()
-////                navController.navigate("login")
-//            }, containerColor = MaterialTheme.colorScheme.secondary) {
-//                Icon(Icons.Default.Lock, contentDescription = "Disconnect")
-//            }
-//        },
+
         topBar = {
             TopAppBar(
                 title = { Text(title) },

@@ -1,6 +1,7 @@
 package com.example.testappqr.data.repository
 
 import com.example.testappqr.data.datasource.remote.ApiService
+import com.example.testappqr.data.models.CodeDTO
 import com.example.testappqr.data.models.ModuleDTO
 import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SSODTO
@@ -14,16 +15,20 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiService) : ProfessorRepository {
-    override suspend fun modules(): List<ModuleLazyDTO> {
+    override suspend fun modules(userId : String): List<ModuleLazyDTO> {
         return apiService.getModules(
-            professorId = "s23022841"
+            userId = "s23022841"
         )
     }
     override suspend fun module(moduleId: UUID): ModuleDTO {
         return apiService.getModule(moduleId)
     }
 
-    override suspend fun addSession(session: SessionLazyDTO): List<SessionLazyDTO> {
+    override suspend fun getCodeByTeacher(userId: UUID): CodeDTO {
+        return apiService.getCodeByTeacher(userId)
+    }
+
+    override suspend fun addSession(session: SessionDTO): List<SessionLazyDTO> {
         return apiService.addSession(session)
     }
 
@@ -41,16 +46,13 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSessions(): List<SessionLazyDTO> {
-        TODO("Not yet implemented")
+    override suspend fun getSessionsOfUserOnDate(userId : String ,date : String): List<SessionLazyDTO> {
+        return apiService.getSessionsOfUserOnDate(userId,date)
     }
 
-    override suspend fun getSessionsByModule(): List<SessionLazyDTO> {
-        TODO("Not yet implemented")
-    }
 
-    override suspend fun getSession(): SessionDTO {
-        TODO("Not yet implemented")
+    override suspend fun getSession(sessionId : UUID): SessionDTO {
+        return apiService.getSession(sessionId)
     }
 
     override suspend fun getStudentsByModule(moduleId: UUID): List<StudentLazyDTO> {

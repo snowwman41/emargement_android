@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionsVM
@@ -57,11 +59,18 @@ import java.util.Locale
 @Composable
 fun ProfessorSessionsScreen(
     navController: NavHostController,
-    professorSessionsVM: ProfessorSessionsVM = hiltViewModel()
+    professorSessionsVM: ProfessorSessionsVM = hiltViewModel(),
+    loginVM: LoginVM = hiltViewModel()
 ) {
     val professorSessions by professorSessionsVM.professorSessionsState.collectAsStateWithLifecycle()
+    val loginState by loginVM.loginState.collectAsStateWithLifecycle()
+
     LaunchedEffect(Unit) {
-        professorSessionsVM.getSessions()
+        println("user compose id : ${loginState.userData?.authenticationSuccess?.attributes?.uid}")
+        loginState.userData?.authenticationSuccess?.attributes?.let {
+            professorSessionsVM.getSessions(
+                it.uid)
+        }
     }
 
     val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(java.util.Date())
@@ -86,7 +95,7 @@ fun ProfessorSessionsScreen(
                                 }
                                 .padding(vertical = 4.dp)
                         )
-                        Divider(thickness = 1.dp)
+                        HorizontalDivider(thickness = 1.dp)
                     }
                 }
             }

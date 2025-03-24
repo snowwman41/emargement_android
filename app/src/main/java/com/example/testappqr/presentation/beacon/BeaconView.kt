@@ -1,6 +1,8 @@
 package com.example.testappqr.presentation.beacon
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.testappqr.MainActivity
+import com.example.testappqr.presentation.sharedviews.BasicButton
 
 
 @Composable
@@ -81,15 +85,12 @@ fun BeaconView(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
-            Card(Modifier.fillMaxWidth()) {
-                if (beaconState.beaconId != null) {
-                    Text(" Beacon ID : ${beaconState.beaconId!!}")
-                } else {
-                    Text("undefined")
-                }
+            if (beaconState.beaconId != null) {
+                BeaconCard(beaconState.beaconId!!)
+                Spacer(modifier = Modifier.height(10.dp))
             }
+
+
 
             beaconState.errorMessage?.let {
                 Text(
@@ -104,7 +105,7 @@ fun BeaconView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(
+                BasicButton(
                     onClick = {
                         if (!beaconVM.checkPermissions()) {
                             // Request permissions directly if they're not granted
@@ -116,24 +117,22 @@ fun BeaconView(
                             beaconVM.startScanning()
                         }
                     },
-                    enabled = !beaconState.isScanning &&
+                    isEnabled = !beaconState.isScanning &&
                             !beaconState.permissionsGranted &&
                             beaconState.isBluetoothEnabled &&
                             beaconState.isLocationEnabled,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Test your beacon")
-                }
+                    modifier = Modifier.weight(1f),
+                    text = "Scan beacon"
+                    )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Button(
+                BasicButton(
                     onClick = { beaconVM.stopScanning() },
-                    enabled = beaconState.isScanning,
+                    isEnabled = beaconState.isScanning,
+                    text="Stop Scanning",
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text("Stop Scanning")
-                }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -162,10 +161,10 @@ fun BeaconView(
                 }
             }
         }
-    }else {
+    } else {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -180,23 +179,25 @@ fun BeaconView(
                 )
             }
 
-            Button(
+            BasicButton(
                 onClick = {
                     if (!beaconVM.checkPermissions()) {
                         // Request permissions directly if they're not granted
-                        (context as? MainActivity)?.requestLocalisationAndBluetoothPermissions(isMainActivity = false)
+                        (context as? MainActivity)?.requestLocalisationAndBluetoothPermissions(
+                            isMainActivity = false
+                        )
                     } else {
                         // Only start scanning if permissions are granted
                         beaconVM.startScanning()
-                    }},
-                enabled = !beaconState.isScanning &&
+                    }
+                },
+                isEnabled = !beaconState.isScanning &&
                         !beaconState.permissionsGranted &&
                         beaconState.isBluetoothEnabled &&
                         beaconState.isLocationEnabled,
+                text= "Sign to session",
                 modifier = Modifier.weight(1f)
-            ) {
-                Text("Sign to session")
-            }
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -205,9 +206,18 @@ fun BeaconView(
                     modifier = Modifier.padding(16.dp)
                 )
             }
-
-
         }
     }
+}
 
+@Composable
+fun BeaconCard(beaconId: String) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Box(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Beacon ID : $beaconId", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
 }

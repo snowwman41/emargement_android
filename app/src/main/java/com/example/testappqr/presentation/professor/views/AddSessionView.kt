@@ -19,19 +19,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.testappqr.data.models.SessionLazyDTO
 
-import com.example.testappqr.presentation.professor.viewmodels.AddSessionVM
+//import com.example.testappqr.presentation.professor.viewmodels.modules.AddSessionVM
+import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorSessionsByModuleVM
 import com.example.testappqr.presentation.sharedviews.ModalView
 import java.util.Calendar
+import java.util.UUID
 
 @Composable
-fun AddSessionView(onDismissRequest: () -> Unit, viewModel: AddSessionVM = hiltViewModel()) {
+fun AddSessionView(
+    moduleId : UUID,
+    viewModel: ProfessorSessionsByModuleVM
+) {
     val sessionState by viewModel.addSessionState.collectAsStateWithLifecycle()
-    ModalView(onDismissRequest = onDismissRequest,
+    ModalView(onDismissRequest = {viewModel.showAddSession(false)},
         onAddRequest = {
-            onDismissRequest()
-            viewModel.addSession()
-        }, showButtons = true) {
+            viewModel.addSession(moduleId)
+            viewModel.showAddSession(false)
+        }, showButtons = true
+    ) {
         Column(
             modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {

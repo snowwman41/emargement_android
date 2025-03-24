@@ -1,7 +1,11 @@
 package com.example.testappqr.domain.usecase.professor
 
+import com.example.testappqr.data.models.ModuleDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
+import com.example.testappqr.utils.convertToTimestamp
 import java.util.UUID
 import javax.inject.Inject
 
@@ -12,17 +16,18 @@ class AddSessionUseCase @Inject constructor(private val professorRepository: Pro
         date: String,
         startTime: String,
         endTime: String
-    ) {
-        val timeStampStartTime = 1L
-        val timeStampEndTime = 1L
-        professorRepository.addSession(
-            session = SessionLazyDTO(
-                moduleId = moduleId,
+    ) : List<SessionLazyDTO> {
+        val startTimestamp = convertToTimestamp(date, startTime)
+        val endTimestamp = convertToTimestamp(date, endTime)
+
+        return professorRepository.addSession(
+            session = SessionDTO(
+                module = ModuleLazyDTO(moduleId = moduleId, null, null),
                 sessionName = sessionName,
-                startTime = timeStampStartTime,
-                endTime = timeStampEndTime,
-                verificationCode = "TODO()",
-                active = false,
+                startTime = startTimestamp,
+                endTime = endTimestamp,
+                verificationCode = null,
+                active = false
             )
         )
     }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -45,7 +46,7 @@ fun ProfessorSessionsByModuleScreen(
             professorSessionsByModuleVM.getSessionsByModule(moduleId)
         }
 
-        Column (modifier = Modifier.fillMaxHeight(),verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally){
+        Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally){
             LazyColumn(Modifier.fillMaxHeight(0.8f)) {
                 items(professorSessionsByModuleState.sessionsList) { session ->
                     SessionView(session, Modifier.clickable {
@@ -64,7 +65,7 @@ fun ProfessorSessionsByModuleScreen(
             Spacer(modifier = Modifier.height(8.dp))
         }
         if (professorSessionsByModuleState.showAddSession){
-            AddSessionView({professorSessionsByModuleVM.showAddSession(false)})
+            AddSessionView(moduleId,professorSessionsByModuleVM)
         }
     }
 }

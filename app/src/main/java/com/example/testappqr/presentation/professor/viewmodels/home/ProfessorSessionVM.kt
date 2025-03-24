@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +23,9 @@ class ProfessorSessionVM @Inject constructor(
         savedStateHandle.getStateFlow("ProfessorSessionState", ProfessorSessionState())
 
     fun getSession() {
+        val sessionId: UUID = UUID.fromString(checkNotNull(savedStateHandle["sessionId"]))
         viewModelScope.launch {
-            val session = professorSessionUseCase()
+            val session = professorSessionUseCase(sessionId =sessionId )
             updateState { it.copy(session = session) }
         }
     }

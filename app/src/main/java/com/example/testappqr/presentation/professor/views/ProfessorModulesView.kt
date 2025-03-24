@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorModulesVM
 //import com.example.testappqr.presentation.navigation.navigateToProfessorModule
@@ -31,11 +32,15 @@ import java.util.UUID
 @Composable
 fun ModulesView(
     navController: NavController,
-    professorVM: ProfessorModulesVM = hiltViewModel()
+    professorVM: ProfessorModulesVM = hiltViewModel(),
+    loginVM: LoginVM = hiltViewModel()
+
 ) {
     val professorState by professorVM.professorState.collectAsStateWithLifecycle()
+    val loginState by loginVM.loginState.collectAsStateWithLifecycle()
+
     LaunchedEffect(Unit) {
-        professorVM.getModules()
+        loginState.userData?.authenticationSuccess?.attributes?.let { professorVM.getModules(it.uid) }
     }
     LazyColumn {
         items(professorState.modulesList) { module ->
@@ -58,7 +63,7 @@ fun ModuleView(module: ModuleLazyDTO, modifier: Modifier) {
             .fillMaxWidth()
             .padding(10.dp)) {
             Text(
-                module.moduleName,
+                module.moduleName!!,
                 style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
             )
         }

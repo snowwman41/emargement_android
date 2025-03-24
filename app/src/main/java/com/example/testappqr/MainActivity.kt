@@ -20,11 +20,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val beaconVM: BeaconVM by viewModels()
 
+    private val loginVM : LoginVM by viewModels()
     private val requestMultiplePermissions = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EmargementTheme {
-                NavGraph(sharedModel = SharedModel())
+                NavGraph(loginVM)
             }
         }
 
@@ -86,35 +88,3 @@ class MainActivity : ComponentActivity() {
 }
 
 
-class SharedModel {
-    var apiSSOResponse: SSODTO? = SSODTO(
-        authenticationSuccess = AuthenticationSuccess(
-            user = "s23022841", attributes = Attributes(
-                amuComposante = "sciences",
-                coGroup = "AMU.M2_IMI_CCI-SMI5T1-V302-2024",
-                mail = "abdelaziz.SOLTANI@etu.univ-amu.fr",
-                eduPersonAffiliation = listOf("member", "student"),
-                displayName = "Abd elaziz SOLTANI",
-                givenName = "Abd elaziz",
-                amuCampus = "L",
-                supannEtuAnneeInscription = "2024",
-                amuDateValidation = "20230823102953Z",
-                supannEntiteAffectation = "SC7",
-                uid = "s23022841",
-                eduPersonPrimaryAffiliation = "student",
-                supannEtuEtape = "SMI5T1",
-                supannCivilite = "M.",
-                eduPersonPrincipalName = "s23022841@univ-amu.fr",
-                memberOf = listOf(
-                    "cn=amu:ufr:sciences:ldap:etudiants,ou=groups,dc=univ-amu,dc=fr",
-                    "cn=amu:campus:luminy:ldap:etudiants,ou=groups,dc=univ-amu,dc=fr"
-                ),
-                sn = "SOLTANI"
-            )
-        )
-    )
-    var moduleId: UUID? = null
-    var sessionId: UUID? = null
-    val development: Boolean = true
-
-}

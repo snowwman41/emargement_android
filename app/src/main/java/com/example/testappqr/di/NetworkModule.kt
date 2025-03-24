@@ -17,9 +17,8 @@ class NetworkModule {
     fun provideNetworkService(): ApiService {
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl("http://192.168.107.164:8080/")
             .build()
         return retrofit.create(ApiService::class.java)
     }
-
 }

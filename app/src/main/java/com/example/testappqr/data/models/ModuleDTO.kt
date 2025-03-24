@@ -17,8 +17,8 @@ data class ModuleDTO(
 @Parcelize
 data class ModuleLazyDTO(
     val moduleId: UUID,
-    val moduleName: String,
-    val specialityId: UUID
+    val moduleName: String?,
+    val specialityId: UUID?
 ) : Parcelable
 
 

@@ -5,7 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.SessionLazyDTO
-import com.example.testappqr.domain.usecase.professor.ProfessorSessionsUseCase
+import com.example.testappqr.domain.usecase.professor.ProfessorSessionsOnDateUseCase
+import com.example.testappqr.utils.formatTodaysDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -14,15 +15,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfessorSessionsVM @Inject constructor(
-    private val professorSessionsUseCase: ProfessorSessionsUseCase,
+    private val professorSessionsOnDateUseCase: ProfessorSessionsOnDateUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val professorSessionsState = savedStateHandle.getStateFlow("ProfessorSessionsState", ProfessorSessionsState())
 
-    fun getSessions() {
+    fun getSessions( userId : String) {
         viewModelScope.launch {
-            val sessions = professorSessionsUseCase()
-            println("sessions: $sessions")
+            println("userId : $userId")
+            val sessions = professorSessionsOnDateUseCase(userId , formatTodaysDate())
+            println(sessions)
             updateState { it.copy(sessionsList = sessions) }
         }
     }

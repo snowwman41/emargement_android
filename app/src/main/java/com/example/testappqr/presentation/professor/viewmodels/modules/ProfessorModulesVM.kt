@@ -5,24 +5,25 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.data.models.ModuleLazyDTO
-import com.example.testappqr.domain.usecase.professor.GetModulesUseCase
+import com.example.testappqr.domain.usecase.professor.GetUserModulesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfessorModulesVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getModulesUseCase: GetModulesUseCase
+    private val getUserModulesUseCase: GetUserModulesUseCase
 ) : ViewModel() {
     val professorState = savedStateHandle.getStateFlow("professorState", ProfessorState())
 
-    fun getModules() {
+    fun getModules(userId : String) {
         updateState { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val moduleList = getModulesUseCase()
+            val moduleList = getUserModulesUseCase(userId)
             updateState { it.copy(modulesList = moduleList, isLoading = false) }
         }
     }
@@ -38,3 +39,4 @@ data class ProfessorState(
     val isLoading: Boolean = true,
     val moduleId: UUID? = null
 ) : Parcelable
+

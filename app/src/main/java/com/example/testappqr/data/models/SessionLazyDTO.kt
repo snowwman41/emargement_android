@@ -11,18 +11,18 @@ data class SessionLazyDTO(
     val sessionName: String,
     val startTime: Long,
     val endTime: Long,
-    val verificationCode: String,
+    val verificationCode: String?,
     val active : Boolean
 //    val signatures: Set<SignatureDTO>
 ) : Parcelable
 @Parcelize
 data class SessionDTO(
     val sessionId: UUID? = null,
-    val moduleId: UUID,
+    val module: ModuleLazyDTO,
     val sessionName: String,
     val startTime: Long,
     val endTime: Long,
-    val verificationCode: String,
+    val verificationCode: String?,
     val active : Boolean,
-    val signatures: @RawValue List<SignatureDTO>
+    val signatures: @RawValue List<SignatureDTO> ? = emptyList()
 ) : Parcelable
