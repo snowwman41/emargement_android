@@ -1,5 +1,6 @@
 package com.example.testappqr.presentation.navigation
 
+import android.webkit.CookieManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -22,6 +26,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,6 +36,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.testappqr.R
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,19 +46,13 @@ fun StudentNavigationView(
     title: String = "",
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
+    loginVM: LoginVM? = null,
     content: @Composable () -> Unit
 ) {
+    var showMenu by rememberSaveable { mutableStateOf(false) }
+
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-//                val cookieManager = CookieManager.getInstance()
-//                cookieManager.removeAllCookies(null)
-//                cookieManager.flush()
-//                navController.navigate("login")
-            }, containerColor = MaterialTheme.colorScheme.secondary) {
-                Icon(Icons.Default.Lock, contentDescription = "Disconnect")
-            }
-        },
+
         topBar = {
             TopAppBar(
                 title = { Text(title) },
@@ -69,7 +69,49 @@ fun StudentNavigationView(
                         }
                     }
                 },
-                actions = actions
+                actions = {
+                    actions()
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "More options"
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Disconnect") },
+                                onClick = {
+                                    showMenu = false
+                                    loginVM?.let {
+                                        it.updateShouldNavigate(false)
+                                        it.updateUserData(null)  // Assuming this function exists
+                                    }
+                                    // Clear cookies and navigate to login
+                                    val cookieManager = CookieManager.getInstance()
+                                    cookieManager.removeAllCookies(null)
+                                    cookieManager.flush()
+                                    navController.navigate(Routes.LOGIN) {
+                                        popUpTo(Routes.LOGIN) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Parameters") },
+                                onClick = {
+                                    showMenu = false
+                                    // Navigate to parameters screen if you have one
+                                    // navController.navigate(Routes.PARAMETERS)
+                                }
+                            )
+                        }
+                    }
+                }
             )
         }, bottomBar = {
             StudentBottomBar(navController)

@@ -181,7 +181,7 @@ fun NavGraph() {
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
-                StudentCodeScreen(navController, sessionId = UUID.fromString(it!!))
+                StudentCodeScreen(navController, sessionId = UUID.fromString(it!!),loginVM = loginVM)
             }
         }
         composable(
@@ -196,7 +196,7 @@ fun NavGraph() {
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
-                StudentQrCodeScreen(navController)
+                StudentQrCodeScreen(navController,loginVM)
             }
         }
         composable(

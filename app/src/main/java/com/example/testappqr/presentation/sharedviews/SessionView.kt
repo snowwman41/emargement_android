@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun SessionView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(6.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,

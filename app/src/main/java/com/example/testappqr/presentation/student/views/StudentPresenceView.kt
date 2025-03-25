@@ -25,55 +25,8 @@ fun StudentPresenceView() {
     if (hasPermission) {
         QrcodeScanner { code ->
             scannedCode = code
-            Log.e("QRCODE","SCANNED THE CODE !! ")        }
+        }
     }
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Button(onClick = {
-////            permissionLauncher.launch(Manifest.permission.CAMERA)
-//            isScanning = !isScanning
-//        }) {
-//
-//            Text("Toggle scan")
-//        }
-//        IconButton(onClick = {
-//            isScanning = !isScanning
-//        }) {
-//            Icon(
-//                painter = painterResource(R.drawable.scan_qr_code),
-//                contentDescription = "code QR"
-//            )
-//        }
-//
-//        if (hasPermission) {
-//            if (isScanning) {
-//                BarcodeScanner { code ->
-//                    scannedCode = code
-//                    isScanning = false
-//                }
-//            } else {
-//                if (scannedCode.isNotEmpty()) {
-//
-//                    Row(horizontalArrangement = Arrangement.Center) {
-//                        Text(
-//                            "Signed to the session",
-//                            fontSize = 20.sp,
-//                            fontWeight = FontWeight.Bold
-//                        )
-//
-//                    }
-//                }
-//            }
-//        } else {
-//            Text("Waiting for camera permission...")
-//        }
-//
-//    }
 }
 
 @Composable

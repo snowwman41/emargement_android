@@ -7,6 +7,7 @@ import com.example.testappqr.data.models.ModuleLazyDTO
 import com.example.testappqr.data.models.SessionDTO
 import com.example.testappqr.data.models.SignatureDTO
 import com.example.testappqr.presentation.beacon.BeaconView
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.navigation.StudentNavigationView
 import com.example.testappqr.presentation.sharedviews.BasicButton
@@ -14,8 +15,8 @@ import com.example.testappqr.presentation.sharedviews.SessionViewHeader
 import java.util.UUID
 
 @Composable
-fun StudentCodeScreen(navController: NavHostController, sessionId: UUID) {
-    StudentNavigationView(navController = navController, title = "Code", showBackButton = true) {
+fun StudentCodeScreen(navController: NavHostController, sessionId: UUID,loginVM: LoginVM) {
+    StudentNavigationView(navController = navController, title = "Code", showBackButton = true, loginVM = loginVM) {
         Column {
 //            SessionViewHeader(
 //                SessionDTO(

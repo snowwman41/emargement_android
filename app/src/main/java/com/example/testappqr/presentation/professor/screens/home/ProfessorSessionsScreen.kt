@@ -25,6 +25,7 @@ import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionsVM
 import com.example.testappqr.presentation.sharedviews.BasicButton
+import com.example.testappqr.presentation.sharedviews.DateCard
 import com.example.testappqr.presentation.sharedviews.SessionView
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -73,18 +74,9 @@ fun ProfessorSessionsScreen(
         }
     }
 
-    val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(java.util.Date())
-
     NavigationView(navController = navController, title = "Today's Sessions", loginVM = loginVM) {
         Column (modifier = Modifier.padding(10.dp)) {
-            BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT_SESSIONS) })
-
-            Text(
-                text = currentDate,
-                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 10.dp)
-            )
-
+            DateCard()
             LazyColumn {
                 items(professorSessions.sessionsList) { session ->
                     Column(modifier = Modifier.fillMaxWidth()) {

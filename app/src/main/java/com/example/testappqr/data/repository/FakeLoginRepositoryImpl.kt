@@ -6,11 +6,12 @@ import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.domain.repository.LoginRepository
 
 class FakeLoginRepositoryImpl : LoginRepository {
-
+//b24028599 student
+    //s23022841 teacher
     override suspend fun getUserData(request : String): SSODTO {
         return SSODTO(
             authenticationSuccess = AuthenticationSuccess(
-                user = "s23022841",
+                user = "b24028599",
                 attributes = Attributes(
                     amuComposante = "sciences",
                     coGroup = "AMU.M2_IMI_CCI-SMI5T1-V302-2024",

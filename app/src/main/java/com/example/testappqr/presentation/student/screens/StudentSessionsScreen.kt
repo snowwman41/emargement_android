@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +26,7 @@ import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.navigation.StudentNavigationView
 import com.example.testappqr.presentation.sharedviews.BasicButton
+import com.example.testappqr.presentation.sharedviews.DateCard
 import com.example.testappqr.presentation.sharedviews.SessionView
 import com.example.testappqr.presentation.student.viewmodels.StudentSessionsVM
 import java.text.SimpleDateFormat
@@ -48,18 +50,11 @@ fun StudentSessionsScreen(
         }
     }
 
-    val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(java.util.Date())
 
-    StudentNavigationView(navController = navController, title = "Today's Sessions") {
+
+    StudentNavigationView(navController = navController, title = "Today's Sessions", loginVM = loginVM) {
         Column (modifier = Modifier.padding(10.dp)) {
-            BasicButton(text = "Student", onClick = { navController.navigate(Routes.PROFESSOR_SESSIONS) })
-
-            Text(
-                text = currentDate,
-                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 10.dp)
-            )
-
+            DateCard()
             LazyColumn {
                 items(studentSessions.sessionsList) { session ->
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -70,7 +65,7 @@ fun StudentSessionsScreen(
                                 }
                                 .padding(vertical = 4.dp)
                         )
-                        HorizontalDivider(thickness = 1.dp)
+                        HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(6.dp))
                     }
                 }
             }

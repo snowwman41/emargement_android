@@ -33,7 +33,6 @@ fun StudentModulesScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BasicButton(text = "Student", onClick = { navController.navigate(Routes.STUDENT_SESSIONS) })
             Text("MODULES")
         //            ModulesView(navController)
         }

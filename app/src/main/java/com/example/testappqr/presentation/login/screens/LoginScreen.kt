@@ -31,18 +31,15 @@ import java.io.ByteArrayInputStream
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
-    loginVM: LoginVM = hiltViewModel()
+    navController: NavHostController, loginVM: LoginVM = hiltViewModel()
 ) {
     val ip = "192.168.107.164"
     val amuSSO = "https://ident.univ-amu.fr/cas/login"
     val validationService = "http://localhost:8080/auth/cas/validate"
 
-    val url = Uri.parse(amuSSO)
-        .buildUpon()
-        .appendQueryParameter("service", validationService)
-        .build()
-        .toString()
+    val url =
+        Uri.parse(amuSSO).buildUpon().appendQueryParameter("service", validationService).build()
+            .toString()
 
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
@@ -51,19 +48,32 @@ fun LoginScreen(
 //        if (loginState.userData != null) {
         if (loginState.shouldNavigate && loginState.userData != null) {
             LaunchedEffect(Unit) {
-                navController.navigate(Routes.PROFESSOR_SESSIONS) {
-                    popUpTo(Routes.LOGIN) {
-                        inclusive = true
+                if (loginState.userData?.authenticationSuccess?.attributes?.eduPersonPrimaryAffiliation.let { it == "teacher" || it == "professor" }) {
+                    navController.navigate(Routes.PROFESSOR_SESSIONS) {
+                        popUpTo(Routes.LOGIN) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
                     }
-                    launchSingleTop = true
                 }
+                else if(loginState.userData?.authenticationSuccess?.attributes?.eduPersonPrimaryAffiliation.let { it == "student" }) {
+                    navController.navigate(Routes.STUDENT_SESSIONS) {
+                        popUpTo(Routes.LOGIN) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }else{
+                    loginVM.updateWebViewError(true)
+
+            }
+
             }
         }
         AndroidView(
             factory = { ctx ->
                 WebView(ctx).apply {
-                    settings
-                        .apply {
+                    settings.apply {
                             javaScriptEnabled = true
                             domStorageEnabled = true
                             setSupportZoom(true)
@@ -81,9 +91,7 @@ fun LoginScreen(
 
                     webViewClient = object : WebViewClient() {
                         override fun onReceivedError(
-                            view: WebView?,
-                            request: WebResourceRequest?,
-                            error: WebResourceError?
+                            view: WebView?, request: WebResourceRequest?, error: WebResourceError?
                         ) {
                             loginVM.updateWebViewError(true)
                             loginVM.updateIsLoading(false)
@@ -91,8 +99,7 @@ fun LoginScreen(
 
                         //intercept to go out of the webview, otherwise we receive data in webview and we can't interact with it
                         override fun shouldInterceptRequest(
-                            view: WebView?,
-                            request: WebResourceRequest?
+                            view: WebView?, request: WebResourceRequest?
                         ): WebResourceResponse? {
                             val requestUrl = request?.url.toString()
                             if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
@@ -108,14 +115,12 @@ fun LoginScreen(
                                 )
                             }
                             return super.shouldInterceptRequest(
-                                view,
-                                request
+                                view, request
                             ) // give the ok the intercept
                         }
 
                         override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            request: WebResourceRequest?
+                            view: WebView?, request: WebResourceRequest?
                         ): Boolean {
                             val url = request?.url?.toString() ?: return false
                             if (url.startsWith("http://localhost:8080")) {
@@ -134,8 +139,7 @@ fun LoginScreen(
                     webChromeClient = WebChromeClient()
                     loadUrl(url)
                 }
-            },
-            modifier = Modifier.fillMaxSize()
+            }, modifier = Modifier.fillMaxSize()
         )
 
 
@@ -147,11 +151,13 @@ fun LoginScreen(
 
         if (loginState.webViewError) {
 
-            Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
-                    text = "Error loading content",
-
+                    text = if (loginState.shouldNavigate && loginState.userData != null) "Error loading content" else "you must have a teacher or student account"
                 )
+
                 BasicButton(
                     onClick = {
                         val cookieManager = CookieManager.getInstance()
@@ -163,8 +169,7 @@ fun LoginScreen(
                         }
                         loginVM.updateWebViewError(false)
                         loginVM.updateIsLoading(true)
-                    },
-                    text = "Refresh"
+                    }, text = "Refresh"
                 )
             }
         }
