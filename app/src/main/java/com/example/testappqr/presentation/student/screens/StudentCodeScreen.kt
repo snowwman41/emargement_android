@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.testappqr.presentation.beacon.BeaconStudentView
 import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
@@ -58,12 +59,17 @@ fun StudentCodeScreen(
                         .fillMaxWidth()
                         .padding(6.dp)
                 )
-                BeaconView(
-                    isProfessor = false,
+//                BeaconView(
+//                    isProfessor = false,
+//                    studentCodeVM = studentCodeVM,
+//                    sessionId = sessionId,
+//                    userId = loginState.userData?.authenticationSuccess?.attributes?.uid
+//
+//                )
+                BeaconStudentView(
                     studentCodeVM = studentCodeVM,
                     sessionId = sessionId,
                     userId = loginState.userData?.authenticationSuccess?.attributes?.uid
-
                 )
             }
 
