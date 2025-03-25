@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.domain.usecase.professor.ProfessorSessionsOnDateUseCase
 import com.example.testappqr.utils.formatTodaysDate
 import dagger.hilt.android.lifecycle.HiltViewModel

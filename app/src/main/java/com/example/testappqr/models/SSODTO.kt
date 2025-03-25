@@ -1,16 +1,21 @@
-package com.example.testappqr.data.models
+package com.example.testappqr.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class SSODTO(
     val authenticationSuccess: AuthenticationSuccess
-)
+) : Parcelable
 
+@Parcelize
 data class AuthenticationSuccess(
 
     val user: String,
     val attributes: Attributes
-)
+) : Parcelable
 
+@Parcelize
 data class Attributes(
     val amuComposante: String,
     val coGroup: String,
@@ -29,4 +34,4 @@ data class Attributes(
     val eduPersonPrincipalName: String,
     val memberOf: List<String>,
     val sn: String
-)
+) : Parcelable

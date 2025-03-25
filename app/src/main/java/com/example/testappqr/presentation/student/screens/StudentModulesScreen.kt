@@ -18,16 +18,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
+import com.example.testappqr.presentation.navigation.StudentNavigationView
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorModulesVM
 import com.example.testappqr.presentation.professor.views.ModuleView
 import com.example.testappqr.presentation.professor.views.ModulesView
 import com.example.testappqr.presentation.sharedviews.BasicButton
 
 @Composable
-fun StudentModulesScreen(navController: NavHostController) {
-    NavigationView(navController = navController, title = "My modules") {
+fun StudentModulesScreen(navController: NavHostController,loginVM: LoginVM) {
+    StudentNavigationView(navController = navController, title = "My modules", loginVM = loginVM) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,

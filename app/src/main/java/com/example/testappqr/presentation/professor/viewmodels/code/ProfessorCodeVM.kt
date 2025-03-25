@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.domain.usecase.professor.ProfessorGetCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

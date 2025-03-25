@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.testappqr.presentation.beacon.BeaconVM
 import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.NavigationView
@@ -31,7 +32,8 @@ import com.example.testappqr.presentation.sharedviews.TextCard
 fun ProfessorCodeScreen(
     navController: NavHostController,
     loginVM: LoginVM,
-    professorCodeVM: ProfessorCodeVM = hiltViewModel()
+    professorCodeVM: ProfessorCodeVM = hiltViewModel(),
+    beaconVM: BeaconVM
 
 ) {
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
@@ -57,9 +59,8 @@ fun ProfessorCodeScreen(
             codeState.codes?.readableCode?.let { TextCard(it,"Input Code") }
             HorizontalDivider()
             codeState.codes?.let {
-                BeaconView(
-                    beaconId = it.beaconId
-                )
+//                BeaconView(
+//                )
             }
         }
 

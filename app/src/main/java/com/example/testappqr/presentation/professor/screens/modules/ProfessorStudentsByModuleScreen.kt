@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorStudentsByModuleVM
+import com.example.testappqr.presentation.sharedviews.DateCard
 import java.util.UUID
 
 
@@ -43,8 +44,9 @@ fun ProfessorStudentsByModuleScreen(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-
+            DateCard()
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
                 items(professorStudentsByModuleState.studentsList) { student ->
                     StudentCard(student.firstName)
                 }

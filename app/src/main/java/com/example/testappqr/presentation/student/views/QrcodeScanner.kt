@@ -1,5 +1,6 @@
 package com.example.testappqr.presentation.student.views
 
+import android.content.Context
 import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -28,17 +30,23 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 import kotlin.math.min
-
+import androidx.compose.ui.platform.LocalContext
 @Composable
-fun QrcodeScanner(onBarcodeDetected: (String) -> Unit) {
+fun QrcodeScanner(onBarcodeDetected:  (String, Context) -> Unit, scanDelay: Long = 2000L) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val previewView = remember { PreviewView(context) }
     val barcodeScanner = remember { BarcodeScanning.getClient() }
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
+
+    // State to track if scanning is currently enabled
+    val scanningEnabled = remember { mutableStateOf(true) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Camera Preview
@@ -107,11 +115,29 @@ fun QrcodeScanner(onBarcodeDetected: (String) -> Unit) {
                 .build()
                 .also { analysis ->
                     analysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                        processImageProxy(
-                            imageProxy = imageProxy,
-                            barcodeScanner = barcodeScanner,
-                            onBarcodeDetected = onBarcodeDetected
-                        )
+                        // Only process image if scanning is enabled
+                        if (scanningEnabled.value) {
+                            processImageProxy(
+                                imageProxy = imageProxy,
+                                barcodeScanner = barcodeScanner,
+                                onBarcodeDetected = { code ->
+                                    // Disable scanning temporarily
+                                    scanningEnabled.value = false
+
+                                    // Pass the detected code
+                                    onBarcodeDetected(code,context)
+
+                                    // Re-enable scanning after delay
+                                    MainScope().launch {
+                                        delay(scanDelay)
+                                        scanningEnabled.value = true
+                                    }
+                                }
+                            )
+                        } else {
+                            // Make sure to close the imageProxy even when not processing
+                            imageProxy.close()
+                        }
                     }
                 }
 

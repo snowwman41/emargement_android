@@ -15,14 +15,12 @@ import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.testappqr.presentation.beacon.BeaconVM
 import com.example.testappqr.presentation.login.screens.LoginScreen
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.professor.screens.ProfessorCodeScreen
@@ -33,14 +31,20 @@ import com.example.testappqr.presentation.professor.screens.modules.ProfessorMod
 import com.example.testappqr.presentation.professor.screens.modules.ProfessorSessionsByModuleScreen
 import com.example.testappqr.presentation.professor.screens.modules.ProfessorStudentsByModuleScreen
 import com.example.testappqr.presentation.student.screens.StudentCodeScreen
+import com.example.testappqr.presentation.student.screens.StudentModulesScreen
 import com.example.testappqr.presentation.student.screens.StudentQrCodeScreen
 import com.example.testappqr.presentation.student.screens.StudentSessionsScreen
+import com.example.testappqr.presentation.student.viewmodels.StudentCodeVM
 import java.util.UUID
 
 @Composable
-fun NavGraph() {
+fun NavGraph(
+    loginVM: LoginVM = hiltViewModel(),
+    studentCodeVM: StudentCodeVM = hiltViewModel(),
+    beaconVM: BeaconVM = hiltViewModel()
+) {
     val navController = rememberNavController()
-    val loginVM: LoginVM = hiltViewModel()
+
 
     NavHost(navController = navController, startDestination = Routes.LOGIN) {
 
@@ -53,7 +57,6 @@ fun NavGraph() {
             popExitTransition = Animation.popExitTransition
         ) {
             LoginScreen(navController, loginVM)
-
         }
 
         composable(
@@ -85,7 +88,7 @@ fun NavGraph() {
             popEnterTransition = Animation.popEnterTransition,
             popExitTransition = Animation.popExitTransition
         ) {
-            ProfessorModulesScreen(navController,  loginVM = loginVM)
+            ProfessorModulesScreen(navController, loginVM = loginVM)
         }
         composable(
             Routes.PROFESSOR_MODULE(
@@ -99,7 +102,7 @@ fun NavGraph() {
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
-                ProfessorModuleNavigationScreen(navController, it!!,loginVM = loginVM)
+                ProfessorModuleNavigationScreen(navController, it!!, loginVM = loginVM)
             }
         }
         composable(
@@ -113,7 +116,11 @@ fun NavGraph() {
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
-                ProfessorSessionsByModuleScreen(navController, UUID.fromString((it!!)),loginVM=loginVM)
+                ProfessorSessionsByModuleScreen(
+                    navController,
+                    UUID.fromString((it!!)),
+                    loginVM = loginVM
+                )
             }
         }
 
@@ -129,10 +136,9 @@ fun NavGraph() {
             arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("moduleId").let {
-                ProfessorStudentsByModuleScreen(navController, it!!,loginVM = loginVM)
+                ProfessorStudentsByModuleScreen(navController, it!!, loginVM = loginVM)
             }
         }
-
 
         composable(
             Routes.PROFESSOR_SESSION_BY_MODULE(
@@ -157,7 +163,7 @@ fun NavGraph() {
             popEnterTransition = Animation.popEnterTransition,
             popExitTransition = Animation.popExitTransition
         ) {
-            ProfessorCodeScreen(navController, loginVM)
+            ProfessorCodeScreen(navController, loginVM, beaconVM = beaconVM)
         }
         //STUDENT
         composable(
@@ -181,14 +187,19 @@ fun NavGraph() {
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
-                StudentCodeScreen(navController, sessionId = UUID.fromString(it!!),loginVM = loginVM)
+                StudentCodeScreen(
+                    navController,
+                    sessionId = UUID.fromString(it!!),
+                    loginVM = loginVM,
+                    studentCodeVM = studentCodeVM
+                )
             }
         }
         composable(
             Routes.STUDENT_QRCODE_SCANNER_BY_SESSION(
-                "{sessionId}",
+                "{sessionId}"
 
-                ),
+            ),
             enterTransition = Animation.enterTransition,
             exitTransition = Animation.exitTransition,
             popEnterTransition = Animation.popEnterTransition,
@@ -196,7 +207,7 @@ fun NavGraph() {
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("sessionId").let {
-                StudentQrCodeScreen(navController,loginVM)
+                StudentQrCodeScreen(navController, loginVM, studentCodeVM = studentCodeVM, sessionId = UUID.fromString(it))
             }
         }
         composable(
@@ -206,7 +217,7 @@ fun NavGraph() {
             popEnterTransition = Animation.popEnterTransition,
             popExitTransition = Animation.popExitTransition
         ) {
-            StudentSessionsScreen(navController, loginVM = loginVM)
+            StudentModulesScreen(navController, loginVM = loginVM)
         }
         composable(Routes.STUDENT_QRCODE_SCANNER) {
 

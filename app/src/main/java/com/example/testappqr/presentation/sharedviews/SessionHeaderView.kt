@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.testappqr.data.models.SessionDTO
-import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.models.SessionDTO
+import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.utils.formatDate
 import com.example.testappqr.utils.formatTime
 

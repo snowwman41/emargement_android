@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.testappqr.models.CodeDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,9 +31,10 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import javax.inject.Inject
 
+@Parcelize
 data class BeaconDevice(
     val address: String, val name: String, val rssi: Int
-)
+) : Parcelable
 
 @HiltViewModel
 class BeaconVM @Inject constructor(
@@ -58,10 +60,8 @@ class BeaconVM @Inject constructor(
 
             if (checkLocationAndBluetoothState())
                 setupBluetoothScanner()
-
         }
     }
-
 
     init {
         // Register receiver for Bluetooth state changes
@@ -144,7 +144,13 @@ class BeaconVM @Inject constructor(
 
         // Scan for the user's beacon with device name
         val filters = ArrayList<ScanFilter>()
-        filters.add(ScanFilter.Builder().setDeviceName(beaconState.value.beaconId).build())
+        Log.e("BEACON ID ADD FILTER", beaconState.value.beaconsId.toString())
+
+        beaconState.value.beaconsId.forEach {
+            filters.add(ScanFilter.Builder().setDeviceName(it.beaconId).build())
+        }
+        Log.e("FILTERs", filters.toString())
+
         viewModelScope.launch {
             delay(SCAN_PERIOD)
             stopScanning()
@@ -314,20 +320,21 @@ class BeaconVM @Inject constructor(
         stopScanning()
     }
 
-    fun setBeaconId(beaconId: String) {
-//        viewModelScope.launch { print("getBeaconid") }
-        updateState { it.copy(beaconId = beaconId) }
+    fun setBeaconId(beaconsId: List<CodeDTO>) {
+//        viewModelScope.launch { print("getBeaconsid") }
+        Log.e("SET BEACONS ID ", beaconsId.toString())
+        updateState { it.copy(beaconsId = beaconsId) }
+        Log.e("AFTER SET BEACONS ID ", beaconState.value.beaconsId.toString())
     }
 
     private fun updateState(update: (BeaconState) -> BeaconState) {
         savedStateHandle["beaconState"] = update(beaconState.value)
     }
-
 }
 
 @Parcelize
 data class BeaconState(
-    val beaconId: String? = null,
+    val beaconsId: List<CodeDTO> = emptyList(),
     val isScanning: Boolean = false,
     val detectedBeacons: @RawValue List<BeaconDevice> = emptyList(),
     val permissionsGranted: Boolean = false,

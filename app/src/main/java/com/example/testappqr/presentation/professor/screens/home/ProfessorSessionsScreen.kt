@@ -61,7 +61,7 @@ import java.util.Locale
 fun ProfessorSessionsScreen(
     navController: NavHostController,
     professorSessionsVM: ProfessorSessionsVM = hiltViewModel(),
-    loginVM: LoginVM = hiltViewModel()
+    loginVM: LoginVM
 ) {
     val professorSessions by professorSessionsVM.professorSessionsState.collectAsStateWithLifecycle()
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()

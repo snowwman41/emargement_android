@@ -1,12 +1,12 @@
 package com.example.testappqr.domain.repository
 
-import com.example.testappqr.data.models.CodeDTO
-import com.example.testappqr.data.models.ModuleDTO
-import com.example.testappqr.data.models.ModuleLazyDTO
-import com.example.testappqr.data.models.SSODTO
-import com.example.testappqr.data.models.SessionDTO
-import com.example.testappqr.data.models.SessionLazyDTO
-import com.example.testappqr.data.models.StudentLazyDTO
+import com.example.testappqr.models.CodeDTO
+import com.example.testappqr.models.ModuleDTO
+import com.example.testappqr.models.ModuleLazyDTO
+import com.example.testappqr.models.SSODTO
+import com.example.testappqr.models.SessionDTO
+import com.example.testappqr.models.SessionLazyDTO
+import com.example.testappqr.models.StudentLazyDTO
 import java.util.UUID
 
 interface ProfessorRepository {

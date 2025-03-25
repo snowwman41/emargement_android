@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.models.SessionLazyDTO
 
 //import com.example.testappqr.presentation.professor.viewmodels.modules.AddSessionVM
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorSessionsByModuleVM

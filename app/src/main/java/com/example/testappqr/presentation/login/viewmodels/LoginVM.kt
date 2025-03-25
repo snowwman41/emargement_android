@@ -4,8 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.data.models.SSODTO
+import com.example.testappqr.models.SSODTO
 import com.example.testappqr.domain.usecase.login.GetUserDataUseCase
+import com.example.testappqr.domain.usecase.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -35,9 +36,27 @@ class LoginVM @Inject constructor(
 
     fun getUserData(request: String) {
         viewModelScope.launch {
-            val userData = getUserDataUseCase(request)
-            println("userdata loginVM  :   $userData")
-            updateUserData(userData)
+            updateState { it.copy(isLoading = true) }
+            when (val result = getUserDataUseCase(request)) {
+                is ApiResult.Success -> {
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            userData = result.data,
+                        )
+                    }
+                }
+                is ApiResult.Error -> {
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                        )
+                    }
+                }
+                is ApiResult.Loading -> {
+                    updateState { it.copy(isLoading = true) }
+                }
+            }
         }
     }
 

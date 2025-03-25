@@ -1,7 +1,7 @@
 package com.example.testappqr.domain.usecase.professor
 
-import com.example.testappqr.data.models.CodeDTO
-import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.models.CodeDTO
+import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
 import javax.inject.Inject
 

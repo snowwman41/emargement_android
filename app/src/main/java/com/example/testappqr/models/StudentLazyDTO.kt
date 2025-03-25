@@ -1,4 +1,4 @@
-package com.example.testappqr.data.models
+package com.example.testappqr.models
 
 data class StudentLazyDTO(
     val studentId: String,

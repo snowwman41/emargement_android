@@ -1,23 +1,79 @@
 package com.example.testappqr.presentation.student.screens
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.testappqr.data.models.ModuleLazyDTO
-import com.example.testappqr.data.models.SessionDTO
-import com.example.testappqr.data.models.SignatureDTO
 import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.navigation.StudentNavigationView
 import com.example.testappqr.presentation.sharedviews.BasicButton
-import com.example.testappqr.presentation.sharedviews.SessionViewHeader
+import com.example.testappqr.presentation.student.viewmodels.StudentCodeVM
 import java.util.UUID
 
 @Composable
-fun StudentCodeScreen(navController: NavHostController, sessionId: UUID,loginVM: LoginVM) {
-    StudentNavigationView(navController = navController, title = "Code", showBackButton = true, loginVM = loginVM) {
-        Column {
+fun StudentCodeScreen(
+    navController: NavHostController,
+    sessionId: UUID, loginVM: LoginVM,
+    studentCodeVM: StudentCodeVM = hiltViewModel()
+) {
+    val studentCodeState by studentCodeVM.studentCodeState.collectAsStateWithLifecycle()
+    val loginState by loginVM.loginState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        studentCodeVM.getCodes(sessionId)
+    }
+    StudentNavigationView(
+        navController = navController,
+        title = "Code",
+        showBackButton = true,
+        loginVM = loginVM
+    ) {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            if (studentCodeState.codes.isNotEmpty()){
+                BasicButton(
+                    onClick = {
+                        navController.navigate(
+                            Routes.STUDENT_QRCODE_SCANNER_BY_SESSION(
+                                sessionId.toString()
+                            )
+                        )
+                    }, text = "Sign with QR Code", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                )
+                BeaconView(
+                    isProfessor = false,
+                    studentCodeVM = studentCodeVM,
+                    sessionId = sessionId,
+                    userId = loginState.userData?.authenticationSuccess?.attributes?.uid
+
+                )
+            }
+
+
+//            BasicButton(onClick = {}, text = "validate with code")
+        }
+    }
+}
+
+
 //            SessionViewHeader(
 //                SessionDTO(
 //                    sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
@@ -48,15 +104,3 @@ fun StudentCodeScreen(navController: NavHostController, sessionId: UUID,loginVM:
 //
 //                )
 //            )
-            BasicButton(onClick = {
-                navController.navigate(
-                    Routes.STUDENT_QRCODE_SCANNER_BY_SESSION(
-                        sessionId.toString()
-                    )
-                )
-            }, text = "Scan QR Code")
-            BeaconView(isProfessor = false)
-//            BasicButton(onClick = {}, text = "validate with code")
-        }
-    }
-}

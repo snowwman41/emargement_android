@@ -155,7 +155,7 @@ fun StudentBottomBar(navController: NavHostController) {
             },
                 label = { Text(text = "Modules") }, selected = currentRoute.contains(Routes.STUDENT_MODULES),
                 onClick = {
-                    navController.navigate(Routes.STUDENT_SESSIONS)
+                    navController.navigate(Routes.STUDENT_MODULES)
 
                     {
                         // Pop up to the start destination of the graph to avoid building up a stack

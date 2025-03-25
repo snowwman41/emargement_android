@@ -1,6 +1,6 @@
 package com.example.testappqr.domain.usecase.professor
 
-import com.example.testappqr.data.models.ModuleDTO
+import com.example.testappqr.models.ModuleDTO
 import com.example.testappqr.domain.repository.ProfessorRepository
 import java.util.UUID
 import javax.inject.Inject

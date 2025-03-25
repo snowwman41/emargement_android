@@ -3,6 +3,7 @@ package com.example.testappqr.presentation.professor.screens.modules
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ import com.example.testappqr.presentation.navigation.NavigationView
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorSessionsByModuleVM
 import com.example.testappqr.presentation.professor.views.AddSessionView
+import com.example.testappqr.presentation.sharedviews.DateCard
 import com.example.testappqr.presentation.sharedviews.SessionView
 import java.util.UUID
 
@@ -51,6 +53,7 @@ fun ProfessorSessionsByModuleScreen(
         }
 
         Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally){
+//            DateCard()
             LazyColumn(Modifier.fillMaxHeight(0.8f)) {
                 items(professorSessionsByModuleState.sessionsList) { session ->
                     SessionView(session, Modifier.clickable {

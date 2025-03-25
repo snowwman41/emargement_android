@@ -31,7 +31,7 @@ import java.io.ByteArrayInputStream
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController, loginVM: LoginVM = hiltViewModel()
+    navController: NavHostController, loginVM: LoginVM
 ) {
     val ip = "192.168.107.164"
     val amuSSO = "https://ident.univ-amu.fr/cas/login"
@@ -44,7 +44,8 @@ fun LoginScreen(
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
-
+        println("loginState.userData: ${loginState.userData}")
+        println( "loginState.shouldNavigate: ${loginState.shouldNavigate}")
 //        if (loginState.userData != null) {
         if (loginState.shouldNavigate && loginState.userData != null) {
             LaunchedEffect(Unit) {
@@ -69,6 +70,11 @@ fun LoginScreen(
             }
 
             }
+        }
+        if (loginState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
         AndroidView(
             factory = { ctx ->
@@ -141,13 +147,6 @@ fun LoginScreen(
                 }
             }, modifier = Modifier.fillMaxSize()
         )
-
-
-        if (loginState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
 
         if (loginState.webViewError) {
 

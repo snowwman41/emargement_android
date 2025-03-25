@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.utils.formatDate
 import com.example.testappqr.utils.formatTime
 import java.util.UUID
@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun SessionView(it: SessionLazyDTO, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().padding(6.dp)
     ) {
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
