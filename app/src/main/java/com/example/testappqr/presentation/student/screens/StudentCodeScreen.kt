@@ -1,6 +1,5 @@
 package com.example.testappqr.presentation.student.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.testappqr.presentation.beacon.BeaconStudentView
-import com.example.testappqr.presentation.beacon.BeaconView
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.navigation.StudentNavigationView

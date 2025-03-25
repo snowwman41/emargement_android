@@ -11,6 +11,7 @@ import java.io.IOException
 class FakeLoginRepositoryImpl : LoginRepository {
     //b24028599 student
     //s23022841 teacher
+    // change uid and eduPersonPrimaryAffiliation in attributes
     override suspend fun getUserData(request: String): ApiResult<SSODTO> {
         return try {
             val response = SSODTO(
@@ -27,8 +28,8 @@ class FakeLoginRepositoryImpl : LoginRepository {
                         supannEtuAnneeInscription = "2024",
                         amuDateValidation = "20230823102953Z",
                         supannEntiteAffectation = "SC7",
-                        uid = "b24028599",
-                        eduPersonPrimaryAffiliation = "student",
+                        uid = "s23022841",
+                        eduPersonPrimaryAffiliation = "teacher",
                         supannEtuEtape = "SMI5T1",
                         supannCivilite = "M.",
                         eduPersonPrincipalName = "s23022841@univ-amu.fr",

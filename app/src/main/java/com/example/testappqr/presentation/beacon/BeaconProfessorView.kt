@@ -1,7 +1,5 @@
 package com.example.testappqr.presentation.beacon
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,13 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.testappqr.MainActivity
-import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.CodeType
 import com.example.testappqr.presentation.professor.viewmodels.code.ProfessorCodeVM
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.sharedviews.TextCard
-import com.example.testappqr.presentation.student.viewmodels.StudentCodeVM
-import java.util.UUID
 
 
 @Composable
@@ -71,32 +65,21 @@ fun BeaconItemView(beacon: BeaconDevice) {
 }
 
 @Composable
-fun BeaconView(
+fun BeaconProfessorView(
     beaconVM: BeaconVM = hiltViewModel(),
-    isProfessor: Boolean = true,
-    studentCodeVM: StudentCodeVM,
-    professorCodeVM: ProfessorCodeVM = hiltViewModel(),
-    sessionId: UUID? = null,
-    userId: String? = null
+    professorCodeVM: ProfessorCodeVM
 
 ) {
-
     val beaconState by beaconVM.beaconState.collectAsStateWithLifecycle()
-    val studentCodeState by studentCodeVM.studentCodeState.collectAsStateWithLifecycle()
     val professorCodeState by professorCodeVM.codeState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        if (isProfessor) {
-            if (professorCodeState.codes != null) {
-                beaconVM.setBeaconId(listOf(professorCodeState.codes!!))
-            }
-        } else {
-            beaconVM.setBeaconId(studentCodeVM.studentCodeState.value.codes)
+        if (professorCodeState.codes != null) {
+            beaconVM.setBeaconId(listOf(professorCodeState.codes!!))
         }
-
-
     }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
         if (professorCodeState.codes != null) {
@@ -157,44 +140,23 @@ fun BeaconView(
         }
 
         HorizontalDivider()
-        if (isProfessor) {
-            Text(
-                text = "Found ${beaconState.detectedBeacons.size} devices",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
 
+        Text(
+            text = "Found ${beaconState.detectedBeacons.size} devices",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
 
-            //
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
 
-            ) {
-                items(beaconState.detectedBeacons.sortedByDescending { it.rssi }) { beacon ->
-                    BeaconItemView(beacon = beacon)
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
-            }
-        } else {
-            if (beaconState.detectedBeacons.isNotEmpty()) {
-                LaunchedEffect(Unit) {
-                    Log.e("BEACN CODE", beaconState.detectedBeacons[0].name)
-                    if (sessionId != null && userId != null) {
-                        studentCodeVM.sign(
-                            sessionId = sessionId,
-                            beaconState.detectedBeacons[0].name,
-                            codeType = CodeType.BEACON,
-                            studentId = userId
-                        )
-                    }
-                }
-                Toast.makeText(
-                    LocalContext.current,
-                    "You have succesfully signed",
-                    Toast.LENGTH_SHORT
-                ).show()
+        ) {
+            items(beaconState.detectedBeacons.sortedByDescending { it.rssi }) { beacon ->
+                BeaconItemView(beacon = beacon)
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
+
     }
 }

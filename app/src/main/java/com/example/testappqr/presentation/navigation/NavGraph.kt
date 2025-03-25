@@ -163,7 +163,7 @@ fun NavGraph(
             popEnterTransition = Animation.popEnterTransition,
             popExitTransition = Animation.popExitTransition
         ) {
-            ProfessorCodeScreen(navController, loginVM, beaconVM = beaconVM)
+            ProfessorCodeScreen(navController, loginVM)
         }
         //STUDENT
         composable(
