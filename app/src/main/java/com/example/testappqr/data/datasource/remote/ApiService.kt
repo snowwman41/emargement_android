@@ -50,7 +50,7 @@ interface ApiService {
 //working
 //validate sso ticket and get the user data
     @GET
-    suspend fun ssoValidatation (@Url url : String): ApiResult<SSODTO>
+    suspend fun ssoValidatation (@Url url : String): SSODTO
 
     @GET("sessions/{userId}/{date}")
     suspend fun getSessionsOfUserOnDate (@Path("userId") userId : String, @Path("date") date : String): List<SessionLazyDTO>

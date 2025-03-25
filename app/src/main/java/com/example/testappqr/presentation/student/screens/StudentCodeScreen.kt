@@ -1,5 +1,6 @@
 package com.example.testappqr.presentation.student.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,7 +31,13 @@ fun StudentCodeScreen(
 ) {
     val studentCodeState by studentCodeVM.studentCodeState.collectAsStateWithLifecycle()
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
+    LaunchedEffect(studentCodeState.message) {
+        studentCodeState.message?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            studentCodeVM.clearErrorMessage() // Clear the message after displaying
+        }
+    }
     LaunchedEffect(Unit) {
         studentCodeVM.getCodes(sessionId)
     }

@@ -1,6 +1,9 @@
 package com.example.testappqr.data.repository
 
+import android.util.Log
 import com.example.testappqr.data.datasource.remote.ApiService
+import com.example.testappqr.domain.repository.ProfessorRepository
+import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.ModuleDTO
 import com.example.testappqr.models.ModuleLazyDTO
@@ -8,18 +11,21 @@ import com.example.testappqr.models.SSODTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.StudentLazyDTO
-import com.example.testappqr.domain.repository.ProfessorRepository
+import retrofit2.HttpException
+import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiService) : ProfessorRepository {
-    override suspend fun modules(userId : String): List<ModuleLazyDTO> {
+class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiService) :
+    ProfessorRepository {
+    override suspend fun modules(userId: String): List<ModuleLazyDTO> {
         return apiService.getModules(
             userId = "s23022841"
         )
     }
+
     override suspend fun module(moduleId: UUID): ModuleDTO {
         return apiService.getModule(moduleId)
     }
@@ -40,18 +46,28 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
         return apiService.closeSession(sessionId)
     }
 
-
-
     override suspend fun verifyToken(): Boolean {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSessionsOfUserOnDate(userId : String ,date : String): List<SessionLazyDTO> {
-        return apiService.getSessionsOfUserOnDate(userId,date)
+    override suspend fun getSessionsOfUserOnDate(
+        userId: String,
+        date: String
+    ): ApiResult<List<SessionLazyDTO>> {
+        return try {
+            val result = apiService.getSessionsOfUserOnDate(userId,date)
+            ApiResult.Success(result)
+        } catch (e: IOException) {
+            ApiResult.Error(e, "Network error occurred")
+        } catch (e: HttpException) {
+            ApiResult.Error(e, "HTTP error: ${e.code()}")
+        } catch (e: Exception) {
+            ApiResult.Error(e, e.message ?: "Unknown error occurred")
+        }
     }
 
 
-    override suspend fun getSession(sessionId : UUID): SessionDTO {
+    override suspend fun getSession(sessionId: UUID): SessionDTO {
         return apiService.getSession(sessionId)
     }
 

@@ -67,7 +67,6 @@ fun ProfessorSessionsScreen(
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        println("user compose id : ${loginState.userData?.authenticationSuccess?.attributes?.uid}")
         loginState.userData?.authenticationSuccess?.attributes?.let {
             professorSessionsVM.getSessions(
                 it.uid)

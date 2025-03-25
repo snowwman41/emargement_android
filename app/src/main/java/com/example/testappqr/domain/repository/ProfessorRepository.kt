@@ -1,5 +1,6 @@
 package com.example.testappqr.domain.repository
 
+import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.ModuleDTO
 import com.example.testappqr.models.ModuleLazyDTO
@@ -11,7 +12,7 @@ import java.util.UUID
 
 interface ProfessorRepository {
     //working
-    suspend fun getSessionsOfUserOnDate(userId : String, date : String): List<SessionLazyDTO>
+    suspend fun getSessionsOfUserOnDate(userId : String, date : String): ApiResult<List<SessionLazyDTO>>
     suspend fun getSession(sessionId : UUID): SessionDTO
     suspend fun modules(userId : String): List<ModuleLazyDTO>
     suspend fun module(moduleId: UUID): ModuleDTO

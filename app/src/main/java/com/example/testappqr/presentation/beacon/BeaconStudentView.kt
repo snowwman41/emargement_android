@@ -82,17 +82,17 @@ fun BeaconStudentView(
                         beaconState.isBluetoothEnabled &&
                         beaconState.isLocationEnabled,
                 modifier = Modifier.weight(1f),
-                text = "Test beacon"
+                text = "Sign in with beacon"
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            BasicButton(
-                onClick = { beaconVM.stopScanning() },
-                isEnabled = beaconState.isScanning,
-                text = "Stop Scanning",
-                modifier = Modifier.weight(1f)
-            )
+//            BasicButton(
+//                onClick = { beaconVM.stopScanning() },
+//                isEnabled = beaconState.isScanning,
+//                text = "Stop Scanning",
+//                modifier = Modifier.weight(1f)
+//            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
