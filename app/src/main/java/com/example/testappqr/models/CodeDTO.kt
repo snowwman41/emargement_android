@@ -11,5 +11,5 @@ data class CodeDTO(
     val readableCode: String,
     val qrCode: String,
     val beaconId: String?,
-    val teacher: @RawValue TeacherLazyDTO
+    val teacher: @RawValue TeacherDTO
 ) : Parcelable

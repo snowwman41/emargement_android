@@ -1,6 +1,7 @@
 package com.example.testappqr.presentation.sharedviews
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,12 +19,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.testappqr.models.SessionDTO
-import com.example.testappqr.models.SessionLazyDTO
+import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSessionVM
 import com.example.testappqr.utils.formatDate
 import com.example.testappqr.utils.formatTime
 
 @Composable
-fun SessionViewHeader(session: SessionDTO) {
+fun SessionViewHeader(session: SessionDTO, professorSessionVM: ProfessorSessionVM) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -51,9 +51,16 @@ fun SessionViewHeader(session: SessionDTO) {
                         RoundedCornerShape(8.dp)
                     )
                     .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .clickable {
+                        if (session.active) {
+                            professorSessionVM.closeSession()
+                        } else {
+                            professorSessionVM.openSession()
+                        }
+                    }
             ) {
                 Text(
-                    text = if (session.active) "✅ Open" else "❌ Closed",
+                    text = if (session.active) "✅ Open : Close Session" else "❌ Closed : Open Session",
                     style = TextStyle(fontSize = 18.sp)
                 )
             }

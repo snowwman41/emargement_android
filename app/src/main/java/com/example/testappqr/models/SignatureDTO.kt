@@ -8,7 +8,7 @@ import java.util.UUID
 @Parcelize
 data class SignatureDTO(
     val id: UUID,
-    val student : @RawValue StudentLazyDTO,
+    val student : @RawValue StudentDTO,
     val sessionId: UUID,
     val verificationCode :String,
     val codeType: CodeType

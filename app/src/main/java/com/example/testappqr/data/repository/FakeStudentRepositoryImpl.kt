@@ -9,8 +9,8 @@ import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureDTO
 import com.example.testappqr.models.SignatureLazyDTO
-import com.example.testappqr.models.StudentLazyDTO
-import com.example.testappqr.models.TeacherLazyDTO
+import com.example.testappqr.models.StudentDTO
+import com.example.testappqr.models.TeacherDTO
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.UUID
@@ -92,7 +92,7 @@ class FakeStudentRepositoryImpl @Inject constructor() : StudentRepository {
                 "250",
                 "1253654",
                 "L ID 007435",
-                TeacherLazyDTO("s23022841", "Second", "Prof", "test2@mail.de")
+                TeacherDTO("s23022841", "Second", "Prof", "test2@mail.de")
             )
         )
     }
@@ -114,19 +114,19 @@ class FakeStudentRepositoryImpl @Inject constructor() : StudentRepository {
                 signatures = listOf(
                     SignatureDTO(
                         id = UUID.fromString("1c0707a1-242d-451d-b911-da984aed985f"),
-                        student = StudentLazyDTO("b24028599", "Oscar", "Bauer", ""),
+                        student = StudentDTO("b24028599", "Oscar", "Bauer", ""),
                         sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
                         verificationCode = "250",
                         codeType = CodeType.QR
                     ), SignatureDTO(
                         id = UUID.fromString("d0e4aca8-7231-41e6-b15b-337c2033c22c"),
-                        student = StudentLazyDTO("b24028599", "Oscar", "Bauer", ""),
+                        student = StudentDTO("b24028599", "Oscar", "Bauer", ""),
                         sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
                         codeType = CodeType.QR,
                         verificationCode = "TODO()"
                     ), SignatureDTO(
                         id = UUID.fromString("e7a87e28-0c0b-4cdc-a143-66cc2446eb8f"),
-                        student = StudentLazyDTO("b24028599", "Oscar", "Bauer", ""),
+                        student = StudentDTO("b24028599", "Oscar", "Bauer", ""),
                         sessionId = UUID.fromString("35ec002e-20fa-445d-9a1c-99a78940722e"),
                         codeType = CodeType.QR,
                         verificationCode = "TODO()"

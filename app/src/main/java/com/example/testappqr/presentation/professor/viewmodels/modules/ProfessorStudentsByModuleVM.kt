@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.models.StudentLazyDTO
+import com.example.testappqr.models.StudentDTO
 import com.example.testappqr.domain.usecase.professor.ProfessorStudentsByModuleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,5 +38,5 @@ class ProfessorStudentsByModuleVM @Inject constructor(
 
 @Parcelize
 data class ProfessorStudentsByModuleState(
-    val studentsList: List<@RawValue StudentLazyDTO> = emptyList()
+    val studentsList: List<@RawValue StudentDTO> = emptyList()
 ) : Parcelable

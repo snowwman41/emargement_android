@@ -110,7 +110,7 @@ fun ProfessorSessionScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                SessionViewHeader(session)
+                SessionViewHeader(session,professorSessionVM)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn {
