@@ -6,11 +6,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.domain.usecase.login.GetUserDataUseCase
+import com.example.testappqr.domain.usecase.professor.ProfessorCreateUserUseCase
+import com.example.testappqr.domain.usecase.student.StudentAddToSpeciality
 import com.example.testappqr.domain.usecase.student.StudentCreateSpecialityUseCase
 import com.example.testappqr.domain.usecase.student.StudentCreateUserUseCase
 import com.example.testappqr.domain.usecase.util.handle
 import com.example.testappqr.models.SSODTO
-import com.example.testappqr.models.SpecialityLazyDTO
+import com.example.testappqr.models.TeacherLazyDTO
 import com.example.testappqr.models.UserCreationDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +25,9 @@ class LoginVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getUserDataUseCase: GetUserDataUseCase,
     private val studentCreateSpecialityUseCase: StudentCreateSpecialityUseCase,
-    private val studentCreateUserUseCase: StudentCreateUserUseCase
+    private val studentCreateUserUseCase: StudentCreateUserUseCase,
+    private val studentAddToSpeciality: StudentAddToSpeciality,
+    private val professorCreateUserUseCase: ProfessorCreateUserUseCase
 ) : ViewModel() {
 
     val loginState = savedStateHandle.getStateFlow("loginState", LoginState())
@@ -51,19 +55,39 @@ class LoginVM @Inject constructor(
                             userData = userData,
                         )
                     }
-                    if (userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "student"){
+                    if (userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "student") {
 
-                        studentCreateSpecialityUseCase(userData.authenticationSuccess.attributes.coGroup).handle(
+                        studentCreateSpecialityUseCase(userData.authenticationSuccess.attributes.coGroup.take(16)).handle(
                             onSuccess = { specialityData ->
                                 studentCreateUserUseCase(
-                                    userCreationDTO = userData.authenticationSuccess.attributes.let{
+                                    userCreationDTO = userData.authenticationSuccess.attributes.let {
                                         UserCreationDTO(it.uid, it.sn, it.givenName, it.mail)
                                     }
+                                ).handle(
+
+                                    onSuccess = {
+                                        Log.d("LoginVM", "getUserData: $userData")
+                                        Log.d("LoginVM", "speciality: $specialityData")
+                                        studentAddToSpeciality(
+                                            studentSpeciality = mapOf(
+                                                "specialityId" to specialityData.id.toString(),
+                                                "studentId" to userData.authenticationSuccess.attributes.uid
+                                            )
+                                        )
+                                    }
                                 )
-                                        },
-                            onLoading = {},
-                            onError = { exception: Exception, s: String -> }
-                        )
+                            },
+
+                            )
+                    } else if (userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "teacher"
+                        || userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "professor"
+                    ) {
+                        professorCreateUserUseCase(userData.authenticationSuccess.attributes.let{TeacherLazyDTO(
+                            userId = it.uid ,
+                            firstName = it.givenName,
+                            lastName = it.sn,
+                            email = it.mail
+                        )})
                     }
                 },
                 onLoading = {
@@ -89,7 +113,6 @@ class LoginVM @Inject constructor(
 //                )
 //            )
 //        }
-
 
 
     fun updateUserData(userData: SSODTO?) {

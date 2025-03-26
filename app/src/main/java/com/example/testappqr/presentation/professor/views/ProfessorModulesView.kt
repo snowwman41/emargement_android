@@ -1,36 +1,27 @@
 package com.example.testappqr.presentation.professor.views
 
+//import com.example.testappqr.presentation.navigation.navigateToProfessorModule
+
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.presentation.login.viewmodels.LoginVM
 import com.example.testappqr.presentation.navigation.Routes
 import com.example.testappqr.presentation.professor.viewmodels.modules.ProfessorModulesVM
-//import com.example.testappqr.presentation.navigation.navigateToProfessorModule
-
-import java.util.UUID
+import com.example.testappqr.presentation.sharedviews.ModuleView
 
 
 @Composable
-fun ModulesView(
+fun ProfessorModulesView(
     navController: NavController,
     professorModulesVM: ProfessorModulesVM = hiltViewModel(),
     loginVM: LoginVM = hiltViewModel()
@@ -40,7 +31,11 @@ fun ModulesView(
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        loginState.userData?.authenticationSuccess?.attributes?.let { professorModulesVM.getModules(it.uid) }
+        loginState.userData?.authenticationSuccess?.attributes?.let {
+            professorModulesVM.getModules(
+                it.uid
+            )
+        }
     }
     LazyColumn {
         items(professorState.modulesList) { module ->
@@ -56,28 +51,3 @@ fun ModulesView(
     }
 }
 
-@Composable
-fun ModuleView(module: ModuleLazyDTO, modifier: Modifier) {
-    Card(modifier = modifier) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)) {
-            Text(
-                module.moduleName!!,
-                style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ModulePreview() {
-    ModuleView(
-        module = ModuleLazyDTO(
-            UUID.randomUUID(),
-            "Module 1", UUID.randomUUID()
-        ),
-        modifier = Modifier.fillMaxWidth()
-    )
-}

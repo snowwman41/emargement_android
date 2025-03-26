@@ -3,6 +3,7 @@ package com.example.testappqr.data.repository
 import com.example.testappqr.domain.repository.StudentRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.models.CodeDTO
+import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureLazyDTO
@@ -146,6 +147,14 @@ class FakeStudentRepositoryImpl @Inject constructor() : StudentRepository {
     }
 
     override suspend fun studentCreateUser(userCreationDTO: UserCreationDTO): ApiResult<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun studentAddToSpeciality(studentSpeciality: Map<String, String>): ApiResult<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun studentModules(studentId: String): ApiResult<List<ModuleLazyDTO>> {
         TODO("Not yet implemented")
     }
 

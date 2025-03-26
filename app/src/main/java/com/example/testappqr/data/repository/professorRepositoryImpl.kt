@@ -11,8 +11,7 @@ import com.example.testappqr.models.SSODTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.StudentDTO
-import retrofit2.HttpException
-import java.io.IOException
+import com.example.testappqr.models.TeacherLazyDTO
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,7 +20,7 @@ import javax.inject.Singleton
 class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiService) :
     ProfessorRepository {
     override suspend fun modules(userId: String): List<ModuleLazyDTO> {
-        return apiService.getModules(
+        return apiService.professorModules(
             userId = "s23022841"
         )
     }
@@ -47,6 +46,10 @@ class ProfessorRepositoryImpl @Inject constructor(private val apiService: ApiSer
 
     override suspend fun closeSession(sessionId: UUID): ApiResult<SessionDTO> {
         return safeApiCall { apiService.closeSession(sessionId) }
+    }
+
+    override suspend fun professorCreateUser(teacherLazyDTO: TeacherLazyDTO): ApiResult<Unit> {
+        return safeApiCall { apiService.createTeacher(teacherLazyDTO) }
     }
 
     override suspend fun verifyToken(): Boolean {

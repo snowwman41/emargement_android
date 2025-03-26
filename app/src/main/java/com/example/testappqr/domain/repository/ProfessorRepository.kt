@@ -8,6 +8,7 @@ import com.example.testappqr.models.SSODTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.StudentDTO
+import com.example.testappqr.models.TeacherLazyDTO
 import java.util.UUID
 
 interface ProfessorRepository {
@@ -23,6 +24,7 @@ interface ProfessorRepository {
     suspend fun getCodeByTeacher(userId: String): CodeDTO
     suspend fun openSession(sessionId: UUID): ApiResult<SessionDTO>
     suspend fun closeSession(sessionId: UUID): ApiResult<SessionDTO>
+    suspend fun professorCreateUser(teacherLazyDTO: TeacherLazyDTO ) : ApiResult<Unit>
 
 
     suspend fun addSession(session: SessionDTO): List<SessionLazyDTO>

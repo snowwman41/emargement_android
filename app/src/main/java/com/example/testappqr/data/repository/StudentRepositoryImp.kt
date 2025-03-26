@@ -6,6 +6,7 @@ import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.domain.repository.StudentRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.domain.usecase.util.safeApiCall
+import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SignatureLazyDTO
 import com.example.testappqr.models.SpecialityCreationDTO
@@ -39,5 +40,14 @@ class StudentRepositoryImp @Inject constructor(private val apiService: ApiServic
     override suspend fun studentCreateUser(userCreationDTO: UserCreationDTO): ApiResult<Unit> {
         return safeApiCall{  apiService.createStudent(userCreationDTO)}
 
+    }
+
+    override suspend fun studentAddToSpeciality(studentSpeciality: Map<String, String>): ApiResult<Unit> {
+        return safeApiCall{  apiService.addStudentToSpeciality(studentSpeciality)}
+
+    }
+
+    override suspend fun studentModules(studentId: String): ApiResult<List<ModuleLazyDTO>> {
+        return safeApiCall{  apiService.studentModules(studentId)}
     }
 }

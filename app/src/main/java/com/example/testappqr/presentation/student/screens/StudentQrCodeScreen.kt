@@ -35,8 +35,7 @@ fun StudentQrCodeScreen(navController: NavHostController, loginVM: LoginVM,stude
         showBackButton = true,
         loginVM = loginVM
     ) {
-//        var isScanning by remember { mutableStateOf(false) }
-//        var scannedCode by remember { mutableStateOf("") }
+
         var hasPermission by rememberSaveable { mutableStateOf(false) }
         val studentCodeState by studentCodeVM.studentCodeState.collectAsStateWithLifecycle()
         val loginState by loginVM.loginState.collectAsStateWithLifecycle()
@@ -45,7 +44,6 @@ fun StudentQrCodeScreen(navController: NavHostController, loginVM: LoginVM,stude
         if (hasPermission) {
             QrcodeScanner({ code,context ->
                 if (studentCodeState.codes[0].qrCode == code) {
-                    Log.e("QRCode DETECTED : ", code)
                     loginState.userData?.authenticationSuccess?.attributes?.uid?.let {
                         studentCodeVM.sign(
                             sessionId = sessionId,
@@ -54,7 +52,7 @@ fun StudentQrCodeScreen(navController: NavHostController, loginVM: LoginVM,stude
                             studentId = it
                         )
                     }
-                    Toast.makeText(context, "QR Code Matched", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
                 } else {
                     Log.e("QRCode DETECTED : ", code)
                     Toast.makeText(context, "QR Code Not Matched", Toast.LENGTH_SHORT).show()

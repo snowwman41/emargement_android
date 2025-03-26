@@ -2,6 +2,7 @@ package com.example.testappqr.domain.repository
 
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.models.CodeDTO
+import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureLazyDTO
@@ -16,5 +17,7 @@ interface StudentRepository {
     suspend fun studentSign (signatureLazyDTO: SignatureLazyDTO ): ApiResult<SessionDTO>
     suspend fun studentCreateSpeciality (specialityCreationDTO : SpecialityCreationDTO): ApiResult<SpecialityLazyDTO>
     suspend fun studentCreateUser (userCreationDTO : UserCreationDTO): ApiResult<Unit>
+    suspend fun studentAddToSpeciality (studentSpeciality : Map<String,String>) : ApiResult<Unit>
+    suspend fun studentModules(studentId: String): ApiResult<List<ModuleLazyDTO>>
 }
 

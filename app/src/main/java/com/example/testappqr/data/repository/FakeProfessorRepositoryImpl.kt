@@ -12,6 +12,7 @@ import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureDTO
 import com.example.testappqr.models.StudentDTO
 import com.example.testappqr.models.TeacherDTO
+import com.example.testappqr.models.TeacherLazyDTO
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.UUID
@@ -196,6 +197,10 @@ class FakeProfessorRepositoryImpl @Inject constructor() : ProfessorRepository {
 //        } catch (e: Exception) {
 //            ApiResult.Error(e, e.message ?: "Unknown error occurred")
 //        }
+    }
+
+    override suspend fun professorCreateUser(teacherLazyDTO: TeacherLazyDTO): ApiResult<Unit> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun addSession(session: SessionDTO): List<SessionLazyDTO> {
