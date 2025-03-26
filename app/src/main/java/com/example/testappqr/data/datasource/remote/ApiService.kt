@@ -1,6 +1,7 @@
 package com.example.testappqr.data.datasource.remote
 
 
+import com.example.testappqr.domain.usecase.student.Speciality
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.ModuleDTO
 import com.example.testappqr.models.ModuleLazyDTO
@@ -8,7 +9,9 @@ import com.example.testappqr.models.SSODTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.models.SpecialityLazyDTO
 import com.example.testappqr.models.StudentDTO
+import com.example.testappqr.models.TeacherDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -73,7 +76,7 @@ interface ApiService {
 
 
     @POST("create-speciality")
-    suspend fun createSpeciality(@Body sessionDTO: SessionDTO): List<SessionLazyDTO>
+    suspend fun createSpeciality(@Body specialityDTO : Speciality): Unit
 
 //
 //    @POST("sign")

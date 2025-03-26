@@ -4,20 +4,21 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.models.SSODTO
 import com.example.testappqr.domain.usecase.login.GetUserDataUseCase
+import com.example.testappqr.domain.usecase.student.StudentCreateSpecialityUseCase
 import com.example.testappqr.domain.usecase.util.ApiResult
+import com.example.testappqr.models.SSODTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class LoginVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val studentCreateSpecialityUseCase: StudentCreateSpecialityUseCase
 ) : ViewModel() {
 
     val loginState = savedStateHandle.getStateFlow("loginState", LoginState())
@@ -45,7 +46,10 @@ class LoginVM @Inject constructor(
                             userData = result.data,
                         )
                     }
+                    if (result.data.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "student")
+                        addSpeciality(result.data.authenticationSuccess.attributes.coGroup)
                 }
+
                 is ApiResult.Error -> {
                     updateState {
                         it.copy(
@@ -53,6 +57,7 @@ class LoginVM @Inject constructor(
                         )
                     }
                 }
+
                 is ApiResult.Loading -> {
                     updateState { it.copy(isLoading = true) }
                 }
@@ -60,16 +65,31 @@ class LoginVM @Inject constructor(
         }
     }
 
-    //    private fun handleValidationRequest(url: String): SSODTO? {
-//        return runBlocking {
-//            try {
-//                val response = RetrofitApi.api.casValidate(url)
-//                response
-//            } catch (e: Exception) {
-//                null
-//            }
+    fun addSpeciality(specialityName: String) {
+        viewModelScope.launch {
+            when (val result = studentCreateSpecialityUseCase(specialityName)) {
+                is ApiResult.Success -> {
+
+                }
+
+                is ApiResult.Error -> {
+
+                }
+
+                is ApiResult.Loading -> {
+                }
+            }
+        }
+//        updateState {
+//            it.copy(
+//                userData = it.userData?.copy(
+//                    specialities = it.userData.specialities.plus(speciality)
+//                )
+//            )
 //        }
-//    }
+    }
+
+
     fun updateUserData(userData: SSODTO?) {
         updateState { it.copy(userData = userData) }
     }
@@ -79,6 +99,7 @@ class LoginVM @Inject constructor(
     }
 
 }
+
 @Parcelize
 data class LoginState(
     val isLoading: Boolean = true,

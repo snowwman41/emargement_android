@@ -38,5 +38,5 @@ class ProfessorStudentsByModuleVM @Inject constructor(
 
 @Parcelize
 data class ProfessorStudentsByModuleState(
-    val studentsList: List<@RawValue StudentDTO> = emptyList()
+    val studentsList: @RawValue List<StudentDTO> = emptyList()
 ) : Parcelable
