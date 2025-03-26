@@ -4,20 +4,20 @@ import com.example.testappqr.data.datasource.remote.ApiService
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.domain.repository.StudentRepository
-import com.example.testappqr.domain.usecase.student.Speciality
 import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.Attributes
-import com.example.testappqr.models.AuthenticationSuccess
-import com.example.testappqr.models.SSODTO
+import com.example.testappqr.domain.usecase.util.safeApiCall
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.models.SpecialityCreationDTO
 import com.example.testappqr.models.SpecialityLazyDTO
+import com.example.testappqr.models.UserCreationDTO
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 
-class StudentRepositoryImp @Inject constructor(private val apiService: ApiService) : StudentRepository{
+class StudentRepositoryImp @Inject constructor(private val apiService: ApiService) :
+    StudentRepository {
 
 
     override suspend fun studentActiveSessions(userId: String): List<SessionLazyDTO> {
@@ -29,29 +29,15 @@ class StudentRepositoryImp @Inject constructor(private val apiService: ApiServic
     }
 
     override suspend fun studentSign(signatureLazyDTO: SignatureLazyDTO): ApiResult<SessionDTO> {
-
-        return try {
-            val result = apiService.studentSign(signatureLazyDTO)
-            ApiResult.Success(result)
-        } catch (e: IOException) {
-            ApiResult.Error(e, "Network error occurred")
-        } catch (e: HttpException) {
-            ApiResult.Error(e, "HTTP error: ${e.code()}")
-        } catch (e: Exception) {
-            ApiResult.Error(e, e.message ?: "Unknown error occurred")
-        }
+        return safeApiCall{  apiService.studentSign(signatureLazyDTO)}
     }
 
-    override suspend fun studentCreateSpeciality(speciality : Speciality): ApiResult<Unit> {
-        return try {
-            val result = apiService.createSpeciality(speciality)
-            ApiResult.Success(result)
-        } catch (e: IOException) {
-            ApiResult.Error(e, "Network error occurred")
-        } catch (e: HttpException) {
-            ApiResult.Error(e, "HTTP error: ${e.code()}")
-        } catch (e: Exception) {
-            ApiResult.Error(e, e.message ?: "Unknown error occurred")
-        }
+    override suspend fun studentCreateSpeciality(specialityCreationDTO: SpecialityCreationDTO): ApiResult<SpecialityLazyDTO> {
+        return safeApiCall{  apiService.createSpeciality(specialityCreationDTO)}
+    }
+
+    override suspend fun studentCreateUser(userCreationDTO: UserCreationDTO): ApiResult<Unit> {
+        return safeApiCall{  apiService.createStudent(userCreationDTO)}
+
     }
 }

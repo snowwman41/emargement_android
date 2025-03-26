@@ -1,14 +1,12 @@
 package com.example.testappqr.presentation.professor.viewmodels.home
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.domain.usecase.professor.ProfessorSessionsOnDateUseCase
-import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.domain.usecase.util.handle
+import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.utils.formatTodaysDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,30 +19,23 @@ class ProfessorSessionsVM @Inject constructor(
     private val professorSessionsOnDateUseCase: ProfessorSessionsOnDateUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val professorSessionsState = savedStateHandle.getStateFlow("ProfessorSessionsState", ProfessorSessionsState())
+    val professorSessionsState =
+        savedStateHandle.getStateFlow("ProfessorSessionsState", ProfessorSessionsState())
 
-    fun getSessions( userId : String) {
+    fun getSessions(userId: String) {
         viewModelScope.launch {
-            when (val result = professorSessionsOnDateUseCase(userId , formatTodaysDate())
-            ){
-                is ApiResult.Success -> {
-                    Log.e("SESSIONS",result.data.toString())
-                    updateState { it.copy(isLoading = false,sessionsList = result.data) }
-                }
-                is ApiResult.Error -> {
-                    Log.e("ERROR", result.message.toString())
-//                    updateState {
-//                        it.copy(
-//                            isLoading = false,
-//                            message = result.message ?: "An error occurred"
-//                        )
-//                    }
-                }
-                is ApiResult.Loading -> {
-                    updateState { it.copy(isLoading = true) }
-                }
-            }
-
+            professorSessionsOnDateUseCase(userId, formatTodaysDate()).handle(
+                onSuccess = { data ->
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            sessionsList = data
+                        )
+                    }
+                },
+                onLoading = { updateState { it.copy(isLoading = true) } },
+                onError = { exception: Exception, s: String -> updateState { it.copy(isLoading = false) } }
+            )
         }
     }
 
@@ -57,5 +48,5 @@ class ProfessorSessionsVM @Inject constructor(
 @Parcelize
 data class ProfessorSessionsState(
     val sessionsList: @RawValue List<SessionLazyDTO> = emptyList(),
-    val isLoading : Boolean = false
+    val isLoading: Boolean = false
 ) : Parcelable

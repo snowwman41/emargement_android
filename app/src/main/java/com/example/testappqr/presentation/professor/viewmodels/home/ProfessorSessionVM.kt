@@ -9,6 +9,7 @@ import com.example.testappqr.domain.usecase.professor.ProfessorCloseSessionUseCa
 import com.example.testappqr.domain.usecase.professor.ProfessorOpenSessionUseCase
 import com.example.testappqr.domain.usecase.professor.ProfessorSessionUseCase
 import com.example.testappqr.domain.usecase.util.ApiResult
+import com.example.testappqr.domain.usecase.util.handle
 import com.example.testappqr.models.SessionDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -61,20 +62,9 @@ class ProfessorSessionVM @Inject constructor(
         val sessionId: UUID = UUID.fromString(checkNotNull(savedStateHandle["sessionId"]))
 
         viewModelScope.launch {
-            when (val result = professorCloseSessionUseCase(sessionId)
-            ) {
-                is ApiResult.Success -> {
-                    Log.e("SESSIONS", result.data.toString())
-                    updateState { it.copy(session = result.data) }
-                }
-
-                is ApiResult.Error -> {
-                    Log.e("ERROR", result.message.toString())
-                }
-
-                is ApiResult.Loading -> {
-                }
-            }
+            professorCloseSessionUseCase(sessionId).handle (
+                onSuccess = { data -> updateState { it.copy(session = data) }}
+            )
         }
     }
 

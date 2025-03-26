@@ -1,20 +1,14 @@
 package com.example.testappqr.data.repository
 
 import com.example.testappqr.domain.repository.StudentRepository
-import com.example.testappqr.domain.usecase.student.Speciality
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.CodeType
-import com.example.testappqr.models.ModuleLazyDTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
-import com.example.testappqr.models.SignatureDTO
 import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.models.SpecialityCreationDTO
 import com.example.testappqr.models.SpecialityLazyDTO
-import com.example.testappqr.models.StudentDTO
-import com.example.testappqr.models.TeacherDTO
-import retrofit2.HttpException
-import java.io.IOException
+import com.example.testappqr.models.UserCreationDTO
 import java.util.UUID
 import javax.inject.Inject
 
@@ -147,7 +141,11 @@ class FakeStudentRepositoryImpl @Inject constructor() : StudentRepository {
 //        }
     }
 
-    override suspend fun studentCreateSpeciality(speciality: Speciality): ApiResult<Unit> {
+    override suspend fun studentCreateSpeciality(specialityCreationDTO: SpecialityCreationDTO): ApiResult<SpecialityLazyDTO> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun studentCreateUser(userCreationDTO: UserCreationDTO): ApiResult<Unit> {
         TODO("Not yet implemented")
     }
 

@@ -1,7 +1,6 @@
 package com.example.testappqr.data.datasource.remote
 
 
-import com.example.testappqr.domain.usecase.student.Speciality
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.ModuleDTO
 import com.example.testappqr.models.ModuleLazyDTO
@@ -9,9 +8,11 @@ import com.example.testappqr.models.SSODTO
 import com.example.testappqr.models.SessionDTO
 import com.example.testappqr.models.SessionLazyDTO
 import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.models.SpecialityCreationDTO
 import com.example.testappqr.models.SpecialityLazyDTO
 import com.example.testappqr.models.StudentDTO
 import com.example.testappqr.models.TeacherDTO
+import com.example.testappqr.models.UserCreationDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -69,14 +70,17 @@ interface ApiService {
     suspend fun closeSession(@Path("sessionId") sessionId: UUID): SessionDTO
 
     @POST("create-student")
-    suspend fun createStudent(@Body sessionDTO: SessionDTO): List<SessionLazyDTO>
+    suspend fun createStudent(@Body userCreationDTO: UserCreationDTO): Unit
 
     @POST("create-teacher")
-    suspend fun createTeacher(@Body teacherDTO: TeacherDTO): List<SessionLazyDTO>
+    suspend fun createTeacher(@Body teacherDTO: TeacherDTO): Unit
 
 
     @POST("create-speciality")
-    suspend fun createSpeciality(@Body specialityDTO : Speciality): Unit
+    suspend fun  createSpeciality(@Body specialityCreationDTO : SpecialityCreationDTO): SpecialityLazyDTO
+
+    @POST("specialities/assign")
+    suspend fun addStudentToSpeciality(@Body specialityStudent : Map<String, String>): Unit
 
 //
 //    @POST("sign")

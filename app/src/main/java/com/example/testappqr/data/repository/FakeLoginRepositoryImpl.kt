@@ -20,7 +20,7 @@ class FakeLoginRepositoryImpl : LoginRepository {
                     attributes = Attributes(
                         amuComposante = "sciences",
                         coGroup = "AMU.M2_IMI_CCI-SMI5T1-V302-2024",
-                        mail = "abdelaziz.SOLTANI@etu.univ-amu.fr",
+                        mail = "abdelaziz.SOLTANI@etu.univ-amu.fr1",
                         eduPersonAffiliation = listOf("member", "student"),
                         displayName = "Abd elaziz SOLTANI",
                         givenName = "Abd elaziz",
@@ -28,7 +28,7 @@ class FakeLoginRepositoryImpl : LoginRepository {
                         supannEtuAnneeInscription = "2024",
                         amuDateValidation = "20230823102953Z",
                         supannEntiteAffectation = "SC7",
-                        uid = "b24028599",
+                        uid = "b24028601",
                         eduPersonPrimaryAffiliation = "student",
                         supannEtuEtape = "SMI5T1",
                         supannCivilite = "M.",

@@ -1,13 +1,17 @@
 package com.example.testappqr.presentation.login.viewmodels
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.domain.usecase.login.GetUserDataUseCase
 import com.example.testappqr.domain.usecase.student.StudentCreateSpecialityUseCase
-import com.example.testappqr.domain.usecase.util.ApiResult
+import com.example.testappqr.domain.usecase.student.StudentCreateUserUseCase
+import com.example.testappqr.domain.usecase.util.handle
 import com.example.testappqr.models.SSODTO
+import com.example.testappqr.models.SpecialityLazyDTO
+import com.example.testappqr.models.UserCreationDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -18,7 +22,8 @@ import javax.inject.Inject
 class LoginVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val studentCreateSpecialityUseCase: StudentCreateSpecialityUseCase
+    private val studentCreateSpecialityUseCase: StudentCreateSpecialityUseCase,
+    private val studentCreateUserUseCase: StudentCreateUserUseCase
 ) : ViewModel() {
 
     val loginState = savedStateHandle.getStateFlow("loginState", LoginState())
@@ -38,48 +43,45 @@ class LoginVM @Inject constructor(
     fun getUserData(request: String) {
         viewModelScope.launch {
             updateState { it.copy(isLoading = true) }
-            when (val result = getUserDataUseCase(request)) {
-                is ApiResult.Success -> {
+            getUserDataUseCase(request).handle(
+                onSuccess = { userData ->
                     updateState {
                         it.copy(
                             isLoading = false,
-                            userData = result.data,
+                            userData = userData,
                         )
                     }
-                    if (result.data.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "student")
-                        addSpeciality(result.data.authenticationSuccess.attributes.coGroup)
-                }
+                    if (userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "student"){
 
-                is ApiResult.Error -> {
-                    updateState {
-                        it.copy(
-                            isLoading = false,
+                        studentCreateSpecialityUseCase(userData.authenticationSuccess.attributes.coGroup).handle(
+                            onSuccess = { specialityData ->
+                                studentCreateUserUseCase(
+                                    userCreationDTO = userData.authenticationSuccess.attributes.let{
+                                        UserCreationDTO(it.uid, it.sn, it.givenName, it.mail)
+                                    }
+                                )
+                                        },
+                            onLoading = {},
+                            onError = { exception: Exception, s: String -> }
                         )
                     }
-                }
-
-                is ApiResult.Loading -> {
+                },
+                onLoading = {
                     updateState { it.copy(isLoading = true) }
+                },
+                onError = { exception: Exception, s: String ->
+                    updateState { it.copy(isLoading = false) }
                 }
-            }
+            )
         }
     }
 
-    fun addSpeciality(specialityName: String) {
-        viewModelScope.launch {
-            when (val result = studentCreateSpecialityUseCase(specialityName)) {
-                is ApiResult.Success -> {
-
-                }
-
-                is ApiResult.Error -> {
-
-                }
-
-                is ApiResult.Loading -> {
-                }
-            }
-        }
+//    private fun addSpeciality(specialityName: String) : SpecialityLazyDTO? {
+//        viewModelScope.launch {
+//
+//        }
+//        return null
+//    }
 //        updateState {
 //            it.copy(
 //                userData = it.userData?.copy(
@@ -87,7 +89,7 @@ class LoginVM @Inject constructor(
 //                )
 //            )
 //        }
-    }
+
 
 
     fun updateUserData(userData: SSODTO?) {
