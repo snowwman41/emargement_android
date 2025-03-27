@@ -48,7 +48,7 @@ fun ProfessorStudentsByModuleScreen(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 items(professorStudentsByModuleState.studentsList) { student ->
-                    StudentCard(student.firstName)
+                    StudentCard("${student.firstName} ${student.lastName}")
                 }
             }
         }
