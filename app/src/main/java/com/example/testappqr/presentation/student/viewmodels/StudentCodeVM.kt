@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappqr.domain.usecase.student.StudentCodeBySessionUseCase
 import com.example.testappqr.domain.usecase.student.StudentSignUseCase
-import com.example.testappqr.domain.usecase.util.ApiResult
+import com.example.testappqr.domain.usecase.util.handle
 import com.example.testappqr.models.CodeDTO
 import com.example.testappqr.models.CodeType
 import com.example.testappqr.models.SignatureLazyDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 
@@ -42,45 +43,53 @@ class StudentCodeVM @Inject constructor(
 
     fun sign(sessionId: UUID, verificationCode: String, codeType: CodeType, studentId: String) {
         viewModelScope.launch {
-            when (val result = studentSignUseCase(
+            studentSignUseCase(
                 SignatureLazyDTO(
                     studentId = studentId,
                     sessionId = sessionId,
                     verificationCode = verificationCode,
                     codeType = codeType
                 )
-            )) {
-                is ApiResult.Success -> {
+            ).handle(
+                onSuccess = { data ->
                     updateState {
                         it.copy(
                             message = "you have successfully signed",
                             isLoading = false,
                         )
                     }
-                }
-                is ApiResult.Error -> {
-                    Log.e("ERROR", result.message.toString())
+                },
+                onLoading = {
+                    updateState { it.copy(isLoading = true) }
+                },
+                onError = { exception, message ->
                     updateState {
                         it.copy(
                             isLoading = false,
-                            message = result.message ?: "An error occurred"
+                            message = "Error : You may have already signed to the session"
                         )
                     }
                 }
-                is ApiResult.Loading -> {
-                    updateState { it.copy(isLoading = true) }
-                }
-            }
-
+            )
         }
     }
-    fun clearErrorMessage(){
+
+    fun clearErrorMessage() {
         updateState {
             it.copy(
                 message = null
             )
         }
     }
+
+    fun updateTextFieldCode(code: String) {
+        updateState {
+            it.copy(
+                textFieldCode = code
+            )
+        }
+    }
+
     private fun updateState(update: (StudentCodeState) -> StudentCodeState) {
         savedStateHandle["studentCodeState"] =
             update(studentCodeState.value)
@@ -90,6 +99,7 @@ class StudentCodeVM @Inject constructor(
 @Parcelize
 data class StudentCodeState(
     val codes: List<CodeDTO> = emptyList(),
-    val isLoading : Boolean = false,
-    val message : String? = null
+    val isLoading: Boolean = false,
+    val message: String? = null,
+    val textFieldCode: String = ""
 ) : Parcelable

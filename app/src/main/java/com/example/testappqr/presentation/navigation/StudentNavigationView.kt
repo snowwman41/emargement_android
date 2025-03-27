@@ -156,15 +156,12 @@ fun StudentBottomBar(navController: NavHostController) {
                 label = { Text(text = "Modules") }, selected = currentRoute.contains(Routes.STUDENT_MODULES),
                 onClick = {
                     navController.navigate(Routes.STUDENT_MODULES)
-
                     {
                         // Pop up to the start destination of the graph to avoid building up a stack
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-                        // Avoid multiple copies of the same destination
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
                         restoreState = true
                     }
                 })

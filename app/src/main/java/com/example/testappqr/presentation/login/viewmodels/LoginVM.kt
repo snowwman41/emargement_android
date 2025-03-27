@@ -66,14 +66,12 @@ class LoginVM @Inject constructor(
                                 ).handle(
 
                                     onSuccess = {
-                                        Log.d("LoginVM", "getUserData: $userData")
-                                        Log.d("LoginVM", "speciality: $specialityData")
-                                        studentAddToSpeciality(
-                                            studentSpeciality = mapOf(
-                                                "specialityId" to specialityData.id.toString(),
-                                                "studentId" to userData.authenticationSuccess.attributes.uid
-                                            )
-                                        )
+//                                        studentAddToSpeciality(
+//                                            studentSpeciality = mapOf(
+//                                                "specialityId" to specialityData.id.toString(),
+//                                                "studentId" to userData.authenticationSuccess.attributes.uid
+//                                            )
+//                                        )
                                     }
                                 )
                             },
@@ -99,21 +97,6 @@ class LoginVM @Inject constructor(
             )
         }
     }
-
-//    private fun addSpeciality(specialityName: String) : SpecialityLazyDTO? {
-//        viewModelScope.launch {
-//
-//        }
-//        return null
-//    }
-//        updateState {
-//            it.copy(
-//                userData = it.userData?.copy(
-//                    specialities = it.userData.specialities.plus(speciality)
-//                )
-//            )
-//        }
-
 
     fun updateUserData(userData: SSODTO?) {
         updateState { it.copy(userData = userData) }

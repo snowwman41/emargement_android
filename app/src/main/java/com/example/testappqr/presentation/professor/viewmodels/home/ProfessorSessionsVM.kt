@@ -24,6 +24,7 @@ class ProfessorSessionsVM @Inject constructor(
 
     fun getSessions(userId: String) {
         viewModelScope.launch {
+            updateState { it.copy(isLoading = true) }
             professorSessionsOnDateUseCase(userId, formatTodaysDate()).handle(
                 onSuccess = { data ->
                     updateState {

@@ -1,7 +1,5 @@
 package com.example.testappqr.presentation.beacon
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.testappqr.MainActivity
 import com.example.testappqr.models.CodeType
-import com.example.testappqr.presentation.professor.viewmodels.code.ProfessorCodeVM
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.student.viewmodels.StudentCodeVM
 import java.util.UUID
@@ -87,12 +84,6 @@ fun BeaconStudentView(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-//            BasicButton(
-//                onClick = { beaconVM.stopScanning() },
-//                isEnabled = beaconState.isScanning,
-//                text = "Stop Scanning",
-//                modifier = Modifier.weight(1f)
-//            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -107,7 +98,6 @@ fun BeaconStudentView(
 
         if (beaconState.detectedBeacons.isNotEmpty()) {
             LaunchedEffect(Unit) {
-                Log.e("BEACN CODE", beaconState.detectedBeacons[0].name)
                 if (sessionId != null && userId != null) {
                     studentCodeVM.sign(
                         sessionId = sessionId,
@@ -117,11 +107,6 @@ fun BeaconStudentView(
                     )
                 }
             }
-            Toast.makeText(
-                LocalContext.current,
-                "You have succesfully signed",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 }

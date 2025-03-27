@@ -7,11 +7,11 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class TeacherDTO(
     val userId: String,
-    val modules: @RawValue List<ModuleLazyDTO>,
+    val modules: @RawValue List<ModuleLazyDTO>?,
     val firstName: String,
     val lastName: String,
     val email: String,
-    val code: CodeDTO
+    val code: @RawValue CodeDTO
 ) : Parcelable
 
 

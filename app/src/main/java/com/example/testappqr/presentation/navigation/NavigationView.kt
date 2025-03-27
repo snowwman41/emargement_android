@@ -158,13 +158,10 @@ fun BottomBar(navController: NavHostController) {
                     navController.navigate(Routes.PROFESSOR_MODULES)
 
                     {
-                        // Pop up to the start destination of the graph to avoid building up a stack
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-                        // Avoid multiple copies of the same destination
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
                         restoreState = true
                     }
                 })

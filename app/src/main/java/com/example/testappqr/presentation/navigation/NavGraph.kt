@@ -270,15 +270,3 @@ object Animation {
         ) + fadeOut(spring())
     }
 }
-
-//fun NavGraphBuilder.student(navController: NavHostController) {
-//    composable(
-//        Routes.STUDENT_MODULES,
-//        enterTransition = Animation.enterTransition,
-//        exitTransition = Animation.exitTransition,
-//        popEnterTransition = Animation.popEnterTransition,
-//        popExitTransition = Animation.popExitTransition
-//    ) {
-//        StudentSessionsScreen(navController)
-//    }
-//}

@@ -50,8 +50,6 @@ fun StudentSessionsScreen(
         }
     }
 
-
-
     StudentNavigationView(navController = navController, title = "Today's Sessions", loginVM = loginVM) {
         Column (modifier = Modifier.padding(10.dp)) {
             DateCard()

@@ -40,20 +40,9 @@ class ProfessorSessionVM @Inject constructor(
     fun openSession() {
         val sessionId: UUID = UUID.fromString(checkNotNull(savedStateHandle["sessionId"]))
         viewModelScope.launch {
-            when (val result = professorOpenSessionUseCase(sessionId)
-            ) {
-                is ApiResult.Success -> {
-                    Log.e("SESSIONS", result.data.toString())
-                    updateState { it.copy(session = result.data) }
-                }
-
-                is ApiResult.Error -> {
-                    Log.e("ERROR", result.message.toString())
-                }
-
-                is ApiResult.Loading -> {
-                }
-            }
+            professorOpenSessionUseCase(sessionId).handle(
+                onSuccess = { data -> updateState { it.copy(session = data) }}
+            )
         }
 
     }

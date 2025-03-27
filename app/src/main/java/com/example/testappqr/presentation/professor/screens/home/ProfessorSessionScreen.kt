@@ -33,58 +33,6 @@ import com.example.testappqr.presentation.professor.viewmodels.home.ProfessorSes
 import com.example.testappqr.presentation.sharedviews.DateCard
 import com.example.testappqr.presentation.sharedviews.SessionViewHeader
 
-//
-//@Composable
-//fun ProfessorSessionScreen(
-//    navController: NavHostController, professorSessionVM: ProfessorSessionVM = hiltViewModel()
-//) {
-//    val professorSessionState by professorSessionVM.professorSessionState.collectAsStateWithLifecycle()
-//    LaunchedEffect(Unit) {
-//        professorSessionVM.getSession()
-//    }
-//    NavigationView(
-//        navController = navController,
-//        true,
-//        if (professorSessionState.session != null) professorSessionState.session!!.sessionName else "null"
-//    ) {
-//        if (professorSessionState.session != null) {
-//            Column(
-//                modifier = Modifier.padding(10.dp)
-//
-//            ) {
-//                Text(
-//                    formatDate(professorSessionState.session!!.startTime),
-//                    style = TextStyle(fontSize = 18.sp)
-//                )
-//                Text(
-//                    formatTime(professorSessionState.session!!.startTime) + " - " + formatTime(
-//                        professorSessionState.session!!.endTime
-//                    ), style = TextStyle(fontSize = 18.sp)
-//                )
-//                LazyColumn {
-//                    items(professorSessionState.session!!.signatures) { signature ->
-//                        SignatureView(signature, Modifier
-//                            .padding(8.dp)
-//                            .fillParentMaxWidth())
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun SignatureView(signature: SignatureDTO, modifier: Modifier = Modifier) {
-//    Card(
-//        modifier = modifier
-//    ) {
-//        Text(signature.studentId,Modifier.padding(10.dp))
-//    }
-//}
-//
-//
-
-
 @Composable
 fun ProfessorSessionScreen(
     navController: NavHostController,
@@ -139,21 +87,10 @@ fun SignatureView(signature: SignatureDTO) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(text = "Name", style = TextStyle(fontSize = 20.sp))
+                Text(text = signature.student.lastName, style = TextStyle(fontSize = 20.sp))
                 Text(
                     text = signature.student.firstName,
                     style = TextStyle(fontSize = 16.sp, color = Color.Gray)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .background(Color(0xFFE3F2FD), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = "Signed at 10:00 am",
-                    style = TextStyle(fontSize = 18.sp, color = Color.Black)
                 )
             }
         }

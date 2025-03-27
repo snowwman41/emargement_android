@@ -64,14 +64,12 @@ class BeaconVM @Inject constructor(
     }
 
     init {
-        // Register receiver for Bluetooth state changes
         val filters = IntentFilter().apply {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
         }
         application.registerReceiver(bluetoothLocationStateReceiver, filters)
 
-        // Initialize Bluetooth scanner
         if (checkLocationAndBluetoothState())
             setupBluetoothScanner()
 
@@ -136,20 +134,18 @@ class BeaconVM @Inject constructor(
             )
         }
 
-        // Set scan settings to aggressive mode for best discovery
+        // Set scan settings
         val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
             .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
             .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
             .setNumOfMatches(ScanSettings.MATCH_NUM_MAX_ADVERTISEMENT).setReportDelay(0).build()
 
-        // Scan for the user's beacon with device name
+        // Scan for the user's beacon with device name by adding a filter
         val filters = ArrayList<ScanFilter>()
-        Log.e("BEACON ID ADD FILTER", beaconState.value.beaconsId.toString())
 
         beaconState.value.beaconsId.forEach {
             filters.add(ScanFilter.Builder().setDeviceName(it.beaconId).build())
         }
-        Log.e("FILTERs", filters.toString())
 
         viewModelScope.launch {
             delay(SCAN_PERIOD)
@@ -168,7 +164,6 @@ class BeaconVM @Inject constructor(
                         isScanning = false, errorMessage = "Missing BLUETOOTH_SCAN permission"
                     )
                 }
-                Log.e(TAG, "Missing BLUETOOTH_SCAN permission")
             }
         } catch (e: Exception) {
             updateState { it.copy(isScanning = false, errorMessage = "Error: ${e.message}") }
@@ -250,7 +245,6 @@ class BeaconVM @Inject constructor(
             updateState { it.copy(errorMessage = errorMessage) }
         }
     }
-
 
     fun checkPermissions(): Boolean {
         val locationPermission = ContextCompat.checkSelfPermission(

@@ -39,9 +39,6 @@ object Routes {
     val STUDENT_QRCODE_SCANNER_BY_SESSION: (sessionId: String) -> String = { sessionId ->
         "student/sessions/${sessionId}/code/qrcode-scanner"
     }
-
-
-
     const val STUDENT_QRCODE_SCANNER = "student/qrcode-scanner"
 
 }

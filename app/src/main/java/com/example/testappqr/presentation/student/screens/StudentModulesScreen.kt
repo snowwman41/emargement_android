@@ -63,26 +63,3 @@ fun StudentModulesView(
         }
     }
 }
-//@Composable
-//fun StudentModulesView(
-//    navController: NavController,
-//    professorVM: ProfessorModulesVM = hiltViewModel()
-//) {
-//    val professorState by professorVM.professorState.collectAsStateWithLifecycle()
-//    LaunchedEffect(Unit) {
-//        professorVM.getModules()
-//    }
-//    LazyColumn {
-//        items(professorState.modulesList) { module ->
-//            ModuleView(module = module,
-//                modifier = Modifier
-//                    .padding(6.dp)
-//                    .clickable {
-////                        navController.navigate(Routes.PROFESSOR_MODULE(module.moduleId.toString()))
-////                        navController.navigateToProfessorModule(module.moduleId.toString()
-//                    //                        )
-//                    }
-//            )
-//        }
-//    }
-//}

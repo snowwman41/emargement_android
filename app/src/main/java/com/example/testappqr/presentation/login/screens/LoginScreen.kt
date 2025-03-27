@@ -44,9 +44,7 @@ fun LoginScreen(
     val loginState by loginVM.loginState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        println("loginState.userData: ${loginState.userData}")
-        println( "loginState.shouldNavigate: ${loginState.shouldNavigate}")
-//        if (loginState.userData != null) {
+
         if (loginState.shouldNavigate && loginState.userData != null) {
             LaunchedEffect(Unit) {
                 if (loginState.userData?.authenticationSuccess?.attributes?.eduPersonPrimaryAffiliation.let { it == "teacher" || it == "professor" }) {
@@ -110,9 +108,8 @@ fun LoginScreen(
                             val requestUrl = request?.url.toString()
                             if (requestUrl.startsWith("http://$ip:8080/auth/cas/validate")) {
                                 loginVM.getUserData(requestUrl)
-//                                if (loginState.userData != null){
+
                                 loginVM.updateShouldNavigate(true)
-//                                }
 
                                 return WebResourceResponse(
                                     "text/plain",
