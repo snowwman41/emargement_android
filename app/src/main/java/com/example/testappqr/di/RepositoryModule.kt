@@ -47,7 +47,9 @@ object RepositoryModule {
     @Singleton
     fun provideLoginRepository(
     ): LoginRepository {
-        return FakeLoginRepositoryImpl()
+        return LoginRepositoryImp(
+            apiService = TODO()
+        )
     }
 //    @Provides
 //    @Singleton

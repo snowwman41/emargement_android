@@ -85,11 +85,6 @@ interface ApiService {
     @POST("specialities/assign")
     suspend fun addStudentToSpeciality(@Body specialityStudent : Map<String, String>): Unit
 
-//
-//    @POST("sign")
-//    suspend fun postSignature (@Body signatureDTO: SignatureDTO): List<SignatureDTO>
-
-
     @POST("auth/token/verify")
     suspend fun verifyToken(): Boolean
 
