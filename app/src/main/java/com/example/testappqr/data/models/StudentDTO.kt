@@ -1,26 +1,24 @@
-package com.example.testappqr.models
+package com.example.testappqr.data.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
-
-@Parcelize
-data class TeacherDTO(
-    val userId: String,
-    val modules: @RawValue List<ModuleLazyDTO>?,
-    val firstName: String,
-    val lastName: String,
-    val email: String,
-    val code: @RawValue CodeDTO
-) : Parcelable
 
 
 @Parcelize
-data class TeacherLazyDTO(
+data class StudentDTO(
     val userId: String,
+    val specialities: Set<SpecialityLazyDTO>,
     val firstName: String,
     val lastName: String,
     val email: String
 ) : Parcelable
 
+
+@Parcelize
+data class StudentLazyDTO(
+    val userId: String,
+    val firstName: String,
+    val lastName: String,
+    val email: String
+) : Parcelable
 

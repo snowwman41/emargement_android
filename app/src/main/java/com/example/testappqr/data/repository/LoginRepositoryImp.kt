@@ -1,7 +1,7 @@
 package com.example.testappqr.data.repository
 
 import com.example.testappqr.data.datasource.remote.ApiService
-import com.example.testappqr.models.SSODTO
+import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.domain.repository.LoginRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
 import retrofit2.HttpException

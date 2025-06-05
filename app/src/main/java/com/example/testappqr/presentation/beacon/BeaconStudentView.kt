@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.testappqr.MainActivity
-import com.example.testappqr.models.CodeType
+import com.example.testappqr.data.models.CodeType
 import com.example.testappqr.presentation.sharedviews.BasicButton
 import com.example.testappqr.presentation.student.viewmodels.StudentCodeVM
 import java.util.UUID

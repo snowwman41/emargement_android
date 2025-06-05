@@ -4,9 +4,9 @@ package com.example.testappqr.domain.usecase.student
 import com.example.testappqr.domain.repository.ProfessorRepository
 import com.example.testappqr.domain.repository.StudentRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.ModuleLazyDTO
-import com.example.testappqr.models.SessionDTO
-import com.example.testappqr.models.UserCreationDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.UserCreationDTO
 import java.util.UUID
 import javax.inject.Inject
 

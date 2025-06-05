@@ -1,6 +1,6 @@
 package com.example.testappqr.domain.usecase.login
 
-import com.example.testappqr.models.SSODTO
+import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.domain.repository.LoginRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
 import javax.inject.Inject

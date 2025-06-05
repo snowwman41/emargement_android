@@ -2,9 +2,9 @@ package com.example.testappqr.data.repository
 
 import com.example.testappqr.domain.repository.LoginRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.Attributes
-import com.example.testappqr.models.AuthenticationSuccess
-import com.example.testappqr.models.SSODTO
+import com.example.testappqr.data.models.Attributes
+import com.example.testappqr.data.models.AuthenticationSuccess
+import com.example.testappqr.data.models.SSODTO
 import retrofit2.HttpException
 import java.io.IOException
 

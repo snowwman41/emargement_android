@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.testappqr.models.ModuleLazyDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
 import java.util.UUID
 
 @Composable

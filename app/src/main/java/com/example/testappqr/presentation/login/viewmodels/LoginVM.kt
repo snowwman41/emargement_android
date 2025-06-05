@@ -11,9 +11,9 @@ import com.example.testappqr.domain.usecase.student.StudentAddToSpeciality
 import com.example.testappqr.domain.usecase.student.StudentCreateSpecialityUseCase
 import com.example.testappqr.domain.usecase.student.StudentCreateUserUseCase
 import com.example.testappqr.domain.usecase.util.handle
-import com.example.testappqr.models.SSODTO
-import com.example.testappqr.models.TeacherLazyDTO
-import com.example.testappqr.models.UserCreationDTO
+import com.example.testappqr.data.models.SSODTO
+import com.example.testappqr.data.models.TeacherLazyDTO
+import com.example.testappqr.data.models.UserCreationDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -80,12 +80,14 @@ class LoginVM @Inject constructor(
                     } else if (userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "teacher"
                         || userData.authenticationSuccess.attributes.eduPersonPrimaryAffiliation == "professor"
                     ) {
-                        professorCreateUserUseCase(userData.authenticationSuccess.attributes.let{TeacherLazyDTO(
+                        professorCreateUserUseCase(userData.authenticationSuccess.attributes.let{
+                            TeacherLazyDTO(
                             userId = it.uid ,
                             firstName = it.givenName,
                             lastName = it.sn,
                             email = it.mail
-                        )})
+                        )
+                        })
                     }
                 },
                 onLoading = {

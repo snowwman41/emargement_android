@@ -1,17 +1,17 @@
 package com.example.testappqr.data.repository
 
 import com.example.testappqr.data.datasource.remote.ApiService
-import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.SessionLazyDTO
+import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.domain.repository.StudentRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.domain.usecase.util.safeApiCall
-import com.example.testappqr.models.ModuleLazyDTO
-import com.example.testappqr.models.SessionDTO
-import com.example.testappqr.models.SignatureLazyDTO
-import com.example.testappqr.models.SpecialityCreationDTO
-import com.example.testappqr.models.SpecialityLazyDTO
-import com.example.testappqr.models.UserCreationDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.SignatureLazyDTO
+import com.example.testappqr.data.models.SpecialityCreationDTO
+import com.example.testappqr.data.models.SpecialityLazyDTO
+import com.example.testappqr.data.models.UserCreationDTO
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.UUID

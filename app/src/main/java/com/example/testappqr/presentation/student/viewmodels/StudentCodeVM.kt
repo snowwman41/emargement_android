@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.testappqr.domain.usecase.student.StudentCodeBySessionUseCase
 import com.example.testappqr.domain.usecase.student.StudentSignUseCase
 import com.example.testappqr.domain.usecase.util.handle
-import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.CodeType
-import com.example.testappqr.models.SignatureLazyDTO
+import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.data.models.CodeType
+import com.example.testappqr.data.models.SignatureLazyDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

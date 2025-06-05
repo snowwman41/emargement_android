@@ -7,9 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import com.example.testappqr.models.Attributes
-import com.example.testappqr.models.AuthenticationSuccess
-import com.example.testappqr.models.SSODTO
+import com.example.testappqr.data.models.Attributes
+import com.example.testappqr.data.models.AuthenticationSuccess
+import com.example.testappqr.data.models.SSODTO
 import com.example.testappqr.presentation.beacon.BeaconVM
 
 import com.example.testappqr.presentation.navigation.NavGraph

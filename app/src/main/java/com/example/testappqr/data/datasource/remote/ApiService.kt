@@ -1,18 +1,18 @@
 package com.example.testappqr.data.datasource.remote
 
 
-import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.ModuleDTO
-import com.example.testappqr.models.ModuleLazyDTO
-import com.example.testappqr.models.SSODTO
-import com.example.testappqr.models.SessionDTO
-import com.example.testappqr.models.SessionLazyDTO
-import com.example.testappqr.models.SignatureLazyDTO
-import com.example.testappqr.models.SpecialityCreationDTO
-import com.example.testappqr.models.SpecialityLazyDTO
-import com.example.testappqr.models.StudentDTO
-import com.example.testappqr.models.TeacherLazyDTO
-import com.example.testappqr.models.UserCreationDTO
+import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.data.models.ModuleDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SSODTO
+import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.data.models.SignatureLazyDTO
+import com.example.testappqr.data.models.SpecialityCreationDTO
+import com.example.testappqr.data.models.SpecialityLazyDTO
+import com.example.testappqr.data.models.StudentDTO
+import com.example.testappqr.data.models.TeacherLazyDTO
+import com.example.testappqr.data.models.UserCreationDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

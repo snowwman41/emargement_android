@@ -1,14 +1,14 @@
 package com.example.testappqr.domain.repository
 
 import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.CodeDTO
-import com.example.testappqr.models.ModuleDTO
-import com.example.testappqr.models.ModuleLazyDTO
-import com.example.testappqr.models.SSODTO
-import com.example.testappqr.models.SessionDTO
-import com.example.testappqr.models.SessionLazyDTO
-import com.example.testappqr.models.StudentDTO
-import com.example.testappqr.models.TeacherLazyDTO
+import com.example.testappqr.data.models.CodeDTO
+import com.example.testappqr.data.models.ModuleDTO
+import com.example.testappqr.data.models.ModuleLazyDTO
+import com.example.testappqr.data.models.SSODTO
+import com.example.testappqr.data.models.SessionDTO
+import com.example.testappqr.data.models.SessionLazyDTO
+import com.example.testappqr.data.models.StudentDTO
+import com.example.testappqr.data.models.TeacherLazyDTO
 import java.util.UUID
 
 interface ProfessorRepository {
@@ -24,7 +24,7 @@ interface ProfessorRepository {
     suspend fun getCodeByTeacher(userId: String): CodeDTO
     suspend fun openSession(sessionId: UUID): ApiResult<SessionDTO>
     suspend fun closeSession(sessionId: UUID): ApiResult<SessionDTO>
-    suspend fun professorCreateUser(teacherLazyDTO: TeacherLazyDTO ) : ApiResult<Unit>
+    suspend fun professorCreateUser(teacherLazyDTO: TeacherLazyDTO) : ApiResult<Unit>
 
 
     suspend fun addSession(session: SessionDTO): List<SessionLazyDTO>

@@ -10,7 +10,7 @@ import com.example.testappqr.domain.usecase.professor.ProfessorOpenSessionUseCas
 import com.example.testappqr.domain.usecase.professor.ProfessorSessionUseCase
 import com.example.testappqr.domain.usecase.util.ApiResult
 import com.example.testappqr.domain.usecase.util.handle
-import com.example.testappqr.models.SessionDTO
+import com.example.testappqr.data.models.SessionDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

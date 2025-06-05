@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappqr.models.SessionLazyDTO
+import com.example.testappqr.data.models.SessionLazyDTO
 import com.example.testappqr.domain.usecase.student.StudentActiveSessionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

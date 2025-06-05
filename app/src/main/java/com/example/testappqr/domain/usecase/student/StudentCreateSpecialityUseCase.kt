@@ -4,8 +4,8 @@ package com.example.testappqr.domain.usecase.student
 
 import com.example.testappqr.domain.repository.StudentRepository
 import com.example.testappqr.domain.usecase.util.ApiResult
-import com.example.testappqr.models.SpecialityCreationDTO
-import com.example.testappqr.models.SpecialityLazyDTO
+import com.example.testappqr.data.models.SpecialityCreationDTO
+import com.example.testappqr.data.models.SpecialityLazyDTO
 import javax.inject.Inject
 
 class StudentCreateSpecialityUseCase @Inject constructor(private val studentRepository: StudentRepository){
