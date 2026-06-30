@@ -56,10 +56,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.protolite.well.known.types)
 
-//    implementation(libs.androidx.appcompat)
-
-
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -82,7 +81,6 @@ dependencies {
 
 
 
-//    implementation(libs.camerax.mlkit)//camera setup
     implementation(libs.mlkit.barcode.scanning)//qr scan
 
     //hilt
