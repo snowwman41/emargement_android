@@ -11,13 +11,24 @@ This is a solo academic project (*projet industriel*). It is the Android client 
 
 > **Backend repository:** _<add link here>_
 
-## Screenshots
+## Screenshots & hardware
 
-> _Add screenshots / a screen recording under `docs/screenshots/` and reference them here._
+The Bluetooth attendance mechanism relies on a BLE beacon (ELA **Blue Lite ID**): the professor's side advertises it and students' devices detect it in range to confirm physical presence.
 
-| Login (CAS SSO) | Professor — sessions | Student — QR scan | Beacon attendance |
-|---|---|---|---|
-| _`docs/screenshots/login.png`_ | _`docs/screenshots/professor-sessions.png`_ | _`docs/screenshots/student-qr.png`_ | _`docs/screenshots/beacon.png`_ |
+<p align="center">
+  <img src="assets/BLE.png" alt="ELA Blue Lite ID Bluetooth beacon used for attendance" width="340">
+</p>
+
+> _App screenshots (login, professor sessions, QR scan, beacon) coming soon — drop image files into `assets/` and embed them here the same way._
+
+## 🎥 Demo videos
+
+| Flow | Video |
+|---|---|
+| 👨‍🏫 **Professor interface** — open sessions, QR code, attendance | [▶ Watch on Google Drive](https://drive.google.com/file/d/1u10wCjtpb6-pX8k6IG8DfFxWSzDtMMGB/view?usp=sharing) |
+| 👨‍🎓 **Student — QR code signing** (with double-sign prevention) | [▶ Watch on Google Drive](https://drive.google.com/file/d/1tzp1UL5rTGHK4edeZBICAS1OXZrjNxrl/view?usp=sharing) |
+| 📡 **Student — BLE beacon signing** | [▶ Watch on Google Drive](https://drive.google.com/file/d/1trv81VYxVujE9YiGIRFWvqJbRNzqtAkl/view?usp=sharing) |
+| ❌ **Close sessions & disconnect** | [▶ Watch on Google Drive](https://drive.google.com/file/d/1to7r_pcKrI9GKN9Sb7oGwkc1zcwy1VQN/view?usp=sharing) |
 
 ## Tech stack
 
