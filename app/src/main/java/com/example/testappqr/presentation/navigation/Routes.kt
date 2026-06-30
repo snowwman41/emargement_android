@@ -16,7 +16,6 @@ object Routes {
     }
 
     val PROFESSOR_SESSIONS_BY_MODULE: (moduleId: String) -> String = { moduleId ->
-        println(" MODULE ID SEND $moduleId")
         "professor/modules/${moduleId}/sessions"
     }
     val PROFESSOR_SESSION_BY_MODULE: (moduleId: String,sessionId : String) -> String = { moduleId,sessionId ->
@@ -39,6 +38,5 @@ object Routes {
     val STUDENT_QRCODE_SCANNER_BY_SESSION: (sessionId: String) -> String = { sessionId ->
         "student/sessions/${sessionId}/code/qrcode-scanner"
     }
-    const val STUDENT_QRCODE_SCANNER = "student/qrcode-scanner"
 
 }

@@ -219,9 +219,6 @@ fun NavGraph(
         ) {
             StudentModulesScreen(navController, loginVM = loginVM)
         }
-        composable(Routes.STUDENT_QRCODE_SCANNER) {
-
-        }
     }
 
 }

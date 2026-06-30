@@ -66,12 +66,6 @@ class LoginVM @Inject constructor(
                                 ).handle(
 
                                     onSuccess = {
-//                                        studentAddToSpeciality(
-//                                            studentSpeciality = mapOf(
-//                                                "specialityId" to specialityData.id.toString(),
-//                                                "studentId" to userData.authenticationSuccess.attributes.uid
-//                                            )
-//                                        )
                                     }
                                 )
                             },
